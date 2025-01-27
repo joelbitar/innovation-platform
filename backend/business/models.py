@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class BusinessArea(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(max_length=255, unique=True)
+    name = models.CharField(max_length=64, unique=True)
+    slug = models.SlugField(max_length=64, unique=True)
     description = models.TextField(default="")
     users = models.ManyToManyField(User, related_name="business_areas", blank=True)
 

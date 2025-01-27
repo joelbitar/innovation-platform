@@ -1,6 +1,18 @@
+build-frontend:
+	docker compose build frontend-dev
+
+build-backend:
+	docker compose build backend-dev
+
+build: build-frontend build-backend
+	$(info Done building)
+
 up:
-	docker compose up frontend-dev -d --build
-	docker compose up backend-dev -d --build
+	docker compose up frontend-dev -d
+	docker compose up backend-dev -d
+
+down:
+	docker stop $$(docker ps -aqf "name=ip-") || true
 
 test:
 	docker compose run backend-dev sh -c "python manage.py test"
