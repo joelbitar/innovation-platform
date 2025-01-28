@@ -2,10 +2,10 @@
 ######################################################### BASE #########################################################
 ########################################################################################################################
 
-FROM node:18-alpine AS base
+FROM node:18-alpine AS ip_frontend_base
 
 # Install dependencies only when needed
-FROM base AS deps
+FROM ip_frontend_base AS ip_frontend_deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -24,13 +24,13 @@ RUN \
 ######################################################### DEV ##########################################################
 ########################################################################################################################
 
-FROM base AS dev
+FROM ip_frontend_base AS ip_frontend_dev
 
 ARG BACKEND_URL
 ENV BACKEND_URL=$BACKEND_URL
 
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+COPY --from=ip_frontend_deps /app/node_modules ./node_modules
 COPY ./frontend .
 
 
@@ -39,9 +39,9 @@ COPY ./frontend .
 ########################################################################################################################
 
 # Rebuild the source code only when needed
-FROM base AS builder
+FROM ip_frontend_base AS ip_frontend_builder
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+COPY --from=ip_frontend_deps /app/node_modules ./node_modules
 COPY ./frontend .
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -60,7 +60,7 @@ RUN yarn build
 ########################################################################################################################
 
 # Production image, copy all the files and run next
-FROM base AS runner
+FROM ip_frontend_base AS ip_frontend_prod
 
 ARG BACKEND_URL
 ENV BACKEND_URL=$BACKEND_URL

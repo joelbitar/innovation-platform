@@ -6,7 +6,7 @@ import {useEffect} from "react";
 
 export default async function LoginPage(props: Params) {
     useEffect(() => {
-            fetch('/api/user/maaaaaj').then(
+            fetch('/api/user/me/').then(
                 response => response.json()
             ).then(data => {
                 console.log(data)
