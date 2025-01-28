@@ -4,9 +4,9 @@ module.exports = {
   async rewrites() {
     return [
       {
-        source: '/api/:path*',
-        destination: 'http://ipbackenddev/api/:path*',
+        source: '/api/:path*/',
+        destination: 'http://ipbackenddev/api/:path*/',
       },
     ];
-  }
+  },
 }
