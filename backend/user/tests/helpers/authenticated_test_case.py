@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
-from django.test import TestCase, Client
+from django.test import TestCase
+from rest_framework.test import APIClient
 
 
-class AuthenticatedTestCase(TestCase):
+class AuthenticatedClientTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username='testuser',
@@ -10,9 +11,6 @@ class AuthenticatedTestCase(TestCase):
         self.user.set_password('testpassword')
         self.user.save()
 
-        self.client = Client()
+        self.client = APIClient()
 
-        self.client.login(
-            username='testuser',
-            password='testpassword',
-        )
+        self.client.force_authenticate(user=self.user)

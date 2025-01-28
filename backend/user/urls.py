@@ -13,8 +13,8 @@ auth_patterns = [
 ]
 
 user_patterns = [
-    path('me/', UserMeView.as_view(), name='api_user_me'),
-    path('me/profile/', UserMeProfileView.as_view({'get': 'get', 'put': 'put'}), name='user-me-profile'),
+    path('me/', UserMeView.as_view(), name='user_me'),
+    path('me/profile/', UserMeProfileView.as_view({'get': 'get', 'put': 'put'}), name='user_me_profile'),
 ]
 
 urlpatterns = [

@@ -67,3 +67,9 @@ class ExtendedUserSerializer(UserWithProfileSerializer):
 
     class Meta:
         model = User
+        fields = UserWithProfileSerializer.Meta.fields + [
+            'permissions',
+            'group_permissions',
+            'is_staff',
+            'is_superuser',
+        ]
