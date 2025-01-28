@@ -1,6 +1,7 @@
 import logging
 
 from django.core.exceptions import SuspiciousOperation
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -11,7 +12,6 @@ class CurrentUserViewBase(APIView):
     def current_user(self):
         user = self.request.user
 
-
         if not user.is_active:
             raise SuspiciousOperation('User is not active')
 
@@ -19,22 +19,14 @@ class CurrentUserViewBase(APIView):
 
 
 class UserMeView(CurrentUserViewBase):
-    authentication_classes = []
-    permission_classes = []
+    permission_classes = [
+        IsAuthenticated,
+    ]
     """
     View to return data about the currently logged in user
     """
 
     def get(self, request):
-        from django.conf import settings
-
-        return Response(
-            {
-                'data': 'testar',
-            },
-            status=200
-        )
-
         return Response(
             ExtendedUserSerializer(
                 self.current_user()

@@ -60,25 +60,27 @@ services:
 
   backend-dev:
     <<: *backend
-    container_name: ipbackenddev
+    container_name: ip_backend_dev
     build:
       context: .
       dockerfile: docker/backend.dockerfile
       target: ip_dev
       args:
         <<: *backend-args
-        DJANGO_ALLOWED_HOSTS: 'localhost,ip_backend_dev,backend.local,ipbackenddev'
+        DJANGO_ALLOWED_HOSTS: 'localhost,backend.dkr'
         DJANGO_DEFAULT_DATABASE_URL: "sqlite:////src/db.sqlite3"
         DJANGO_DEBUG: 'on'
         DJANGO_STATIC_URL: "/static/"
         DJANGO_MEDIA_URL: "/media/"
         DJANGO_SECRET_KEY: 'django-insecure-)c%s=kj@d9l-n9uv!p&8&60=k74n(y4mf3g*c5r+)5ode7p%k8'
     ports:
-      - "8000:80"
+      - "8000:8000"
     volumes:
       - ./backend:/src
     networks:
-      - ip_network
+      ip_network:
+        aliases:
+          - backend.dkr
 
   backend-test:
     <<: *backend
