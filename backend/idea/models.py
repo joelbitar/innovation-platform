@@ -1,7 +1,10 @@
+import uuid
+
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
-from ..campaign.models import Round
+from campaign.models import CampaignRound, Campaign
 
 
 # Create your models here.
@@ -10,7 +13,8 @@ class Idea(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ideas")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ideas")
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name="ideas")
 
     class Visibility(models.TextChoices):
         PUBLIC = "PUBLIC"
@@ -19,43 +23,64 @@ class Idea(models.Model):
 
     visibility = models.CharField(max_length=32, choices=Visibility.choices, default=Visibility.PRIVATE)
 
+    def has_voted(self, campaign_round: CampaignRound, user: User) -> bool:
+        return Vote.objects.filter(idea=self, round=campaign_round, created_by=user).exists()
+
+    def add_vote(self, campaign_round: CampaignRound, user: User) -> "Vote":
+        return Vote.objects.create(idea=self, round=self.campaign.rounds.last(), created_by=user)
+
     def __str__(self):
         return self.title
 
 
-class Comment(models.Model):
-    text = models.TextField()
+class IdeaData(models.Model):
+    idea = models.ForeignKey(Idea, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
-    idea = models.ForeignKey(Idea, on_delete=models.CASCADE, related_name="comments")
+
+    class Meta:
+        abstract = True
+
+
+class IdeaRoundData(IdeaData):
+    round = models.ForeignKey(CampaignRound, on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
+
+
+class Information(IdeaRoundData):
+    def get_file_path(self, filename):
+        return f"idea/{self.idea.pk}/files/{timezone.now().isoformat('-')[:10]}/{uuid.uuid4()}/{filename}"
+
+    round = models.ForeignKey(CampaignRound, on_delete=models.CASCADE, related_name="information", null=True, blank=True)
+    title = models.CharField(max_length=255, default="", blank=True)
+    text = models.TextField(default="", blank=True)
+    file = models.FileField(upload_to=get_file_path, null=True, blank=True)
+
+
+class Comment(IdeaRoundData):
+    text = models.TextField()
+    public = models.BooleanField(default=False)
 
     def __str__(self):
         return self.text
 
 
-class Star(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="stars")
-    idea = models.ForeignKey(Idea, on_delete=models.CASCADE, related_name="stars")
-
+class Star(IdeaData):
     class Meta:
-        unique_together = ("user", "idea")
+        unique_together = ("created_by", "idea")
 
 
-class Vote(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="votes")
-    idea = models.ForeignKey(Idea, on_delete=models.CASCADE, related_name="votes")
-    round = models.ForeignKey(Round, on_delete=models.CASCADE, related_name="votes")
-
+class Vote(IdeaRoundData):
     class Meta:
-        unique_together = ("user", "idea", "round")
+        unique_together = ("created_by", "idea", "round")
 
 
-class IdeaRoundVoteCount(models.Model):
+class RoundVoteCount(models.Model):
     idea = models.ForeignKey(Idea, on_delete=models.CASCADE)
-    round = models.ForeignKey(Round, on_delete=models.CASCADE)
+    round = models.ForeignKey(CampaignRound, on_delete=models.CASCADE)
     count = models.PositiveIntegerField(default=0)
 
     def __str__(self):

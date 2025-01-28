@@ -8,3 +8,5 @@ DATABASES = {
 }
 
 DEBUG = True
+
+SECRET_KEY = 'testing_secret_key'

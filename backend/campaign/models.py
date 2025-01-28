@@ -1,5 +1,7 @@
+from django.contrib.auth.models import User
 from django.db import models
-from rest_framework.authtoken.admin import User
+
+from business.models import BusinessArea
 
 
 # Create your models here.
@@ -8,19 +10,25 @@ class Campaign(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="campaigns")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="campaigns")
+    business_areas = models.ManyToManyField(BusinessArea)
 
     def __str__(self):
         return self.name
 
 
-class Round(models.Model):
+class CampaignRound(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rounds")
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name="rounds")
-    public = models.BooleanField(default=False, help_text='If contributors can see this round')
+
+    # active_from = models.DateTimeField(null=True, blank=True, default=None)
+    # active_to = models.DateTimeField(null=True, blank=True, default=None)
 
     def __str__(self):
         return self.name
+
+# CampaignRounds should have a set of idea-fields where we can specify what kind of data we want to collect for each idea on each round.
