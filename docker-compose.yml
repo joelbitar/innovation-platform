@@ -3,9 +3,11 @@ services:
   frontend: &frontend
     container_name: ip-frontend
     build:
-      context: . #if your Dockerfile is not at the same level change the path here (./frontend)
+      context: .
       dockerfile: docker/frontend.dockerfile
       target: dev
+      args: &frontend-build-args
+        BACKEND_URL: "{BACKEND_URL}"
     restart: always
     command: yarn dev
     environment:
@@ -20,6 +22,12 @@ services:
   frontend-dev:
     <<: *frontend
     container_name: ip_frontend_dev
+    build:
+      context: .
+      dockerfile: docker/frontend.dockerfile
+      target: dev
+      args: &frontend-build-args
+        BACKEND_URL: "http://backend.dkr:8000"
     environment:
       - NODE_ENV=development
       #if you’re using Windows, you may need to uncomment the next line - Sol from @Kobe E

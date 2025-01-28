@@ -26,6 +26,9 @@ RUN \
 
 FROM base AS dev
 
+ARG BACKEND_URL
+ENV BACKEND_URL=$BACKEND_URL
+
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY ./frontend .
@@ -58,6 +61,10 @@ RUN yarn build
 
 # Production image, copy all the files and run next
 FROM base AS runner
+
+ARG BACKEND_URL
+ENV BACKEND_URL=$BACKEND_URL
+
 WORKDIR /app
 
 # Uncomment the following line in case you want to disable telemetry during runtime.
