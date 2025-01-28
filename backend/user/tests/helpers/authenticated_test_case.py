@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import TestCase, Client
 from rest_framework.test import APIClient
 
 
@@ -14,3 +14,10 @@ class AuthenticatedClientTestCase(TestCase):
         self.client = APIClient()
 
         self.client.force_authenticate(user=self.user)
+
+    def tearDown(self):
+        self.client.force_authenticate(user=None)
+        self.client.logout()
+        self.client = None
+        self.user.delete()
+        self.user = None

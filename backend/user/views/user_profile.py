@@ -40,6 +40,9 @@ class UserMeProfileView(CurrentUserViewBase, ModelViewSet):
             profile.start_page = data.validated_data.get('start_page', profile.start_page)
 
         for key, value in data.validated_data.items():
+            if key == 'type':
+                continue
+
             setattr(profile, key, value)
 
         profile.save()
