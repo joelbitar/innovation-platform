@@ -53,8 +53,6 @@ class IdeaModelIdeaCreationTests(TestCase):
                 idea.has_voted(campaign_round, self.user)
             )
 
-        print(dir(idea))
-
         with self.subTest('Idea should have one vote'):
             self.assertEqual(
                 1,
