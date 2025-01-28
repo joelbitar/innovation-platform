@@ -63,8 +63,22 @@ WORKDIR /src/
 # #############################################################################
 FROM ip_app as ip_dev
 
+ARG DJANGO_DEFAULT_DATABASE_URL
+ARG DJANGO_SECRET_KEY
+ARG DJANGO_STATIC_URL
+ARG DJANGO_ALLOWED_HOSTS
+ARG DJANGO_DEBUG
+
+ENV DEFAULT_DATABASE_URL=$DJANGO_DEFAULT_DATABASE_URL
+ENV SECRET_KEY=$DJANGO_SECRET_KEY
+ENV STATIC_URL=$DJANGO_STATIC_URL
+ENV MEDIA_URL=$DJANGO_MEDIA_URL
+ENV ALLOWED_HOSTS=$DJANGO_ALLOWED_HOSTS
+ENV DEBUG=$DJANGO_DEBUG
+
+
 # Install the dev dependencies
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]
 
 # #############################################################################
 # ############                   Test image 						###########

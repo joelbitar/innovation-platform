@@ -15,30 +15,32 @@ services:
     volumes:
       - ./frontend:/app
     ports:
-      - 3000:3000
+      - "3000:3000"
 
   frontend-dev:
     <<: *frontend
-    container_name: ip-frontend-dev
+    container_name: ip_frontend_dev
     environment:
-      - NODE_ENV=development 
+      - NODE_ENV=development
       #if you’re using Windows, you may need to uncomment the next line - Sol from @Kobe E
       #- WATCHPACK_POLLING=true
     volumes:
       - ./frontend:/app
       - /app/node_modules
       - /app/.next
+    networks:
+      - ip_network
 
   frontend-test:
     <<: *frontend
-    container_name: ip-frontend-test
+    container_name: ip_frontend_test
     command: yarn test
     environment:
       - NODE_ENV=development
 
   backend: &backend
     image: "ip_backend"
-    container_name: ip-backend
+    container_name: ip_backend
     build:
       context: .
       dockerfile: docker/backend.dockerfile
@@ -58,23 +60,25 @@ services:
 
   backend-dev:
     <<: *backend
-    container_name: ip-backend-dev
+    container_name: ipbackenddev
     build:
       context: .
       dockerfile: docker/backend.dockerfile
       target: ip_dev
       args:
         <<: *backend-args
-        DJANGO_ALLOWED_HOSTS: '*'
+        DJANGO_ALLOWED_HOSTS: 'localhost,ip_backend_dev,backend.local,ipbackenddev'
         DJANGO_DEFAULT_DATABASE_URL: "sqlite:////src/db.sqlite3"
         DJANGO_DEBUG: 'on'
         DJANGO_STATIC_URL: "/static/"
         DJANGO_MEDIA_URL: "/media/"
         DJANGO_SECRET_KEY: 'django-insecure-)c%s=kj@d9l-n9uv!p&8&60=k74n(y4mf3g*c5r+)5ode7p%k8'
     ports:
-      - "8000:8000"
+      - "8000:80"
     volumes:
       - ./backend:/src
+    networks:
+      - ip_network
 
   backend-test:
     <<: *backend
@@ -88,3 +92,7 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/src
+
+networks:
+  ip_network:
+    name: ip_network

@@ -11,8 +11,8 @@ up:
 	docker compose up frontend-dev -d
 	docker compose up backend-dev -d
 
-down:
-	docker stop $$(docker ps -aqf "name=ip-") || true
+stop:
+	docker stop $$(docker ps -aqf "name=ip_") || true
 
 test:
 	docker compose run backend-dev sh -c "python manage.py test"
