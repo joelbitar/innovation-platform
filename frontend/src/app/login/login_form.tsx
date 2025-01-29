@@ -5,16 +5,16 @@ import {useState} from "react";
 import {apiClient} from "@/lib/apiClient";
 
 export default function LoginForm() {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState(undefined);
 
     console.log('hello')
     useEffect(() => {
-        apiClient('/api/user/me/').then(
+        apiClient.get('/api/user/me/').then(
             (data) => {
                 setData(data)
             }
         )
-        apiClient('/api/auth/token/', {'username': 'hej', 'password': 'hej'}).then(
+        apiClient.post('/api/auth/token/', {'username': 'hej', 'password': 'hej'}).then(
             (data) => {
                 setData(data)
             }

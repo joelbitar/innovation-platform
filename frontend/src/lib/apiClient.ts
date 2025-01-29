@@ -155,47 +155,66 @@ axios.interceptors.response.use(
   }
 );
  */
-export const apiClient = async (url: RequestInfo | URL, data?: any, method?: string) => {
-    if(!method){
-        method = data ? 'POST' : 'GET';
-    }
 
+type RequestConfig = {
+    url: RequestInfo | URL,
+    method: string,
+    data: any
+}
+
+const getRequestConfig = (url : RequestInfo | URL, data, method) => {
+    const rq : RequestConfig = {
+        url: url,
+        method: method,
+        data: data
+    };
+
+    console.log('Generated request config', rq)
+
+    return rq
+}
+
+const getResponse = (requestConfig: RequestConfig) => {
     let accessToken = localStorage.getItem('access-token');
 
     let headers = {}
 
-    if(method === 'POST' || method === 'PUT' || method === 'PATCH'){
+    if(requestConfig.method === 'POST' || requestConfig.method === 'PUT' || requestConfig.method === 'PATCH'){
         headers['Content-Type'] = 'application/json';
     }
 
     if (accessToken) {
         headers['Authorization'] = `Bearer ${accessToken}`;
     }
+    console.log(requestConfig.data)
 
-    const init = data
+    const init = requestConfig.data
         ? {
-            method: method,
-            body: JSON.stringify(data),
+            method: requestConfig.method,
+            body: JSON.stringify(requestConfig.data),
             headers: headers
         }
         : undefined;
 
-    const response = await fetch(url, {...init});
-
-    if (!response.ok) {
-        if (response.status === 401) {
-            throw new Error('Unauthorized');
-        }
-
-        throw new Error('Request Failed');
-    }
-
-    console.log('executing request..')
-    return response.json();
+    return fetch(requestConfig.url, {...init});
 };
 
-const bleh = async () => {
+const apiRequest = (requestConfig: RequestConfig) => {
     return new Promise((resolve, reject) => {
-
+        getResponse(requestConfig).then((response) => {
+            resolve(response.json());
+        }).catch((error) => {
+            console.error('Error from server', error)
+            reject(error);
+        });
     })
+}
+
+export const apiClient = {
+    'get' : (url: RequestInfo | URL) => {
+        return apiRequest(getRequestConfig(url, undefined, 'GET'));
+    },
+    'post' : (url: RequestInfo | URL, data: any) => {
+        return apiRequest(getRequestConfig(url, data, 'POST'));
+    },
 }

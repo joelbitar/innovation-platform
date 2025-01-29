@@ -95,15 +95,61 @@ class AuthenticationAPITests(TestCase):
             'Not able to log in so unable to proceed with tests',
         )
 
+        with self.subTest('Should have refresh token'):
+            self.assertIn(
+                'refresh',
+                response.data,
+            )
+
+            self.assertNotNone(
+                first_refresh_token := response.data.get('refresh')
+            )
+
         response = self.client.post(
             reverse('auth_jwt_token_refresh'),
             {
-                'refresh': response.data.get('refresh'),
+                'refresh': first_refresh_token,
             }
         )
 
-        self.assertEqual(
-            200,
-            response.status_code,
-            response.content,
+        with self.subTest('Should get 200'):
+            self.assertEqual(
+                200,
+                response.status_code,
+                response.content,
+            )
+
+        with self.subTest('Should have access token'):
+            self.assertIn(
+                'access',
+                response.data,
+            )
+
+            self.assertNotNone(
+                access_token := response.data.get('access')
+            )
+
+        with self.subTest('Should have refresh token'):
+            self.assertIn(
+                'refresh',
+                response.data,
+            )
+
+            self.assertNotNone(
+                refresh_token := response.data.get('refresh')
+            )
+
+        # Should we be able to use the old refresh token
+        response = self.client.post(
+            reverse('auth_jwt_token_refresh'),
+            {
+                'refresh': first_refresh_token,
+            }
         )
+
+        with self.subTest('Should get 401'):
+            self.assertEqual(
+                401,
+                response.status_code,
+                response.content,
+            )
