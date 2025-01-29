@@ -6,8 +6,6 @@ import cn from "classnames";
 //import { ThemeSwitcher } from "./_components/theme-switcher";
 
 import "./globals.css";
-import {logger} from "@/lib/auth";
-import {SWRConfig} from "swr";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -62,10 +60,8 @@ export default function RootLayout({
       <body
         className={cn(inter.className, "dark:bg-slate-900 dark:text-slate-400")}
       >
-        <SWRConfig value={{ fetcher: logger }}>
-            <div className="min-h-screen">{children}</div>
-            <Footer />
-        </SWRConfig>
+         <div className="min-h-screen">{children}</div>
+         <Footer />
       </body>
     </html>
   );

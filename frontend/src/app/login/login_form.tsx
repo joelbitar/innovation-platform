@@ -1,15 +1,17 @@
 'use client';
 
-import {useEffect} from "react";
 import {useState} from "react";
 import {apiClient} from "@/lib/apiClient";
 import {login} from "@/lib/auth";
 
 
 export default function LoginForm() {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+
     const handleOnSubmit = () => {
         console.log('submit')
-        login('joel', 'joel').then(
+        login(username, password).then(
             (data) => {
                 console.log(data)
             },
@@ -25,11 +27,15 @@ export default function LoginForm() {
             <form>
                 <label>
                     Username:
-                    <input type="text" name="username"/>
+                    <input type="text" name="username"
+                            onChange={(e) => setUsername(e.target.value)}
+                    />
                 </label>
                 <label>
                     Password:
-                    <input type="password" name="password"/>
+                    <input type="password" name="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                    />
                 </label>
                 <button type="submit"
                         onClick={(e) => {
