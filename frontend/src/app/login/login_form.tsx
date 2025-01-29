@@ -3,27 +3,21 @@
 import {useEffect} from "react";
 import {useState} from "react";
 import {apiClient} from "@/lib/apiClient";
+import {login} from "@/lib/auth";
+
 
 export default function LoginForm() {
-    const [data, setData] = useState(undefined);
-
-    console.log('hello')
-    useEffect(() => {
-        apiClient.get('/api/user/me/').then(
+    const handleOnSubmit = () => {
+        console.log('submit')
+        login('joel', 'joel').then(
             (data) => {
-                setData(data)
+                console.log(data)
+            },
+            (error) => {
+                console.error(error)
             }
         )
-        apiClient.post('/api/auth/token/', {'username': 'hej', 'password': 'hej'}).then(
-            (data) => {
-                setData(data)
-            }
-        )
-    }, [])
-
-    useEffect(() => {
-        console.log(data)
-    }, [data]);
+    }
 
     return (
         <div>
@@ -37,8 +31,22 @@ export default function LoginForm() {
                     Password:
                     <input type="password" name="password"/>
                 </label>
-                <button type="submit">Submit</button>
+                <button type="submit"
+                        onClick={(e) => {
+                            e.preventDefault()
+                            handleOnSubmit()
+                        }
+                        }
+                >Submit
+                </button>
             </form>
+            <button type={"button"} onClick={() => {
+                apiClient.get('/api/user/me/').then(
+                    (data) => {
+                        console.log('buttonclick response', data)
+                    }
+                )
+            }}>Get User</button>
         </div>
     );
 }

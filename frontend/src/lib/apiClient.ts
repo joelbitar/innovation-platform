@@ -162,8 +162,10 @@ type RequestConfig = {
     data: any
 }
 
-const getRequestConfig = (url : RequestInfo | URL, data, method) => {
-    const rq : RequestConfig = {
+let tokenRefreshPromise = null;
+
+const getRequestConfig = (url: RequestInfo | URL, data, method) => {
+    const rq: RequestConfig = {
         url: url,
         method: method,
         data: data
@@ -174,30 +176,125 @@ const getRequestConfig = (url : RequestInfo | URL, data, method) => {
     return rq
 }
 
+export function setAccessToken(token: string) {
+    localStorage.setItem('access-token', token);
+}
+
+export function getAccessToken() {
+    return localStorage.getItem('access-token');
+}
+
+export function setRefreshToken(token: string) {
+    localStorage.setItem('refresh-token', token);
+}
+
+export function getRefreshToken() {
+    return localStorage.getItem('refresh-token');
+}
+
+export function decodeJWTToken<T>(token: string): T | null {
+    // Decode the token
+    return JSON.parse(atob(token.split('.')[1]));
+}
+
+export function isExpired(token: string) {
+    // Check if the token is expired
+
+    // Decode the token
+    let decodedToken = decodeJWTToken(token);
+
+    //console.log('Decoded token', decodedToken)
+
+    if (decodedToken) {
+        let exp = decodedToken.exp;
+        let now = Math.floor(Date.now() / 1000);
+        return exp < now;
+    }
+
+    return false;
+}
+
 const getResponse = (requestConfig: RequestConfig) => {
-    let accessToken = localStorage.getItem('access-token');
+    let accessToken = getAccessToken() || "";
 
     let headers = {}
 
-    if(requestConfig.method === 'POST' || requestConfig.method === 'PUT' || requestConfig.method === 'PATCH'){
+    if (requestConfig.method === 'POST' || requestConfig.method === 'PUT' || requestConfig.method === 'PATCH') {
         headers['Content-Type'] = 'application/json';
     }
 
-    if (accessToken) {
-        headers['Authorization'] = `Bearer ${accessToken}`;
+    // Request data to the fetch function
+    let requestData: RequestInit = {
+        method: requestConfig.method,
+        headers: headers
     }
-    console.log(requestConfig.data)
 
-    const init = requestConfig.data
-        ? {
-            method: requestConfig.method,
-            body: JSON.stringify(requestConfig.data),
-            headers: headers
-        }
-        : undefined;
+    // in case we have data to send
+    if (requestConfig.data) {
+        requestData.body = JSON.stringify(requestConfig.data);
+    }
 
-    return fetch(requestConfig.url, {...init});
-};
+    if (!isExpired(accessToken) || requestConfig.url.startsWith('/api/auth/')) {
+        // The token is valid
+        // or the request is to the auth endpoint
+        // In any case we shall add the token to the headers and make the request.
+        headers['Authorization'] = `Bearer ${accessToken}`;
+
+        return fetch(requestConfig.url, requestData)
+    } else {
+        // The token is expired
+        // We shall try to refresh the token
+        // Then make the request
+        return new Promise((resolve, reject) => {
+            /**
+             * If there is a token refresh request in flight, we will wait for it to finish, then make our request.
+             * If there is no refresh request in flight, we will make a new one. Set it to the global variable and wait for it to finish.
+             */
+
+            if (tokenRefreshPromise) {
+                //console.log('there is a token refresh request in flight. Waiting for it to finish')
+                tokenRefreshPromise.then(() => {
+                    console.log('Token refresh-promise is done. make the request')
+                    resolve(getResponse(requestConfig));
+                }).catch((error) => {
+                    //console.error('Error refreshing token', error)
+                    reject(error);
+                })
+            } else {
+                // Make a new token refresh request
+                console.log('Refreshing token....')
+                tokenRefreshPromise = fetch('/api/auth/token/refresh/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        refresh: getRefreshToken()
+                    })
+                }).then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Error refreshing token');
+                    }
+                }).then((data) => {
+                    console.log('Token refreshed', data)
+                    setAccessToken(data.access);
+                    setRefreshToken(data.refresh);
+                    resolve(getResponse(requestConfig));
+                }).catch((error) => {
+                    console.error('Error refreshing token', error)
+                    reject(error);
+                }).finally(
+                    () => {
+                        tokenRefreshPromise = null;
+                    }
+                )
+            }
+        })
+
+    }
+}
 
 const apiRequest = (requestConfig: RequestConfig) => {
     return new Promise((resolve, reject) => {
@@ -211,10 +308,10 @@ const apiRequest = (requestConfig: RequestConfig) => {
 }
 
 export const apiClient = {
-    'get' : (url: RequestInfo | URL) => {
+    'get': (url: RequestInfo | URL) => {
         return apiRequest(getRequestConfig(url, undefined, 'GET'));
     },
-    'post' : (url: RequestInfo | URL, data: any) => {
+    'post': (url: RequestInfo | URL, data: any) => {
         return apiRequest(getRequestConfig(url, data, 'POST'));
     },
 }

@@ -20,17 +20,13 @@ class CurrentUserViewBase(APIView):
 
 class UserMeView(CurrentUserViewBase):
     permission_classes = [
-#        IsAuthenticated,
+        IsAuthenticated,
     ]
     """
     View to return data about the currently logged in user
     """
 
     def get(self, request):
-        return Response(
-        {'hello' : 'world'},
-        status=200
-        )
         return Response(
             ExtendedUserSerializer(
                 self.current_user()
