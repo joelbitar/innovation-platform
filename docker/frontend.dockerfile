@@ -26,9 +26,6 @@ RUN \
 
 FROM ip_frontend_base AS ip_frontend_dev
 
-ARG BACKEND_URL
-ENV BACKEND_URL=$BACKEND_URL
-
 WORKDIR /app
 COPY --from=ip_frontend_deps /app/node_modules ./node_modules
 COPY ./frontend .
@@ -40,6 +37,7 @@ COPY ./frontend .
 
 # Rebuild the source code only when needed
 FROM ip_frontend_base AS ip_frontend_builder
+
 WORKDIR /app
 COPY --from=ip_frontend_deps /app/node_modules ./node_modules
 COPY ./frontend .

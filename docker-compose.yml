@@ -6,8 +6,6 @@ services:
       context: .
       dockerfile: docker/frontend.dockerfile
       target: ip_frontend_prod
-      args: &frontend-build-args
-        BACKEND_URL: "{BACKEND_URL}"
     environment:
       - NODE_ENV=development
       #if you’re using Windows, you may need to uncomment the next line - Sol from @Kobe E
@@ -24,12 +22,11 @@ services:
       context: .
       dockerfile: docker/frontend.dockerfile
       target: ip_frontend_dev
-      args: &frontend-build-args
-        BACKEND_URL: "http://backend.dkr:8000"
     restart: always
     command: yarn dev
     environment:
       - NODE_ENV=development
+      - BACKEND_URL=http://backend.dkr:8000
       #if you’re using Windows, you may need to uncomment the next line - Sol from @Kobe E
       #- WATCHPACK_POLLING=true
     volumes:
@@ -53,15 +50,6 @@ services:
       context: .
       dockerfile: docker/backend.dockerfile
       target: ip_backend
-      args: &backend-args
-        DJANGO_DEFAULT_DATABASE_URL: "${DJANGO_DEFAULT_DATABASE_URL}"
-        DJANGO_SECRET_KEY: "${DJANGO_SECRET_KEY}"
-        DJANGO_STATIC_URL: "${DJANGO_STATIC_URL}"
-        DJANGO_MEDIA_URL: "${DJANGO_MEDIA_URL}"
-        TAG_NAME: "${TAG_NAME}"
-        EMAIL_DEFAULT_FROM: "${EMAIL_DEFAULT_FROM}"
-        DJANGO_ALLOWED_HOSTS: "${DJANGO_ALLOWED_HOSTS}"
-        DJANGO_DEBUG: 'off'
 
     ports:
       - "8000:8000"
@@ -73,14 +61,13 @@ services:
       context: .
       dockerfile: docker/backend.dockerfile
       target: ip_dev
-      args:
-        <<: *backend-args
-        DJANGO_ALLOWED_HOSTS: 'localhost,backend.dkr'
-        DJANGO_DEFAULT_DATABASE_URL: "sqlite:////src/db.sqlite3"
-        DJANGO_DEBUG: 'on'
-        DJANGO_STATIC_URL: "/static/"
-        DJANGO_MEDIA_URL: "/media/"
-        DJANGO_SECRET_KEY: 'django-insecure-)c%s=kj@d9l-n9uv!p&8&60=k74n(y4mf3g*c5r+)5ode7p%k8'
+    environment:
+      - ALLOWED_HOSTS=localhost,backend.dkr
+      - DEFAULT_DATABASE_URL=sqlite:////src/db.sqlite3
+      - DEBUG=on
+      - STATIC_URL=/static/
+      - MEDIA_URL=/media/
+      - SECRET_KEY=django-insecure-)c%s=kj@d9l-n9uv!p&8&60=k74n(y4mf3g*c5r+)5ode7p%k8
     ports:
       - "8000:8000"
     volumes:
