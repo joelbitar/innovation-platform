@@ -27,14 +27,14 @@ services:
     environment:
       - NODE_ENV=development
       - BACKEND_URL=http://backend.dkr:8000
-      #if you’re using Windows, you may need to uncomment the next line - Sol from @Kobe E
-      #- WATCHPACK_POLLING=true
     volumes:
       - ./frontend:/app
       - /app/node_modules
       - /app/.next
     networks:
-      - ip_network
+      ip_network:
+        aliases:
+          - frontend.dkr
 
   frontend-test:
     <<: *frontend
@@ -89,6 +89,22 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/src
+
+  proxy-dev:
+    container_name: ip_proxy_dev
+    build:
+      context: .
+      dockerfile: docker/proxy.dockerfile
+      target: ip_proxy_dev
+    ports:
+      - "4000:80"
+#    depends_on:
+#      - frontend-dev
+#      - backend-dev
+    networks:
+      ip_network:
+        aliases:
+          - proxy.dkr
 
 networks:
   ip_network:
