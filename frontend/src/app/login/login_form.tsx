@@ -1,17 +1,29 @@
 'use client';
 
 import {useEffect} from "react";
+import {useState} from "react";
+import {apiClient} from "@/lib/apiClient";
 
 export default function LoginForm() {
+    const [data, setData] = useState(null);
+
     console.log('hello')
     useEffect(() => {
-            fetch('/api/user/me/').then(
-                (response) => {
-                    console.log(response.json())
-                },
-            )
-        }
-    )
+        apiClient('/api/user/me/').then(
+            (data) => {
+                setData(data)
+            }
+        )
+        apiClient('/api/auth/token/', {'username': 'hej', 'password': 'hej'}).then(
+            (data) => {
+                setData(data)
+            }
+        )
+    }, [])
+
+    useEffect(() => {
+        console.log(data)
+    }, [data]);
 
     return (
         <div>
