@@ -2,7 +2,7 @@
 
 import {useState} from "react";
 import {apiClient} from "@/lib/apiClient";
-import {login} from "@/lib/auth";
+import {login, logout} from "@/lib/auth";
 
 
 export default function LoginForm() {
@@ -28,13 +28,13 @@ export default function LoginForm() {
                 <label>
                     Username:
                     <input type="text" name="username"
-                            onChange={(e) => setUsername(e.target.value)}
+                           onChange={(e) => setUsername(e.target.value)}
                     />
                 </label>
                 <label>
                     Password:
                     <input type="password" name="password"
-                            onChange={(e) => setPassword(e.target.value)}
+                           onChange={(e) => setPassword(e.target.value)}
                     />
                 </label>
                 <button type="submit"
@@ -52,7 +52,12 @@ export default function LoginForm() {
                         console.log('buttonclick response', data)
                     }
                 )
-            }}>Get User</button>
+            }}>Get User
+            </button>
+            <button type={"button"} onClick={() => {
+                logout()
+            }}>Logout
+            </button>
         </div>
     );
 }

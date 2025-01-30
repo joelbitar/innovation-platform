@@ -1,6 +1,6 @@
 'use client';
 
-import {apiClient, setAccessToken, setRefreshToken} from "@/lib/apiClient";
+import {apiClient, getRefreshToken, setAccessToken, setRefreshToken} from "@/lib/apiClient";
 
 export function login(username, password) {
   return new Promise((resolve, reject) => {
@@ -15,4 +15,13 @@ export function login(username, password) {
       }
     )
   })
+}
+
+export function logout() {
+    apiClient.post(
+        '/api/auth/token/blacklist/',
+        {
+            'refresh': getRefreshToken()
+        }
+    )
 }

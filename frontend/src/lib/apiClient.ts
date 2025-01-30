@@ -159,19 +159,26 @@ axios.interceptors.response.use(
 type RequestConfig = {
     url: RequestInfo | URL,
     method: string,
-    data: any
+    data: any | undefined
 }
 
-let tokenRefreshPromise = null;
+type JWTToken = {
+    exp: number
+    iat: number
+    jti: string
+    user_id: number
+    token_type: string
+    test: string
+}
 
-const getRequestConfig = (url: RequestInfo | URL, data, method) => {
+let tokenRefreshPromise: Promise<any> | null = null;
+
+const getRequestConfig = (url: RequestInfo | URL, data :any = undefined, method: string | undefined = undefined )  => {
     const rq: RequestConfig = {
         url: url,
-        method: method,
+        method: method || 'GET',
         data: data
     };
-
-    console.log('Generated request config', rq)
 
     return rq
 }
@@ -192,9 +199,13 @@ export function getRefreshToken() {
     return localStorage.getItem('refresh-token');
 }
 
-export function decodeJWTToken<T>(token: string): T | null {
+export function decodeJWTToken(token: string): JWTToken {
     // Decode the token
-    return JSON.parse(atob(token.split('.')[1]));
+    let JWTToken: JWTToken;
+
+    return JWTToken = {
+        ...(JSON.parse(atob(token.split('.')[1]))),
+    }
 }
 
 export function isExpired(token: string) {
@@ -203,21 +214,18 @@ export function isExpired(token: string) {
     // Decode the token
     let decodedToken = decodeJWTToken(token);
 
-    //console.log('Decoded token', decodedToken)
-
     if (decodedToken) {
-        let exp = decodedToken.exp;
-        let now = Math.floor(Date.now() / 1000);
-        return exp < now;
+        // Allow for a 2-second buffer
+        return (decodedToken.exp) < ((Math.floor(Date.now() / 1000)) + 2);
     }
 
     return false;
 }
 
-const getResponse = (requestConfig: RequestConfig) => {
+const getResponse = (requestConfig: RequestConfig): Promise<any> => {
     let accessToken = getAccessToken() || "";
 
-    let headers = {}
+    let headers: any = {}
 
     if (requestConfig.method === 'POST' || requestConfig.method === 'PUT' || requestConfig.method === 'PATCH') {
         headers['Content-Type'] = 'application/json';
@@ -262,7 +270,8 @@ const getResponse = (requestConfig: RequestConfig) => {
                 })
             } else {
                 // Make a new token refresh request
-                console.log('Refreshing token....')
+                console.info('Refreshing token, original request will be executed after token is refreshed')
+
                 tokenRefreshPromise = fetch('/api/auth/token/refresh/', {
                     method: 'POST',
                     headers: {
@@ -278,7 +287,6 @@ const getResponse = (requestConfig: RequestConfig) => {
                         throw new Error('Error refreshing token');
                     }
                 }).then((data) => {
-                    console.log('Token refreshed', data)
                     setAccessToken(data.access);
                     setRefreshToken(data.refresh);
                     resolve(getResponse(requestConfig));
@@ -309,9 +317,9 @@ const apiRequest = (requestConfig: RequestConfig) => {
 
 export const apiClient = {
     'get': (url: RequestInfo | URL) => {
-        return apiRequest(getRequestConfig(url, undefined, 'GET'));
+        return apiRequest(getRequestConfig(url));
     },
-    'post': (url: RequestInfo | URL, data: any) => {
+    'post': (url: RequestInfo | URL, data: any): Promise<any> => {
         return apiRequest(getRequestConfig(url, data, 'POST'));
     },
 }

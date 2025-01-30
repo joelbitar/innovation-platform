@@ -1,4 +1,3 @@
-
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
@@ -153,3 +152,7 @@ class AuthenticationAPITests(TestCase):
                 response.status_code,
                 response.content,
             )
+
+    # Test should be able to logout, that is blacklist a token
+    def test_should_be_able_to_logout_that_is_blacklist_a_token(self):
+        self.assertTrue(False)
