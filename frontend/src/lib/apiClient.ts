@@ -262,7 +262,7 @@ const getResponse = (requestConfig: RequestConfig): Promise<any> => {
             console.log('No need to try to make the request. Users needs to go and log in')
             return new Promise((resolve, reject) => {
                 // Send browser to Login page at; /login
-                window.location.href = '/login/';
+                //window.location.href = '/login/';
                 reject('No access token and no refresh token')
             })
         }
