@@ -154,5 +154,67 @@ class AuthenticationAPITests(TestCase):
             )
 
     # Test should be able to logout, that is blacklist a token
-    def test_should_be_able_to_logout_that_is_blacklist_a_token(self):
-        self.assertTrue(False)
+    def test_should_be_able_to_logout_and_blacklist_a_token(self):
+        response = self.helper_obtain_jwt_token_pair(
+            self.username,
+            self.password,
+        )
+
+        self.assertEqual(
+            200,
+            response.status_code,
+            'Not able to log in so unable to proceed with tests',
+        )
+
+        with self.subTest('Should have refresh token'):
+            self.assertIn(
+                'refresh',
+                response.data,
+            )
+
+            self.assertIsNotNone(
+                refresh_token := response.data.get('refresh')
+            )
+
+        response = self.client.post(
+            reverse('auth_jwt_token_blacklist'),
+            {
+                'refresh': refresh_token,
+            }
+        )
+
+        with self.subTest('Should have ok response from blacklisting'):
+            self.assertEqual(
+                200,
+                response.status_code,
+                response.content,
+            )
+
+        # Should we be able to use the old refresh token
+        response = self.client.post(
+            reverse('auth_jwt_token_refresh'),
+            {
+                'refresh': refresh_token,
+            }
+        )
+
+        with self.subTest('Token should be blacklisted'):
+            self.assertEqual(
+                401,
+                response.status_code,
+                response.content,
+            )
+
+        with self.subTest('Should get 400 response when trying to blacklist again'):
+            response = self.client.post(
+                reverse('auth_jwt_token_blacklist'),
+                {
+                    'refresh': refresh_token,
+                }
+            )
+
+            self.assertEqual(
+                400,
+                response.status_code,
+                response.content,
+            )

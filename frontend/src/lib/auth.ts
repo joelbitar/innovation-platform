@@ -23,5 +23,10 @@ export function logout() {
         {
             'refresh': getRefreshToken()
         }
+    ).then(
+        (data) => {
+            setAccessToken(undefined)
+            setRefreshToken(undefined)
+        }
     )
 }

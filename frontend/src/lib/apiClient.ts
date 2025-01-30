@@ -173,7 +173,7 @@ type JWTToken = {
 
 let tokenRefreshPromise: Promise<any> | null = null;
 
-const getRequestConfig = (url: RequestInfo | URL, data :any = undefined, method: string | undefined = undefined )  => {
+const getRequestConfig = (url: RequestInfo | URL, data: any = undefined, method: string | undefined = undefined) => {
     const rq: RequestConfig = {
         url: url,
         method: method || 'GET',
@@ -183,20 +183,28 @@ const getRequestConfig = (url: RequestInfo | URL, data :any = undefined, method:
     return rq
 }
 
-export function setAccessToken(token: string) {
-    localStorage.setItem('access-token', token);
+export function setAccessToken(token: string | undefined) {
+    localStorage.setItem('access-token', token || "");
 }
 
-export function getAccessToken() {
-    return localStorage.getItem('access-token');
+function sanitizeValue(value: string | null | undefined): string | undefined {
+    if (!value || value === 'null' || value === 'undefined') {
+        return undefined;
+    }
+
+    return value;
 }
 
-export function setRefreshToken(token: string) {
-    localStorage.setItem('refresh-token', token);
+export function getAccessToken(): string | undefined {
+    return sanitizeValue(localStorage.getItem('access-token'));
+}
+
+export function setRefreshToken(token: string | undefined) {
+    localStorage.setItem('refresh-token', token || "");
 }
 
 export function getRefreshToken() {
-    return localStorage.getItem('refresh-token');
+    return sanitizeValue(localStorage.getItem('refresh-token'));
 }
 
 export function decodeJWTToken(token: string): JWTToken {
@@ -223,7 +231,7 @@ export function isExpired(token: string) {
 }
 
 const getResponse = (requestConfig: RequestConfig): Promise<any> => {
-    let accessToken = getAccessToken() || "";
+    let accessToken = getAccessToken() || undefined;
 
     let headers: any = {}
 
@@ -242,7 +250,7 @@ const getResponse = (requestConfig: RequestConfig): Promise<any> => {
         requestData.body = JSON.stringify(requestConfig.data);
     }
 
-    if (!isExpired(accessToken) || requestConfig.url.startsWith('/api/auth/')) {
+    if ((accessToken && !isExpired(accessToken)) || requestConfig.url.startsWith('/api/auth/')) {
         // The token is valid
         // or the request is to the auth endpoint
         // In any case we shall add the token to the headers and make the request.
@@ -250,6 +258,15 @@ const getResponse = (requestConfig: RequestConfig): Promise<any> => {
 
         return fetch(requestConfig.url, requestData)
     } else {
+        if (!accessToken && !getRefreshToken()) {
+            console.log('No need to try to make the request. Users needs to go and log in')
+            return new Promise((resolve, reject) => {
+                // Send browser to Login page at; /login
+                window.location.href = '/login/';
+                reject('No access token and no refresh token')
+            })
+        }
+
         // The token is expired
         // We shall try to refresh the token
         // Then make the request
@@ -262,10 +279,9 @@ const getResponse = (requestConfig: RequestConfig): Promise<any> => {
             if (tokenRefreshPromise) {
                 //console.log('there is a token refresh request in flight. Waiting for it to finish')
                 tokenRefreshPromise.then(() => {
-                    console.log('Token refresh-promise is done. make the request')
+                    console.log('Token refresh-promise is done. make the original request')
                     resolve(getResponse(requestConfig));
                 }).catch((error) => {
-                    //console.error('Error refreshing token', error)
                     reject(error);
                 })
             } else {
@@ -284,6 +300,7 @@ const getResponse = (requestConfig: RequestConfig): Promise<any> => {
                     if (response.ok) {
                         return response.json();
                     } else {
+                        // This happend when the refresh token is invalid or old.
                         throw new Error('Error refreshing token');
                     }
                 }).then((data) => {

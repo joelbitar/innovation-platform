@@ -1,10 +1,15 @@
+from django.core.exceptions import SuspiciousOperation
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class TokenBlacklistView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
     @staticmethod
     def blacklist_refresh_token(refresh_token_string: str):
         refresh_token = RefreshToken(refresh_token_string)
@@ -18,7 +23,10 @@ class TokenBlacklistView(APIView):
             return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
         # Blacklist token
-        self.blacklist_refresh_token(refresh_token_string)
+        try:
+            self.blacklist_refresh_token(refresh_token_string)
+        except TokenError:
+            raise SuspiciousOperation('Token is invalid')
 
         # Return ok.
         return JsonResponse({})
