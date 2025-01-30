@@ -101,7 +101,7 @@ class AuthenticationAPITests(TestCase):
                 response.data,
             )
 
-            self.assertNotNone(
+            self.assertIsNotNone(
                 first_refresh_token := response.data.get('refresh')
             )
 
@@ -125,7 +125,7 @@ class AuthenticationAPITests(TestCase):
                 response.data,
             )
 
-            self.assertNotNone(
+            self.assertIsNotNone(
                 access_token := response.data.get('access')
             )
 
@@ -135,7 +135,7 @@ class AuthenticationAPITests(TestCase):
                 response.data,
             )
 
-            self.assertNotNone(
+            self.assertIsNotNone(
                 refresh_token := response.data.get('refresh')
             )
 

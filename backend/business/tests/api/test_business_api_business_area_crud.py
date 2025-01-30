@@ -1,21 +1,10 @@
-from django.contrib.auth.models import User
-from django.test import TestCase
 from django.urls import reverse
-from rest_framework.test import APIClient
 
+from user.tests.helpers.authenticated_test_case import AuthenticatedClientTestCase
 from ...models import BusinessArea
 
 
-class BusinessBusinessAreaCrudTests(TestCase):
-    def setUp(self):
-        self.client = APIClient()
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpassword',
-        )
-
-        self.client.force_authenticate(user=self.user)
-
+class BusinessBusinessAreaCrudTests(AuthenticatedClientTestCase):
     # Test should be able to create a business area
     def test_should_be_able_to_create_a_business_area(self):
         response = self.client.post(

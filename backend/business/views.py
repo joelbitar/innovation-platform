@@ -1,14 +1,7 @@
-from rest_framework import viewsets, serializers, permissions
+from rest_framework import viewsets, permissions
 
-from business.models import BusinessArea
-
-
-class BusinessAreaSerializer(serializers.ModelSerializer):
-    slug = serializers.SlugField(read_only=True)
-
-    class Meta:
-        model = BusinessArea
-        fields = '__all__'
+from .models import BusinessArea
+from .serializers import BusinessAreaSerializer
 
 
 class BusinessAreaViewSet(viewsets.ModelViewSet):
