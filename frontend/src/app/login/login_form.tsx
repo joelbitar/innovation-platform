@@ -1,8 +1,8 @@
 'use client';
 
 import {useState} from "react";
-import {apiClient} from "@/lib/apiClient";
 import {login, logout} from "@/lib/auth";
+import {ApiService} from "@/lib/api";
 
 
 export default function LoginForm() {
@@ -47,7 +47,7 @@ export default function LoginForm() {
                 </button>
             </form>
             <button type={"button"} onClick={() => {
-                apiClient.get('/api/user/me/').then(
+                ApiService.retrieveUserProfile().then(
                     (data) => {
                         console.log('buttonclick response', data)
                     }
