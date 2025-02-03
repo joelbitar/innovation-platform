@@ -28,10 +28,9 @@ FROM ip_frontend_base AS ip_frontend_dev
 
 WORKDIR /app
 
-RUN npm install openapi-typescript-codegen --no-save
-
 COPY --from=ip_frontend_deps /app/node_modules ./node_modules
 COPY ./frontend .
+RUN npm install openapi-typescript-codegen
 
 
 ########################################################################################################################

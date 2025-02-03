@@ -98,9 +98,9 @@ services:
       target: ip_proxy_dev
     ports:
       - "4000:80"
-#    depends_on:
-#      - frontend-dev
-#      - backend-dev
+    depends_on:
+      - frontend-dev
+      - backend-dev
     networks:
       ip_network:
         aliases:

@@ -43,7 +43,7 @@ FROM ip_base as ip_app
 
 # Set environment variables from build args
 
-WORKDIR /src-dev/
+WORKDIR /src/
 
 
 # #############################################################################
@@ -51,6 +51,7 @@ WORKDIR /src-dev/
 # #############################################################################
 FROM ip_app as ip_dev
 
+COPY backend/requirements-dev.txt .
 RUN /py/bin/pip install -r requirements-dev.txt
 
 
