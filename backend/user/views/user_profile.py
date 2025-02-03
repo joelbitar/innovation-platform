@@ -1,3 +1,5 @@
+from typing import Type
+
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 
@@ -10,6 +12,9 @@ class UserMeProfileView(CurrentUserViewBase, ModelViewSet):
     """
     View to work with profile for the currently logged in user
     """
+    @staticmethod
+    def get_serializer_class() -> Type[UserProfileSerializer]:
+        return UserProfileSerializer
 
     def get_profile(self):
         user = self.current_user()
@@ -21,11 +26,11 @@ class UserMeProfileView(CurrentUserViewBase, ModelViewSet):
         profile = self.get_profile()
 
         return Response(
-            UserProfileSerializer(profile).data
+            self.get_serializer_class()(profile).data
         )
 
     def put(self, request):
-        data = UserProfileSerializer(data=request.data)
+        data = self.get_serializer_class()(data=request.data)
 
         if not data.is_valid():
             return Response(
@@ -48,8 +53,7 @@ class UserMeProfileView(CurrentUserViewBase, ModelViewSet):
         profile.save()
 
         return Response(
-            UserProfileSerializer(
+            self.get_serializer_class()(
                 profile
             ).data
         )
-

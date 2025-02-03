@@ -51,6 +51,9 @@ WORKDIR /src/
 # #############################################################################
 FROM ip_app as ip_dev
 
+COPY backend/requirements-dev.txt .
+RUN /py/bin/pip install -r requirements-dev.txt
+
 
 # Install the dev dependencies
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
