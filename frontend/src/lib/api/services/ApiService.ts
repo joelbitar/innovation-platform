@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BusinessArea } from '../models/BusinessArea';
+import type { Idea } from '../models/Idea';
 import type { TokenObtainPair } from '../models/TokenObtainPair';
 import type { TokenRefresh } from '../models/TokenRefresh';
 import type { UserProfile } from '../models/UserProfile';
@@ -114,7 +115,7 @@ export class ApiService {
     public static listUserMes(): CancelablePromise<Array<any>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/user/me/',
+            url: '/api/user/user/me/',
         });
     }
     /**
@@ -125,7 +126,7 @@ export class ApiService {
     public static retrieveUserProfile(): CancelablePromise<UserProfile> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/user/me/profile/',
+            url: '/api/user/user/me/profile/',
         });
     }
     /**
@@ -139,9 +140,106 @@ export class ApiService {
     ): CancelablePromise<UserProfile> {
         return __request(OpenAPI, {
             method: 'PUT',
-            url: '/api/user/me/profile/',
+            url: '/api/user/user/me/profile/',
             body: requestBody,
             mediaType: 'application/json',
+        });
+    }
+    /**
+     * @returns Idea
+     * @throws ApiError
+     */
+    public static listIdeas(): CancelablePromise<Array<Idea>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/idea/idea/',
+        });
+    }
+    /**
+     * @param requestBody
+     * @returns Idea
+     * @throws ApiError
+     */
+    public static createIdea(
+        requestBody?: Idea,
+    ): CancelablePromise<Idea> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/idea/idea/',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * @param id A unique integer value identifying this idea.
+     * @returns Idea
+     * @throws ApiError
+     */
+    public static retrieveIdea(
+        id: string,
+    ): CancelablePromise<Idea> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/idea/idea/{id}/',
+            path: {
+                'id': id,
+            },
+        });
+    }
+    /**
+     * @param id A unique integer value identifying this idea.
+     * @param requestBody
+     * @returns Idea
+     * @throws ApiError
+     */
+    public static updateIdea(
+        id: string,
+        requestBody?: Idea,
+    ): CancelablePromise<Idea> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/idea/idea/{id}/',
+            path: {
+                'id': id,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * @param id A unique integer value identifying this idea.
+     * @param requestBody
+     * @returns Idea
+     * @throws ApiError
+     */
+    public static partialUpdateIdea(
+        id: string,
+        requestBody?: Idea,
+    ): CancelablePromise<Idea> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/idea/idea/{id}/',
+            path: {
+                'id': id,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * @param id A unique integer value identifying this idea.
+     * @returns void
+     * @throws ApiError
+     */
+    public static destroyIdea(
+        id: string,
+    ): CancelablePromise<void> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/idea/idea/{id}/',
+            path: {
+                'id': id,
+            },
         });
     }
     /**
@@ -156,7 +254,7 @@ export class ApiService {
     ): CancelablePromise<TokenObtainPair> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/auth/token/',
+            url: '/api/user/auth/token/',
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -171,7 +269,7 @@ export class ApiService {
     ): CancelablePromise<TokenRefresh> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/auth/token/refresh/',
+            url: '/api/user/auth/token/refresh/',
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -186,7 +284,7 @@ export class ApiService {
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/auth/token/blacklist/',
+            url: '/api/user/auth/token/blacklist/',
             body: requestBody,
             mediaType: 'application/json',
         });

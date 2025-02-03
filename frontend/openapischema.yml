@@ -138,7 +138,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/user/me/:
+  /api/user/user/me/:
     get:
       operationId: listUserMes
       description: ''
@@ -153,7 +153,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/user/me/profile/:
+  /api/user/user/me/profile/:
     get:
       operationId: retrieveUserProfile
       description: View to work with profile for the currently logged in user
@@ -191,7 +191,142 @@ paths:
           description: ''
       tags:
       - api
-  /api/auth/token/:
+  /api/idea/idea/:
+    get:
+      operationId: listIdeas
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Idea'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createIdea
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Idea'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idea'
+          description: ''
+      tags:
+      - api
+  /api/idea/idea/{id}/:
+    get:
+      operationId: retrieveIdea
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this idea.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idea'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateIdea
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this idea.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Idea'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idea'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateIdea
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this idea.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Idea'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idea'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyIdea
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this idea.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/user/auth/token/:
     post:
       operationId: createTokenObtainPair
       description: 'Takes a set of user credentials and returns an access and refresh
@@ -219,7 +354,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/auth/token/refresh/:
+  /api/user/auth/token/refresh/:
     post:
       operationId: createTokenRefresh
       description: ''
@@ -244,7 +379,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/auth/token/blacklist/:
+  /api/user/auth/token/blacklist/:
     post:
       operationId: createTokenBlacklist
       description: ''
@@ -303,6 +438,65 @@ components:
         user:
           type: string
           readOnly: true
+    Idea:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_by:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            label:
+              type: string
+              readOnly: true
+            username:
+              type: string
+              description: Required. 150 characters or fewer. Letters, digits and
+                @/./+/-/_ only.
+              pattern: ^[\w.@+-]+\z
+              maxLength: 150
+            email:
+              type: string
+              format: email
+              maxLength: 254
+            first_name:
+              type: string
+              maxLength: 150
+            last_name:
+              type: string
+              maxLength: 150
+          required:
+          - username
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        visibility:
+          enum:
+          - PUBLIC
+          - BUSINESS_AREA
+          - PRIVATE
+          type: string
+        campaign:
+          type: integer
+      required:
+      - title
+      - description
+      - campaign
     TokenObtainPair:
       type: object
       properties:

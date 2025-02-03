@@ -8,6 +8,7 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { BusinessArea } from './models/BusinessArea';
+export { Idea } from './models/Idea';
 export type { TokenObtainPair } from './models/TokenObtainPair';
 export type { TokenRefresh } from './models/TokenRefresh';
 export { UserProfile } from './models/UserProfile';

@@ -37,7 +37,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         # IssueWatcherViewPayloadSerializer
         model = Profile
         fields = '__all__'
-        read_only_fields = ('user', )
+        read_only_fields = ('user',)
 
 
 class UserWithProfileSerializer(UserSerializer):
@@ -73,3 +73,7 @@ class ExtendedUserSerializer(UserWithProfileSerializer):
             'is_staff',
             'is_superuser',
         ]
+
+
+class CreatedByModelSerializer(serializers.ModelSerializer):
+    created_by = UserSerializer(read_only=True)
