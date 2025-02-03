@@ -59,5 +59,5 @@ generate-api-client:
 	docker compose run frontend-dev sh -c "chmod -R 774 src/lib/api && chown -R $(shell id -u):$(shell id -g) src/lib/api"
 	rm frontend/openapischema.yml
 
-showurls:
-	docker compose run backend-dev sh -c "python manage.py showurls"
+show_urls:
+	docker compose run backend-dev sh -c "python manage.py show_urls"
