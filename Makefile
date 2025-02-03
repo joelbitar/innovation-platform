@@ -33,8 +33,17 @@ up-proxy-dev:
 up: up-frontend-dev up-backend-dev up-proxy-dev
 	$(info Started)
 
-stop:
-	docker stop $$(docker ps -aqf "name=ip_") || true
+stop-backend-dev:
+	docker stop ip_backend_dev
+
+stop-frontend-dev:
+	docker stop ip_frontend_dev
+
+stop-proxy-dev:
+	docker stop ip_proxy_dev
+
+stop: stop-frontend-dev stop-backend-dev stop-proxy-dev
+	$(info Done stopping)
 
 logs:
 	docker compose logs -f

@@ -247,7 +247,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Idea'
+                $ref: '#/components/schemas/IdeaDetail'
           description: ''
       tags:
       - api
@@ -319,6 +319,141 @@ paths:
         in: path
         required: true
         description: A unique integer value identifying this idea.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/idea/vote/:
+    get:
+      operationId: listVotes
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vote'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createVote
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Vote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Vote'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+          description: ''
+      tags:
+      - api
+  /api/idea/vote/{id}/:
+    get:
+      operationId: retrieveVote
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this vote.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateVote
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this vote.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Vote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Vote'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateVote
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this vote.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Vote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Vote'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyVote
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this vote.
         schema:
           type: string
       responses:
@@ -453,24 +588,7 @@ components:
             label:
               type: string
               readOnly: true
-            username:
-              type: string
-              description: Required. 150 characters or fewer. Letters, digits and
-                @/./+/-/_ only.
-              pattern: ^[\w.@+-]+\z
-              maxLength: 150
-            email:
-              type: string
-              format: email
-              maxLength: 254
-            first_name:
-              type: string
-              maxLength: 150
-            last_name:
-              type: string
-              maxLength: 150
-          required:
-          - username
+              description: The full name of the user if it exists, otherwise the username
           readOnly: true
         title:
           type: string
@@ -497,6 +615,93 @@ components:
       - title
       - description
       - campaign
+    IdeaDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_by:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            label:
+              type: string
+              readOnly: true
+              description: The full name of the user if it exists, otherwise the username
+          readOnly: true
+        round_votes:
+          type: array
+          items:
+            type: object
+            properties:
+              round_pk:
+                type: integer
+              count:
+                type: integer
+            required:
+            - round_pk
+            - count
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        visibility:
+          enum:
+          - PUBLIC
+          - BUSINESS_AREA
+          - PRIVATE
+          type: string
+        campaign:
+          type: integer
+      required:
+      - round_votes
+      - title
+      - description
+      - campaign
+    Vote:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_by:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            label:
+              type: string
+              readOnly: true
+              description: The full name of the user if it exists, otherwise the username
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        idea:
+          type: integer
+        round:
+          type: integer
+      required:
+      - idea
+      - round
     TokenObtainPair:
       type: object
       properties:

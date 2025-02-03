@@ -8,7 +8,7 @@ from .models import Profile
 
 class UserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    label = serializers.SerializerMethodField()
+    label = serializers.SerializerMethodField(help_text='The full name of the user if it exists, otherwise the username')
 
     @staticmethod
     def get_label(obj: Optional[User]) -> Optional[str]:
@@ -75,5 +75,14 @@ class ExtendedUserSerializer(UserWithProfileSerializer):
         ]
 
 
+class AbbreviatedUserSerializer(UserSerializer):
+    class Meta:
+        model = UserSerializer.Meta.model
+        fields = [
+            'id',
+            'label',
+        ]
+
+
 class CreatedByModelSerializer(serializers.ModelSerializer):
-    created_by = UserSerializer(read_only=True)
+    created_by = AbbreviatedUserSerializer(read_only=True)

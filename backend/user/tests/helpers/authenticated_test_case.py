@@ -14,10 +14,3 @@ class AuthenticatedClientTestCase(TestCase):
         self.client = APIClient()
 
         self.client.force_authenticate(user=self.user)
-
-    def tearDown(self):
-        self.client.force_authenticate(user=None)
-        self.client.logout()
-        self.client = None
-        self.user.delete()
-        self.user = None

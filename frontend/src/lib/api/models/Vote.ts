@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Idea = {
+export type Vote = {
     readonly id?: number;
     readonly created_by?: {
         readonly id?: number;
@@ -11,18 +11,9 @@ export type Idea = {
          */
         readonly label?: string;
     };
-    title: string;
-    description: string;
     readonly created_at?: string;
     readonly updated_at?: string;
-    visibility?: Idea.visibility;
-    campaign: number;
+    idea: number;
+    round: number;
 };
-export namespace Idea {
-    export enum visibility {
-        PUBLIC = 'PUBLIC',
-        BUSINESS_AREA = 'BUSINESS_AREA',
-        PRIVATE = 'PRIVATE',
-    }
-}
 

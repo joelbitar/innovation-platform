@@ -4,9 +4,11 @@
 /* eslint-disable */
 import type { BusinessArea } from '../models/BusinessArea';
 import type { Idea } from '../models/Idea';
+import type { IdeaDetail } from '../models/IdeaDetail';
 import type { TokenObtainPair } from '../models/TokenObtainPair';
 import type { TokenRefresh } from '../models/TokenRefresh';
 import type { UserProfile } from '../models/UserProfile';
+import type { Vote } from '../models/Vote';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
@@ -172,12 +174,12 @@ export class ApiService {
     }
     /**
      * @param id A unique integer value identifying this idea.
-     * @returns Idea
+     * @returns IdeaDetail
      * @throws ApiError
      */
     public static retrieveIdea(
         id: string,
-    ): CancelablePromise<Idea> {
+    ): CancelablePromise<IdeaDetail> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/idea/idea/{id}/',
@@ -237,6 +239,103 @@ export class ApiService {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/idea/idea/{id}/',
+            path: {
+                'id': id,
+            },
+        });
+    }
+    /**
+     * @returns Vote
+     * @throws ApiError
+     */
+    public static listVotes(): CancelablePromise<Array<Vote>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/idea/vote/',
+        });
+    }
+    /**
+     * @param requestBody
+     * @returns Vote
+     * @throws ApiError
+     */
+    public static createVote(
+        requestBody?: Vote,
+    ): CancelablePromise<Vote> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/idea/vote/',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * @param id A unique integer value identifying this vote.
+     * @returns Vote
+     * @throws ApiError
+     */
+    public static retrieveVote(
+        id: string,
+    ): CancelablePromise<Vote> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/idea/vote/{id}/',
+            path: {
+                'id': id,
+            },
+        });
+    }
+    /**
+     * @param id A unique integer value identifying this vote.
+     * @param requestBody
+     * @returns Vote
+     * @throws ApiError
+     */
+    public static updateVote(
+        id: string,
+        requestBody?: Vote,
+    ): CancelablePromise<Vote> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/idea/vote/{id}/',
+            path: {
+                'id': id,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * @param id A unique integer value identifying this vote.
+     * @param requestBody
+     * @returns Vote
+     * @throws ApiError
+     */
+    public static partialUpdateVote(
+        id: string,
+        requestBody?: Vote,
+    ): CancelablePromise<Vote> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/idea/vote/{id}/',
+            path: {
+                'id': id,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * @param id A unique integer value identifying this vote.
+     * @returns void
+     * @throws ApiError
+     */
+    public static destroyVote(
+        id: string,
+    ): CancelablePromise<void> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/idea/vote/{id}/',
             path: {
                 'id': id,
             },

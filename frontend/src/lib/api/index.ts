@@ -9,8 +9,10 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { BusinessArea } from './models/BusinessArea';
 export { Idea } from './models/Idea';
+export { IdeaDetail } from './models/IdeaDetail';
 export type { TokenObtainPair } from './models/TokenObtainPair';
 export type { TokenRefresh } from './models/TokenRefresh';
 export { UserProfile } from './models/UserProfile';
+export type { Vote } from './models/Vote';
 
 export { ApiService } from './services/ApiService';
