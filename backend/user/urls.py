@@ -1,6 +1,6 @@
 from django.urls import path, include
-
 from rest_framework_simplejwt.views import TokenObtainPairView
+
 from .views.me import UserMeView
 from .views.token_blacklist import TokenBlacklistView
 from .views.token_refresh_view import CustomTokenRefreshView
