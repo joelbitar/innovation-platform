@@ -4,19 +4,14 @@ import {ApiService} from "@/lib/api";
 import React, {useEffect, useState} from "react";
 
 type Props = {
-    campaignId: number
+    campaignId: string
 }
 
 export default function CampaignRoundList({campaignId}: Props) {
     const [campaignRounds, setCampaignRounds] = useState([]);
 
-    console.log('campid', campaignId);
-
     useEffect(() => {
-        console.log('CampaignRoundList fetch: "' + String(campaignId) + '"');
-        ApiService.listCampaignRounds(String(campaignId)).then(
-            setCampaignRounds
-        )
+        ApiService.listCampaignRounds(campaignId).then(setCampaignRounds)
     }, [campaignId]);
 
     return (
@@ -26,9 +21,7 @@ export default function CampaignRoundList({campaignId}: Props) {
                 campaignRounds &&
                 campaignRounds.map((campaignRound) => (
                         <div key={campaignRound.id}>
-                            <a href={`/round/${campaignRound.id}`}>{campaignRound.name}</a>
-                            <h3>{campaignRound.name}</h3>
-                            <p>{campaignRound.description}</p>
+                            <a href={`/campaign/${campaignId}/round/${campaignRound.id}/`}>{campaignRound.name}</a>
                         </div>
                     )
                 )
