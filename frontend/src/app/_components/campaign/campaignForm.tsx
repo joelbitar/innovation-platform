@@ -1,20 +1,28 @@
 'use client';
 
 import React, {useState} from 'react';
-import {ApiService} from "@/lib/api";
+import {ApiService, Campaign} from "@/lib/api";
+import {useForm, SubmitHandler} from "react-hook-form";
 
 export function CampaignCreateForm() {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: {errors},
+    } = useForm<Campaign>()
 
-        ApiService.createCampaign({
-            name,
-            description
-        }).then(
+    const onSubmit: (data: Campaign) => void = (data: Campaign) =>  {
+        ApiService.createCampaign(data).then(
             (data) => {
+                window.history.pushState(
+                    {},
+                    '',
+                    `/campaign/${data.id}`
+                )
                 console.log(data)
             },
             (error) => {
@@ -26,16 +34,16 @@ export function CampaignCreateForm() {
     return (
         <>
             <h1>Campaign Form</h1>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <label>
                     Name:
-                    <input value={name} onChange={(e) => setName(e.target.value)} type="text" name="name"/>
+                    <input {...register("name")}/>
                 </label>
                 <label>
                     Description:
-                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} name="description"/>
+                    <textarea {...register("description")}/>
                 </label>
-                <button type="submit" onClick={handleSubmit}>Submit</button>
+                <button type="submit">Submit</button>
             </form>
         </>
     )

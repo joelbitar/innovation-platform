@@ -74,3 +74,6 @@ generate-frontend-permissions:
 
 show_urls:
 	docker compose run backend-dev sh -c "python manage.py show_urls"
+
+createsuperuser:
+	docker compose run backend-dev sh -c "python manage.py createsuperuser"
