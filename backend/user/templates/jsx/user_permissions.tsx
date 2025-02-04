@@ -1,0 +1,37 @@
+'use client'
+/* generated using generate_permissions -- do not edit */
+
+import {getUserPermissions} from "./auth";
+
+export class UserPermissions {
+    // List of possible permissions{% for permission in permissions %}
+    static {{ permission.key }} = "{{permission.permission}}";{% endfor %}
+
+    static getAllPermissions() {
+        return [{% for permission in permissions %}
+            this.{{permission.key}}{% if not loop.last %},{% endif %}{% endfor %}
+        ];
+    }
+
+    static hasPermission(permission) {
+        if(!this.getAllPermissions().includes(permission)){
+            console.error('Permission not found amongst possibilities: ' + permission);
+        }
+
+        const currentUserPermissions = getUserPermissions()
+
+        return currentUserPermissions.includes(permission);
+    }
+
+    // Specific methods for checking if the current user has the specified permission{% for permission in permissions %}
+    static has{{ permission.method_name }}() {
+        return this.hasPermission(this.{{ permission.key }}, userPermissions);
+    }{% endfor %}
+}
+
+export function Secured({children, permissions}) {
+    console.log('UserPermission', permissions)
+    return <>
+        {% verbatim %} {{ children }} {% endverbatim %}
+    </>
+}

@@ -138,35 +138,6 @@ paths:
           description: ''
       tags:
       - api
-  /api/user/user/me/:
-    get:
-      operationId: listUserMes
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items: {}
-          description: ''
-      tags:
-      - api
-  /api/user/user/me/profile/:
-    get:
-      operationId: getForLoggedInUserUserProfile
-      description: View to work with profile for the currently logged in user
-      parameters: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserProfile'
-          description: ''
-      tags:
-      - api
   /api/idea/idea/:
     get:
       operationId: listIdeas
@@ -437,7 +408,35 @@ paths:
           description: ''
       tags:
       - api
-  /api/user/auth/token/:
+  /api/user/me/:
+    get:
+      operationId: getForCurrentLoggedInUserUserWithPermissions
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithPermissions'
+          description: ''
+      tags:
+      - api
+  /api/user/me/profile/:
+    get:
+      operationId: getForLoggedInUserUserProfile
+      description: View to work with profile for the currently logged in user
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+      tags:
+      - api
+  /api/auth/token/:
     post:
       operationId: createTokenObtainPair
       description: 'Takes a set of user credentials and returns an access and refresh
@@ -465,7 +464,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/user/auth/token/refresh/:
+  /api/auth/token/refresh/:
     post:
       operationId: createTokenRefresh
       description: ''
@@ -490,7 +489,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/user/auth/token/blacklist/:
+  /api/auth/token/blacklist/:
     post:
       operationId: createTokenBlacklist
       description: ''
@@ -534,21 +533,6 @@ components:
             type: integer
       required:
       - name
-    UserProfile:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        type:
-          enum:
-          - CONTRIBUTOR
-          - MODERATOR
-          - ADMIN
-          type: string
-        user:
-          type: string
-          readOnly: true
     Idea:
       type: object
       properties:
@@ -678,6 +662,77 @@ components:
       required:
       - idea
       - round
+    UserWithPermissions:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+          description: The full name of the user if it exists, otherwise the username
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+\z
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        profile:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            type:
+              enum:
+              - CONTRIBUTOR
+              - MODERATOR
+              - ADMIN
+              type: string
+            user:
+              type: string
+              readOnly: true
+          readOnly: true
+        permissions:
+          type: string
+          readOnly: true
+        group_permissions:
+          type: string
+          readOnly: true
+        is_staff:
+          type: boolean
+          readOnly: true
+        is_superuser:
+          type: boolean
+          readOnly: true
+      required:
+      - username
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        type:
+          enum:
+          - CONTRIBUTOR
+          - MODERATOR
+          - ADMIN
+          type: string
+        user:
+          type: string
+          readOnly: true
     TokenObtainPair:
       type: object
       properties:

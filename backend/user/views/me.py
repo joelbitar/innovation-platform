@@ -2,8 +2,9 @@ from django.core.exceptions import SuspiciousOperation
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
-from ..serializers import ExtendedUserSerializer
+from ..serializers import UserWithPermissionsSerializer
 
 
 class CurrentUserViewBase(APIView):
@@ -16,15 +17,19 @@ class CurrentUserViewBase(APIView):
         return user
 
 
-class UserMeView(CurrentUserViewBase):
+class UserMeView(CurrentUserViewBase, ModelViewSet):
     permission_classes = [IsAuthenticated]
     """
     View to return data about the currently logged in user
     """
 
-    def get(self, request):
+    http_method_names = ['get']
+
+    serializer_class = UserWithPermissionsSerializer
+
+    def get_for_current_logged_in_user(self, request):
         return Response(
-            ExtendedUserSerializer(
+            self.serializer_class(
                 self.current_user()
             ).data
         )

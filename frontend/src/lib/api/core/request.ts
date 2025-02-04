@@ -87,7 +87,7 @@ const getResponse = (requestConfig: RequestConfig): Promise<any> => {
         requestData.body = JSON.stringify(requestConfig.data);
     }
 
-    if (!isExpired(accessToken) || requestConfig.url.startsWith('/api/auth/')) {
+    if ((!!accessToken && !isExpired(accessToken)) || requestConfig.url.startsWith('/api/auth/')) {
         // The token is valid
         // or the request is to the auth endpoint
         // In any case we shall add the token to the headers and make the request.
@@ -129,6 +129,8 @@ const getResponse = (requestConfig: RequestConfig): Promise<any> => {
                     if (response.ok) {
                         return response.json();
                     } else {
+                        setAccessToken('');
+                        setRefreshToken('');
                         throw new Error('Error refreshing token');
                     }
                 }).then((data) => {

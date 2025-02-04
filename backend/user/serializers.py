@@ -50,7 +50,7 @@ class UserWithProfileSerializer(UserSerializer):
         ]
 
 
-class ExtendedUserSerializer(UserWithProfileSerializer):
+class UserWithPermissionsSerializer(UserWithProfileSerializer):
     permissions = serializers.SerializerMethodField()
     group_permissions = serializers.SerializerMethodField()
 

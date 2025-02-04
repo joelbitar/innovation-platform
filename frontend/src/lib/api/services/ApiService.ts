@@ -8,6 +8,7 @@ import type { IdeaDetail } from '../models/IdeaDetail';
 import type { TokenObtainPair } from '../models/TokenObtainPair';
 import type { TokenRefresh } from '../models/TokenRefresh';
 import type { UserProfile } from '../models/UserProfile';
+import type { UserWithPermissions } from '../models/UserWithPermissions';
 import type { Vote } from '../models/Vote';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -108,27 +109,6 @@ export class ApiService {
             path: {
                 'id': id,
             },
-        });
-    }
-    /**
-     * @returns any
-     * @throws ApiError
-     */
-    public static listUserMes(): CancelablePromise<Array<any>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/user/user/me/',
-        });
-    }
-    /**
-     * View to work with profile for the currently logged in user
-     * @returns UserProfile
-     * @throws ApiError
-     */
-    public static getForLoggedInUserUserProfile(): CancelablePromise<UserProfile> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/user/user/me/profile/',
         });
     }
     /**
@@ -326,6 +306,27 @@ export class ApiService {
         });
     }
     /**
+     * @returns UserWithPermissions
+     * @throws ApiError
+     */
+    public static getForCurrentLoggedInUserUserWithPermissions(): CancelablePromise<UserWithPermissions> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/user/me/',
+        });
+    }
+    /**
+     * View to work with profile for the currently logged in user
+     * @returns UserProfile
+     * @throws ApiError
+     */
+    public static getForLoggedInUserUserProfile(): CancelablePromise<UserProfile> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/user/me/profile/',
+        });
+    }
+    /**
      * Takes a set of user credentials and returns an access and refresh JSON web
      * token pair to prove the authentication of those credentials.
      * @param requestBody
@@ -337,7 +338,7 @@ export class ApiService {
     ): CancelablePromise<TokenObtainPair> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/user/auth/token/',
+            url: '/api/auth/token/',
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -352,7 +353,7 @@ export class ApiService {
     ): CancelablePromise<TokenRefresh> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/user/auth/token/refresh/',
+            url: '/api/auth/token/refresh/',
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -367,7 +368,7 @@ export class ApiService {
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/user/auth/token/blacklist/',
+            url: '/api/auth/token/blacklist/',
             body: requestBody,
             mediaType: 'application/json',
         });

@@ -68,5 +68,9 @@ generate-api-client:
 	docker compose run frontend-dev sh -c "chmod -R 774 src/lib/api && chown -R $(shell id -u):$(shell id -g) src/lib/api"
 	rm frontend/openapischema.yml
 
+generate-permissions:
+	docker compose run backend-dev sh -c "python manage.py generate_permissions_jsx temp_generated_permissions.jsx; chmod -R 664 temp_generated_permissions.jsx && chown -R $(shell id -u):$(shell id -g) temp_generated_permissions.jsx"
+	mv backend/temp_generated_permissions.jsx frontend/src/lib/userPermissions.jsx
+
 show_urls:
 	docker compose run backend-dev sh -c "python manage.py show_urls"

@@ -3,6 +3,7 @@
 import {useState} from "react";
 import {login, logout} from "@/lib/auth";
 import {ApiService} from "@/lib/api";
+import {Secured, UserPermissions} from "@/lib/userPermissions";
 
 
 export default function LoginForm() {
@@ -47,17 +48,23 @@ export default function LoginForm() {
                 </button>
             </form>
             <button type={"button"} onClick={() => {
-                ApiService.retrieveUserProfile().then(
+                ApiService.getForLoggedInUserUserProfile().then(
                     (data) => {
                         console.log('buttonclick response', data)
                     }
                 )
-            }}>Get User
+            }}>Get User Profile
             </button>
             <button type={"button"} onClick={() => {
                 logout()
             }}>Logout
             </button>
+            <Secured
+                permissions={[UserPermissions.campaign__delete_campaign]}
+            >
+                <>
+                hej </>
+            </Secured>
         </div>
     );
 }

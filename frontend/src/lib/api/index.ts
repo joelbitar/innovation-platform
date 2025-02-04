@@ -13,6 +13,7 @@ export { IdeaDetail } from './models/IdeaDetail';
 export type { TokenObtainPair } from './models/TokenObtainPair';
 export type { TokenRefresh } from './models/TokenRefresh';
 export { UserProfile } from './models/UserProfile';
+export { UserWithPermissions } from './models/UserWithPermissions';
 export type { Vote } from './models/Vote';
 
 export { ApiService } from './services/ApiService';
