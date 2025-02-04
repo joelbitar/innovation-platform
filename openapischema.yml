@@ -408,7 +408,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/campaign/campaign/:
+  /api/campaign/:
     get:
       operationId: listCampaigns
       description: ''
@@ -448,7 +448,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/campaign/campaign/{id}/:
+  /api/campaign/{id}/:
     get:
       operationId: retrieveCampaign
       description: ''
@@ -536,6 +536,177 @@ paths:
         in: path
         required: true
         description: A unique integer value identifying this campaign.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/campaign/{campaign_id}/round/:
+    get:
+      operationId: listCampaignRounds
+      description: ''
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CampaignRound'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createCampaignRound
+      description: ''
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignRound'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CampaignRound'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CampaignRound'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignRound'
+          description: ''
+      tags:
+      - api
+  /api/campaign/{campaign_id}/round/{id}/:
+    get:
+      operationId: retrieveCampaignRound
+      description: ''
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignRound'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateCampaignRound
+      description: ''
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignRound'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CampaignRound'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CampaignRound'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignRound'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateCampaignRound
+      description: ''
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignRound'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CampaignRound'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CampaignRound'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignRound'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyCampaignRound
+      description: ''
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: ''
         schema:
           type: string
       responses:
@@ -834,6 +1005,41 @@ components:
       required:
       - name
       - description
+    CampaignRound:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_by:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            label:
+              type: string
+              readOnly: true
+              description: The full name of the user if it exists, otherwise the username
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        campaign:
+          type: integer
+      required:
+      - name
+      - campaign
     UserWithPermissions:
       type: object
       properties:

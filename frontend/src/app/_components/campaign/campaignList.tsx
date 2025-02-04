@@ -18,7 +18,9 @@ export default function CampaignList() {
                 campaigns &&
                 campaigns.map((campaign) => (
                         <div key={campaign.id}>
-                            <h2>{campaign.name}</h2>
+                            <a href={`/campaign/${campaign.id}`}>
+                                {campaign.name}
+                            </a>
                             <p>{campaign.description}</p>
                         </div>
                     )

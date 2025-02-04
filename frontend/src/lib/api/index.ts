@@ -9,6 +9,7 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { BusinessArea } from './models/BusinessArea';
 export type { Campaign } from './models/Campaign';
+export type { CampaignRound } from './models/CampaignRound';
 export { Idea } from './models/Idea';
 export { IdeaDetail } from './models/IdeaDetail';
 export type { TokenObtainPair } from './models/TokenObtainPair';

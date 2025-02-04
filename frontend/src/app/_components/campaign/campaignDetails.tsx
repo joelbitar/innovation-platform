@@ -2,6 +2,7 @@
 
 import {useEffect, useState} from "react";
 import {ApiService} from "@/lib/api";
+import CampaignRoundList from "@/app/_components/campaign_round/campaignRoundList";
 
 type Props = {
     id: number
@@ -28,6 +29,7 @@ export default function CampaignDetails({id}: Props) {
                     </>
                 )
             }
+            <CampaignRoundList campaignId={id} />
         </>
     )
 }
