@@ -125,26 +125,10 @@ export class ApiService {
      * @returns UserProfile
      * @throws ApiError
      */
-    public static retrieveUserProfile(): CancelablePromise<UserProfile> {
+    public static getForLoggedInUserUserProfile(): CancelablePromise<UserProfile> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/user/user/me/profile/',
-        });
-    }
-    /**
-     * View to work with profile for the currently logged in user
-     * @param requestBody
-     * @returns UserProfile
-     * @throws ApiError
-     */
-    public static updateUserProfile(
-        requestBody?: UserProfile,
-    ): CancelablePromise<UserProfile> {
-        return __request(OpenAPI, {
-            method: 'PUT',
-            url: '/api/user/user/me/profile/',
-            body: requestBody,
-            mediaType: 'application/json',
         });
     }
     /**

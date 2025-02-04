@@ -23,7 +23,7 @@ class UserMeProfileView(CurrentUserViewBase, ModelViewSet):
             user=self.current_user()
         )
 
-    def get_current_user_profile_response(self, request):
+    def get_for_logged_in_user(self, request):
         profile = self.get_queryset().first()
 
         if not profile:

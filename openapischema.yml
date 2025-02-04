@@ -155,33 +155,9 @@ paths:
       - api
   /api/user/user/me/profile/:
     get:
-      operationId: retrieveUserProfile
+      operationId: getForLoggedInUserUserProfile
       description: View to work with profile for the currently logged in user
       parameters: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserProfile'
-          description: ''
-      tags:
-      - api
-    put:
-      operationId: updateUserProfile
-      description: View to work with profile for the currently logged in user
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserProfile'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/UserProfile'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/UserProfile'
       responses:
         '200':
           content:
