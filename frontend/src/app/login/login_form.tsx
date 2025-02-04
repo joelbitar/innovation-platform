@@ -59,12 +59,6 @@ export default function LoginForm() {
                 logout()
             }}>Logout
             </button>
-            <Secured
-                permissions={[UserPermissions.campaign__delete_campaign]}
-            >
-                <>
-                hej </>
-            </Secured>
         </div>
     );
 }

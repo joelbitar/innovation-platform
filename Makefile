@@ -60,7 +60,7 @@ migrate:
 makemigrations:
 	docker compose run backend-dev sh -c "python manage.py makemigrations && chmod -R 664 */migrations/*.py && chown -R $(shell id -u):$(shell id -g) */migrations/*.py"
 
-generate-api-client:
+generate-frontend-api-service:
 	docker compose run backend-dev sh -c "python manage.py generateschema --file openapischema.yml; chmod -R 664 openapischema.yml && chown -R $(shell id -u):$(shell id -g) openapischema.yml"
 	mv backend/openapischema.yml openapischema.yml
 	cp openapischema.yml frontend/openapischema.yml
@@ -68,7 +68,7 @@ generate-api-client:
 	docker compose run frontend-dev sh -c "chmod -R 774 src/lib/api && chown -R $(shell id -u):$(shell id -g) src/lib/api"
 	rm frontend/openapischema.yml
 
-generate-permissions:
+generate-frontend-permissions:
 	docker compose run backend-dev sh -c "python manage.py generate_permissions_jsx temp_generated_permissions.jsx; chmod -R 664 temp_generated_permissions.jsx && chown -R $(shell id -u):$(shell id -g) temp_generated_permissions.jsx"
 	mv backend/temp_generated_permissions.jsx frontend/src/lib/userPermissions.jsx
 

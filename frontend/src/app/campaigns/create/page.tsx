@@ -1,13 +1,13 @@
 import Container from "@/app/_components/container";
 import Header from "@/app/_components/header";
-import CampaignList from "@/app/_components/campaign/campaignList";
+import {CampaignCreateForm} from "@/app/_components/campaign/campaignForm";
 
-export default function Index() {
+export default function Create() {
     return (
         <main>
             <Container>
                 <Header />
-                <CampaignList />
+                <CampaignCreateForm />
             </Container>
         </main>
     );

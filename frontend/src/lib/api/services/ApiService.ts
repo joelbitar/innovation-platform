@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BusinessArea } from '../models/BusinessArea';
+import type { Campaign } from '../models/Campaign';
 import type { Idea } from '../models/Idea';
 import type { IdeaDetail } from '../models/IdeaDetail';
 import type { TokenObtainPair } from '../models/TokenObtainPair';
@@ -300,6 +301,103 @@ export class ApiService {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/idea/vote/{id}/',
+            path: {
+                'id': id,
+            },
+        });
+    }
+    /**
+     * @returns Campaign
+     * @throws ApiError
+     */
+    public static listCampaigns(): CancelablePromise<Array<Campaign>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/campaign/campaign/',
+        });
+    }
+    /**
+     * @param requestBody
+     * @returns Campaign
+     * @throws ApiError
+     */
+    public static createCampaign(
+        requestBody?: Campaign,
+    ): CancelablePromise<Campaign> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/campaign/campaign/',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * @param id A unique integer value identifying this campaign.
+     * @returns Campaign
+     * @throws ApiError
+     */
+    public static retrieveCampaign(
+        id: string,
+    ): CancelablePromise<Campaign> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/campaign/campaign/{id}/',
+            path: {
+                'id': id,
+            },
+        });
+    }
+    /**
+     * @param id A unique integer value identifying this campaign.
+     * @param requestBody
+     * @returns Campaign
+     * @throws ApiError
+     */
+    public static updateCampaign(
+        id: string,
+        requestBody?: Campaign,
+    ): CancelablePromise<Campaign> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/campaign/campaign/{id}/',
+            path: {
+                'id': id,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * @param id A unique integer value identifying this campaign.
+     * @param requestBody
+     * @returns Campaign
+     * @throws ApiError
+     */
+    public static partialUpdateCampaign(
+        id: string,
+        requestBody?: Campaign,
+    ): CancelablePromise<Campaign> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/campaign/campaign/{id}/',
+            path: {
+                'id': id,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * @param id A unique integer value identifying this campaign.
+     * @returns void
+     * @throws ApiError
+     */
+    public static destroyCampaign(
+        id: string,
+    ): CancelablePromise<void> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/campaign/campaign/{id}/',
             path: {
                 'id': id,
             },

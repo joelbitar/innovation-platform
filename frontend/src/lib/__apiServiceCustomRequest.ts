@@ -150,10 +150,67 @@ const getResponse = (requestConfig: RequestConfig): Promise<any> => {
     }
 }
 
+export const isDefined = <T>(value: T | null | undefined): value is Exclude<T, null | undefined> => {
+    return value !== undefined && value !== null;
+};
+
+export const getQueryString = (params: Record<string, any>): string => {
+    const qs: string[] = [];
+
+    const append = (key: string, value: any) => {
+        qs.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
+    };
+
+    const process = (key: string, value: any) => {
+        if (isDefined(value)) {
+            if (Array.isArray(value)) {
+                value.forEach(v => {
+                    process(key, v);
+                });
+            } else if (typeof value === 'object') {
+                Object.entries(value).forEach(([k, v]) => {
+                    process(`${key}[${k}]`, v);
+                });
+            } else {
+                append(key, value);
+            }
+        }
+    };
+
+    Object.entries(params).forEach(([key, value]) => {
+        process(key, value);
+    });
+
+    if (qs.length > 0) {
+        return `?${qs.join('&')}`;
+    }
+
+    return '';
+};
+
+const getUrl = (config: OpenAPIConfig, options: ApiRequestOptions): string => {
+    const encoder = config.ENCODE_PATH || encodeURI;
+
+    const path = options.url
+        .replace('{api-version}', config.VERSION)
+        .replace(/{(.*?)}/g, (substring: string, group: string) => {
+            if (options.path?.hasOwnProperty(group)) {
+                return encoder(String(options.path[group]));
+            }
+            return substring;
+        });
+
+    const url = `${config.BASE}${path}`;
+    if (options.query) {
+        return `${url}${getQueryString(options.query)}`;
+    }
+    return url;
+};
+
 export const request = <T>(config: OpenAPIConfig, options: ApiRequestOptions): CancelablePromise<T> => {
     return new CancelablePromise((resolve, reject, onCancel) => {
         let requestConfig = getRequestConfig(
-            `${config.BASE}${options.url}`,
+            getUrl(config, options),
             options.body,
             options.method
         );

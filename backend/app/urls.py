@@ -20,6 +20,7 @@ from django.urls import path, include
 api_urls = [
     path('business/', include('business.urls')),
     path('idea/', include('idea.urls')),
+    path('campaign/', include('campaign.urls')),
     path('', include('user.urls')),
 ]
 
