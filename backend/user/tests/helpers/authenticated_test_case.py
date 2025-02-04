@@ -8,6 +8,7 @@ class AuthenticatedClientTestCase(TestCase):
         self.user = User.objects.create_user(
             username='testuser',
         )
+        self.user.is_superuser = True
         self.user.set_password('testpassword')
         self.user.save()
 

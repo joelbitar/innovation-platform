@@ -1,5 +1,3 @@
-import logging
-
 from django.core.exceptions import SuspiciousOperation
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -19,6 +17,7 @@ class CurrentUserViewBase(APIView):
 
 
 class UserMeView(CurrentUserViewBase):
+    permission_classes = [IsAuthenticated]
     """
     View to return data about the currently logged in user
     """

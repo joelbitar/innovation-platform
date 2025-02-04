@@ -19,8 +19,9 @@ class UserMeAPITests(AuthenticatedClientTestCase):
 
         with self.subTest('Response data'):
             self.assertEqual(
-                self.user.username,
-                response.data.get('username'),
+                self.user.pk,
+                response.data.get('id'),
+                response.data,
             )
 
         with self.subTest('Should return 400 error if user is not active'):

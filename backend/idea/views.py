@@ -1,6 +1,4 @@
-from rest_framework.permissions import IsAuthenticated
-
-from user.views.helpers.created_by_current_user_helper import CreatedByModelViewSet
+from lib.created_by_current_user_helper import CreatedByModelViewSet
 from .models import Idea, Vote
 from .serializers import IdeaSerializer, VoteSerializer, IdeaDetailSerializer
 

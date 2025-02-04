@@ -66,7 +66,7 @@ class IdeaAPIVoteTests(AuthenticatedClientTestCase):
 
         with self.subTest('Should create a vote on the round'):
             self.assertEqual(
-                round,
+                self.round,
                 self.idea.vote_set.first().round
             )
 

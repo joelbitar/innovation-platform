@@ -1,14 +1,14 @@
 from django.core.exceptions import SuspiciousOperation
 from django.http import JsonResponse
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class TokenBlacklistView(APIView):
-    authentication_classes = []
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     @staticmethod
     def blacklist_refresh_token(refresh_token_string: str):
