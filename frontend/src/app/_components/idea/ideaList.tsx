@@ -22,14 +22,18 @@ export default function IdeaList({campaignId, roundId, voting}: IdeaListProps) {
         <>
             <ul>
                 {ideas.map((idea: Idea) => (
-                    <li key={idea.id}>
-                        <Link href={`/campaign/${campaignId}/idea/${idea.id}`}>
-                            {idea.title}
-                        </Link>
+                    <div key={idea.id} className={'card'}>
+                        <h3>
+                            <Link href={`/campaign/${campaignId}/idea/${idea.id}`}>
+                                {idea.title}
+                            </Link>
+                        </h3>
                         {
                             <>
                                 {roundId && (
-                                    <IdeaVoteCount idea={idea} roundId={roundId}/>
+                                    <>
+                                        <span>Votes: </span><IdeaVoteCount idea={idea} roundId={roundId}/>
+                                    </>
                                 )}
                             </>
                         }
@@ -40,7 +44,7 @@ export default function IdeaList({campaignId, roundId, voting}: IdeaListProps) {
                                 </Secured>
                             </>
                         )}
-                    </li>
+                    </div>
                 ))}
                 {ideas.length === 0 && (
                     <>No ideas yet :(</>

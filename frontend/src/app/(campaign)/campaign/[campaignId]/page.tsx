@@ -26,11 +26,15 @@ export default async function CampaignPage(props: Params) {
                     <CreateCampaignRoundLink campaignId={campaignId}/>
                 </div>
                 <div>
+                    <h2>Information</h2>
                     <CampaignDetails id={campaignId}/>
                     <CampaignIdeasProvider campaignId={campaignId}>
                         <h3
                             className={"text-2xl mt-3 mb-1"}
-                        >Ideas submitted on this campaign</h3>
+                        >
+                            Ideas submitted on this campaign
+                        </h3>
+
                         <CampaignIdeas campaignId={campaignId}/>
                     </CampaignIdeasProvider>
                 </div>

@@ -20,8 +20,15 @@ export default function CampaignRoundList({campaignId}: Props) {
             {
                 campaignRounds &&
                 campaignRounds.map((campaignRound) => (
-                        <div key={campaignRound.id}>
-                            <Link href={`/campaign/${campaignId}/round/${campaignRound.id}/`}>{campaignRound.name}</Link>
+                        <div key={campaignRound.id} className={'card'}>
+                            <h3>
+                                <Link
+                                    href={`/campaign/${campaignId}/round/${campaignRound.id}/`}>{campaignRound.name}
+                                </Link>
+                            </h3>
+                            <p>
+                                {campaignRound.description}
+                            </p>
                         </div>
                     )
                 )

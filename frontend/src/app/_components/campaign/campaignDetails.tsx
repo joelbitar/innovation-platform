@@ -22,17 +22,15 @@ export default function CampaignDetails({id}: Props) {
         <>
             {
                 campaign && (
-                    <>
+                    <div className={'card'}>
                         Name: {campaign.name}
                         <pre>
                             {campaign.description}
                         </pre>
-                    </>
+                    </div>
                 )
             }
-            <h2
-                className={"text-1xl font-bold mt-1"}
-            >Rounds</h2>
+            <h2>Rounds</h2>
             <CampaignRoundList campaignId={id}/>
         </>
     )

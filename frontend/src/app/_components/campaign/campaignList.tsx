@@ -16,10 +16,13 @@ export default function CampaignList() {
             {
                 campaigns &&
                 campaigns.map((campaign) => (
-                        <div key={campaign.id}>
-                            <a href={`/campaign/${campaign.id}`}>
+                        <div key={campaign.id} className={"card"}>
+                            <a href={`/campaign/${campaign.id}`} className={'h3'}>
                                 {campaign.name}
                             </a>
+                            <p>
+                                {campaign.description}
+                            </p>
                         </div>
                     )
                 )
