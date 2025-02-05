@@ -27,7 +27,7 @@ class Idea(models.Model):
         return Vote.objects.filter(idea=self, round=campaign_round, created_by=user).exists()
 
     def add_vote(self, campaign_round: CampaignRound, user: User) -> "Vote":
-        return Vote.objects.create(idea=self, round=self.campaign.rounds.last(), created_by=user)
+        return Vote.objects.create(idea=self, round=campaign_round, created_by=user)
 
     def __str__(self):
         return self.title

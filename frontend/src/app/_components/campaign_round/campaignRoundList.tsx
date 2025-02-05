@@ -17,7 +17,6 @@ export default function CampaignRoundList({campaignId}: Props) {
 
     return (
         <>
-            <h2>Campaign rounds</h2>
             {
                 campaignRounds &&
                 campaignRounds.map((campaignRound) => (

@@ -205,7 +205,7 @@ class AuthenticationAPITests(TestCase):
                 response.content,
             )
 
-        with self.subTest('Should get 400 response when trying to blacklist again'):
+        with self.subTest('Should get 401 response when trying to blacklist again'):
             response = self.client.post(
                 reverse('auth_jwt_token_blacklist'),
                 {
@@ -214,7 +214,7 @@ class AuthenticationAPITests(TestCase):
             )
 
             self.assertEqual(
-                400,
+                401,
                 response.status_code,
                 response.content,
             )

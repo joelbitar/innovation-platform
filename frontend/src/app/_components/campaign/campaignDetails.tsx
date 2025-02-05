@@ -20,15 +20,19 @@ export default function CampaignDetails({id}: Props) {
 
     return (
         <>
-            <h1>Campaign</h1>
             {
                 campaign && (
                     <>
-                        {campaign.name}
-                        {campaign.description}
+                        Name: {campaign.name}
+                        <pre>
+                            {campaign.description}
+                        </pre>
                     </>
                 )
             }
+            <h2
+                className={"text-1xl font-bold mt-1"}
+            >Rounds</h2>
             <CampaignRoundList campaignId={id}/>
         </>
     )

@@ -13,7 +13,6 @@ export default function CampaignList() {
     }, []);
     return (
         <>
-            <h1>Campaigns</h1>
             {
                 campaigns &&
                 campaigns.map((campaign) => (
@@ -21,7 +20,6 @@ export default function CampaignList() {
                             <a href={`/campaign/${campaign.id}`}>
                                 {campaign.name}
                             </a>
-                            <p>{campaign.description}</p>
                         </div>
                     )
                 )

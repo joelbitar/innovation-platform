@@ -688,6 +688,96 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/idea/round/{round_id}/idea/{idea_id}/vote/me/:
+    get:
+      operationId: idea_round_idea_vote_me_list
+      parameters:
+      - in: path
+        name: idea_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      - in: path
+        name: round_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - idea
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vote'
+          description: ''
+    post:
+      operationId: idea_round_idea_vote_me_create
+      parameters:
+      - in: path
+        name: idea_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      - in: path
+        name: round_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Vote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Vote'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+          description: ''
+  /api/idea/round/{round_id}/vote/me/:
+    get:
+      operationId: idea_round_vote_me_list
+      parameters:
+      - in: path
+        name: round_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - idea
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vote'
+          description: ''
   /api/idea/vote/:
     get:
       operationId: idea_vote_list

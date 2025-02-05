@@ -220,7 +220,15 @@ export const request = <T>(config: OpenAPIConfig, options: ApiRequestOptions): C
         })
 
         getResponse(requestConfig).then((response) => {
-            resolve(response.json());
+            try {
+                if (response.status === 204) {
+                    resolve(null);
+                } else {
+                    resolve(response.json());
+                }
+            }finally {
+                resolve(null)
+            }
         }).catch((error) => {
             console.error('Error from server', error)
             reject(error);

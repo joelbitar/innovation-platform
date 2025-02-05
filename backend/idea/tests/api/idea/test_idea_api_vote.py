@@ -136,7 +136,7 @@ class IdeaAPIVoteTests(AuthenticatedClientTestCase):
                 self.assertIn(
                     campaing_round.pk,
                     [rv.get('round_pk') for rv in round_votes],
-                f'Could not find {campaing_round.name} in round_votes'
+                    f'Could not find {campaing_round.name} in round_votes'
                 )
 
         with self.subTest('Should have correct round-vote data for the round'):
@@ -153,6 +153,141 @@ class IdeaAPIVoteTests(AuthenticatedClientTestCase):
                 )
 
     # Test should be able to get if i have voted on an idea
-    def test_should_be_able_to_get_if_i_have_voted_on_an_idea(self):
-        self.assertTrue(False)
+    def test_should_be_able_to_vote_on_an_idea(self):
+        no_vote_response = self.client.get(
+            reverse(
+                'round_idea_me_vote-list',
+                kwargs={'round_id': self.round.pk, 'idea_id': self.idea.pk}
+            )
+        )
+
+        with self.subTest('Should return 404 since there is no vote'):
+            self.assertEqual(
+                404,
+                no_vote_response.status_code,
+            )
+
+        self.idea.vote_set.create(
+            round=self.round,
+            created_by=self.user
+        )
+
+        has_vote_response = self.client.get(
+            reverse(
+                'round_idea_me_vote-list',
+                kwargs={'round_id': self.round.pk, 'idea_id': self.idea.pk}
+            )
+        )
+
+        with self.subTest('Should return 200 since there is a vote'):
+            self.assertEqual(
+                200,
+                has_vote_response.status_code,
+            )
+
+        self.idea.vote_set.all().delete()
+
+        vote_response = self.client.post(
+            reverse(
+                'round_idea_me_vote-list',
+                kwargs={'round_id': self.round.pk, 'idea_id': self.idea.pk}
+            )
+        )
+
+        self.assertTrue(CampaignRound.objects.filter(pk=self.round.pk))
+
+        with self.subTest('Should return 201 since vote is created'):
+            self.assertEqual(
+                201,
+                vote_response.status_code,
+                vote_response.data
+            )
+
+        with self.subTest('Should have a vote'):
+            self.assertEqual(
+                1,
+                self.idea.vote_set.count()
+            )
+
+    # Test should be able to get my votes for a round
+    def test_should_be_able_to_get_my_votes_for_a_round(self):
+        for uid in range(5):
+            self.idea.vote_set.create(
+                round=self.round,
+                created_by=User.objects.create_user(
+                    username=f'testuser{uid}',
+                    password='testpassword'
+                )
+            )
+
+        self.idea.add_vote(
+            campaign_round=self.round,
+            user=self.user
+        )
+        self.idea.add_vote(
+            campaign_round=self.round,
+            user=User.objects.create_user(
+                username='asflsaef',
+                password='testpassword'
+            )
+        )
+
+        expected_vote_count = self.round.vote_set.filter(
+            idea=self.idea,
+            created_by=self.user
+        ).count()
+
+        self.assertEqual(
+            1,
+            expected_vote_count
+        )
+
+        response = self.client.get(
+            reverse(
+                'round_me_vote-list',
+                kwargs={'round_id': self.round.pk}
+            )
+        )
+
+        with self.subTest('Should return 200'):
+            self.assertEqual(
+                200,
+                response.status_code,
+                response.content
+            )
+
+        with self.subTest('Should return correct number of votes'):
+            self.assertEqual(
+                expected_vote_count,
+                len(response.data)
+            )
+
+    # Test should be able to remove vote for myself
+    def test_should_be_able_to_remove_vote_for_myself(self):
+        vote = self.idea.add_vote(
+            campaign_round=self.round,
+            user=self.user
+        )
+
+        response = self.client.delete(
+            reverse(
+                'vote-detail',
+                kwargs={'pk': vote.pk}
+            )
+        )
+
+        with self.subTest('Should return 204'):
+            self.assertEqual(
+                204,
+                response.status_code,
+                response.content
+            )
+
+        with self.subTest('Should not have a vote'):
+            self.assertEqual(
+                0,
+                self.idea.vote_set.count()
+            )
+
+
 

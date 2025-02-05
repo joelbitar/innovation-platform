@@ -125,6 +125,64 @@ export class IdeaService {
         });
     }
     /**
+     * @param ideaId
+     * @param roundId
+     * @returns Vote
+     * @throws ApiError
+     */
+    public static ideaRoundIdeaVoteMeList(
+        ideaId: string,
+        roundId: string,
+    ): CancelablePromise<Array<Vote>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/idea/round/{round_id}/idea/{idea_id}/vote/me/',
+            path: {
+                'idea_id': ideaId,
+                'round_id': roundId,
+            },
+        });
+    }
+    /**
+     * @param ideaId
+     * @param roundId
+     * @param requestBody
+     * @returns Vote
+     * @throws ApiError
+     */
+    public static ideaRoundIdeaVoteMeCreate(
+        ideaId: string,
+        roundId: string,
+        requestBody: Vote,
+    ): CancelablePromise<Vote> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/idea/round/{round_id}/idea/{idea_id}/vote/me/',
+            path: {
+                'idea_id': ideaId,
+                'round_id': roundId,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * @param roundId
+     * @returns Vote
+     * @throws ApiError
+     */
+    public static ideaRoundVoteMeList(
+        roundId: string,
+    ): CancelablePromise<Array<Vote>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/idea/round/{round_id}/vote/me/',
+            path: {
+                'round_id': roundId,
+            },
+        });
+    }
+    /**
      * @returns Vote
      * @throws ApiError
      */

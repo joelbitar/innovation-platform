@@ -2,17 +2,17 @@
 
 
 import React from "react";
-import {useCampaignIdeas} from "@/app/_components/campaign/campaignIdeasProvider";
 import IdeaList from "@/app/_components/idea/ideaList";
 
 
-export default function CampaignIdeaList() {
-    const {ideas} = useCampaignIdeas();
-
+export default function CampaignIdeaList({campaignId, roundId, voting}: { campaignId: string, roundId: string, voting: boolean }) {
     return (
         <>
-            <h1>Ideas</h1>
-            <IdeaList ideas={ideas}/>
+            <IdeaList
+                campaignId={campaignId}
+                roundId={roundId}
+                voting={voting}
+            />
         </>
     )
 }
