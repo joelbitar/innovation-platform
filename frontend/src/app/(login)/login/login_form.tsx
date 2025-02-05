@@ -2,7 +2,6 @@
 
 import {useState} from "react";
 import {login, logout} from "@/lib/auth";
-import {UserService} from "@/lib/api";
 
 
 export default function LoginForm() {
@@ -10,7 +9,6 @@ export default function LoginForm() {
     const [password, setPassword] = useState('')
 
     const handleOnSubmit = () => {
-        console.log('submit')
         login(username, password).then(
             (data) => {
                 console.log(data)
@@ -46,14 +44,6 @@ export default function LoginForm() {
                 >Submit
                 </button>
             </form>
-            <button type={"button"} onClick={() => {
-                UserService.userMeProfileRetrieve().then(
-                    (data) => {
-                        console.log('buttonclick response', data)
-                    }
-                )
-            }}>Get User Profile
-            </button>
             <button type={"button"} onClick={() => {
                 logout()
             }}>Logout

@@ -10,7 +10,7 @@ const Header = () => {
             <Link href="/login/" className="hover:underline ml-4">
                 Login
             </Link>
-            <CreateCampaignLink className="hover:underline ml-4"/>
+            <CreateCampaignLink/>
         </h2>
     );
 };

@@ -21,17 +21,19 @@ export default async function CampaignPage(props: Params) {
         <main>
             <Container>
                 <Header/>
-                <div className={"flex"}>
-                    <CreateCampaignIdeaLink campaignId={campaignId}/>
-                    <CreateCampaignRoundLink campaignId={campaignId}/>
+                <div className={"grid grid-cols-1 gap-5 mb-4"}>
+                    <div className={""}>
+                        <CreateCampaignIdeaLink campaignId={campaignId}/>
+                    </div>
+                    <div className={""}>
+                        <CreateCampaignRoundLink campaignId={campaignId}/>
+                    </div>
                 </div>
                 <div>
                     <h2>Information</h2>
                     <CampaignDetails id={campaignId}/>
                     <CampaignIdeasProvider campaignId={campaignId}>
-                        <h3
-                            className={"text-2xl mt-3 mb-1"}
-                        >
+                        <h3>
                             Ideas submitted on this campaign
                         </h3>
 

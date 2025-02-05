@@ -8,7 +8,11 @@ export function setUserData(data: any) {
 }
 
 export function getUserData() {
-    return JSON.parse(localStorage.getItem('user') || '{}')
+    try{
+        return JSON.parse(localStorage.getItem('user') || '{}')
+    }catch (e) {
+        return {}
+    }
 }
 
 export function getUserPermissions(): string[] {

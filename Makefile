@@ -46,7 +46,7 @@ stop: stop-frontend-dev stop-backend-dev stop-proxy-dev
 	$(info Done stopping)
 
 logs:
-	docker compose logs -f
+	docker compose logs -f -n 50 frontend-dev backend-dev
 
 restart: stop up
 	$(info Done restarting)

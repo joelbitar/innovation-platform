@@ -386,11 +386,16 @@ export class UserPermissions {
 }
 
 export function Secured({children, permissions}) {
-    if(!!permissions && !permissions.every(permission => UserPermissions.hasPermission(permission))) {
-		return null;
-	}
+    let visible = false
 
-    return <>
+    try{
+        visible = true
+        //visible = (!!permissions && !permissions.every(permission => UserPermissions.hasPermission(permission)))
+    }catch (e){
+        console.error('Error while checking permissions: ', e)
+    }
+
+    return <div className={visible ? "" : "hidden"}>
          { children } 
-    </>
+    </div>
 }
