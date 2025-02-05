@@ -10,7 +10,7 @@ export function IdeaForm({campaignId, afterSubmit}: {campaignId: string, afterSu
     const {
         register,
         handleSubmit,
-        watch,
+        reset,
         formState: {errors},
     } = useForm<Campaign>()
 
@@ -26,7 +26,10 @@ export function IdeaForm({campaignId, afterSubmit}: {campaignId: string, afterSu
                     '',
                     `/campaign/${data.id}`
                 )
-                console.log(data)
+                // Clear form
+                reset()
+
+                // Call post sumbmit callback
                 afterSubmit()
             },
             (error) => {
