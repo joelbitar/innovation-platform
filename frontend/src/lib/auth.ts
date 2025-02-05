@@ -1,7 +1,7 @@
 'use client';
 
-import {ApiService} from "@/lib/api";
 import {getRefreshToken, setAccessToken, setRefreshToken} from "@/lib/api/core/request";
+import {AuthService, UserService} from "@/lib/api";
 
 export function setUserData(data: any) {
     localStorage.setItem('user', JSON.stringify(data))
@@ -17,7 +17,7 @@ export function getUserPermissions(): string[] {
 
 function fetchUserData() {
     return new Promise((resolve, reject) => {
-        ApiService.getForCurrentLoggedInUserUserWithPermissions().then(
+        UserService.userMeRetrieve().then(
             (data) => {
                 setUserData(data)
                 resolve(data)
@@ -31,7 +31,7 @@ function fetchUserData() {
 
 export function login(username: string, password: string) {
     return new Promise((resolve, reject) => {
-        ApiService.createTokenObtainPair({
+        AuthService.authTokenCreate({
             username,
             password
         }).then(
@@ -55,7 +55,7 @@ export function login(username: string, password: string) {
 }
 
 export function logout() {
-    ApiService.createTokenBlacklist(
+    AuthService.authTokenBlacklistCreate(
         {
             'refresh': getRefreshToken()
         }

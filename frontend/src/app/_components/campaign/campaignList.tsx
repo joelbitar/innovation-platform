@@ -1,13 +1,13 @@
 'use client'
 
 import {useEffect, useState} from "react";
-import {ApiService} from "@/lib/api";
+import {CampaignService} from "@/lib/api";
 
 export default function CampaignList() {
     const [campaigns, setCampaigns] = useState([]);
 
     useEffect(() => {
-        ApiService.listCampaigns().then(
+        CampaignService.campaignList().then(
             setCampaigns
         )
     }, []);

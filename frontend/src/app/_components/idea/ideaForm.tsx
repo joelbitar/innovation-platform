@@ -1,7 +1,7 @@
 'use client'
 
-import {ApiService, Campaign, Idea} from "@/lib/api";
 import {useForm, SubmitHandler} from "react-hook-form";
+import {Campaign, Idea, IdeaService} from "@/lib/api";
 
 
 
@@ -14,12 +14,10 @@ export function IdeaForm({campaignId, afterSubmit}: {campaignId: string, afterSu
         formState: {errors},
     } = useForm<Campaign>()
 
-    console.log('IdeaForm: "' + String(campaignId) + '"');
-
     const onSubmit: (data: Idea) => void = (data: Idea) =>  {
         data.campaign = parseInt(campaignId, 10)
 
-        ApiService.createIdea(data).then(
+        IdeaService.ideaIdeaCreate(data).then(
             (data) => {
                 window.history.pushState(
                     {},

@@ -2,11 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type BusinessArea = {
+export type AbbreviatedUser = {
     readonly id: number;
-    readonly slug: string;
-    name: string;
-    description?: string;
-    users?: Array<number>;
+    /**
+     * The full name of the user if it exists, otherwise the username
+     */
+    readonly label: string | null;
 };
 

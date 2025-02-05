@@ -1,8 +1,8 @@
 'use client';
 
-import {ApiService} from "@/lib/api";
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
+import {CampaignService} from "@/lib/api";
 
 type Props = {
     campaignId: string
@@ -12,7 +12,7 @@ export default function CampaignRoundList({campaignId}: Props) {
     const [campaignRounds, setCampaignRounds] = useState([]);
 
     useEffect(() => {
-        ApiService.listCampaignRounds(campaignId).then(setCampaignRounds)
+        CampaignService.campaignRoundList(campaignId).then(setCampaignRounds)
     }, [campaignId]);
 
     return (

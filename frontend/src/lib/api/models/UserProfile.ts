@@ -2,16 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { TypeEnum } from './TypeEnum';
 export type UserProfile = {
-    readonly id?: number;
-    type?: UserProfile.type;
-    readonly user?: string;
+    readonly id: number;
+    type?: TypeEnum;
+    readonly user: number;
 };
-export namespace UserProfile {
-    export enum type {
-        CONTRIBUTOR = 'CONTRIBUTOR',
-        MODERATOR = 'MODERATOR',
-        ADMIN = 'ADMIN',
-    }
-}
 

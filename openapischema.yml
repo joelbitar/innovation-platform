@@ -1,13 +1,79 @@
-openapi: 3.0.2
+openapi: 3.0.3
 info:
   title: ''
-  version: ''
+  version: 0.0.0
 paths:
-  /api/business/business_area/:
+  /api/auth/token/:
+    post:
+      operationId: auth_token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/auth/token/blacklist/:
+    post:
+      operationId: auth_token_blacklist_create
+      tags:
+      - auth
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/auth/token/refresh/:
+    post:
+      operationId: auth_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/business/business_area//:
     get:
-      operationId: listBusinessAreas
-      description: ''
-      parameters: []
+      operationId: business_business_area_list
+      tags:
+      - business
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -17,12 +83,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/BusinessArea'
           description: ''
-      tags:
-      - api
     post:
-      operationId: createBusinessArea
-      description: ''
-      parameters: []
+      operationId: business_business_area_create
+      tags:
+      - business
       requestBody:
         content:
           application/json:
@@ -34,6 +98,9 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/BusinessArea'
+        required: true
+      security:
+      - jwtAuth: []
       responses:
         '201':
           content:
@@ -41,19 +108,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/BusinessArea'
           description: ''
-      tags:
-      - api
-  /api/business/business_area/{id}/:
+  /api/business/business_area//{id}/:
     get:
-      operationId: retrieveBusinessArea
-      description: ''
+      operationId: business_business_area_retrieve
       parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this business area.
+      - in: path
+        name: id
         schema:
-          type: string
+          type: integer
+        description: A unique integer value identifying this business area.
+        required: true
+      tags:
+      - business
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -61,18 +129,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/BusinessArea'
           description: ''
-      tags:
-      - api
     put:
-      operationId: updateBusinessArea
-      description: ''
+      operationId: business_business_area_update
       parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this business area.
+      - in: path
+        name: id
         schema:
-          type: string
+          type: integer
+        description: A unique integer value identifying this business area.
+        required: true
+      tags:
+      - business
       requestBody:
         content:
           application/json:
@@ -84,6 +151,9 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/BusinessArea'
+        required: true
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -91,29 +161,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/BusinessArea'
           description: ''
-      tags:
-      - api
     patch:
-      operationId: partialUpdateBusinessArea
-      description: ''
+      operationId: business_business_area_partial_update
       parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this business area.
+      - in: path
+        name: id
         schema:
-          type: string
+          type: integer
+        description: A unique integer value identifying this business area.
+        required: true
+      tags:
+      - business
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BusinessArea'
+              $ref: '#/components/schemas/PatchedBusinessArea'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/BusinessArea'
+              $ref: '#/components/schemas/PatchedBusinessArea'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/BusinessArea'
+              $ref: '#/components/schemas/PatchedBusinessArea'
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -121,320 +192,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/BusinessArea'
           description: ''
-      tags:
-      - api
     delete:
-      operationId: destroyBusinessArea
-      description: ''
+      operationId: business_business_area_destroy
       parameters:
-      - name: id
-        in: path
-        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
         description: A unique integer value identifying this business area.
-        schema:
-          type: string
+        required: true
+      tags:
+      - business
+      security:
+      - jwtAuth: []
       responses:
         '204':
-          description: ''
-      tags:
-      - api
-  /api/idea/idea/:
-    get:
-      operationId: listIdeas
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Idea'
-          description: ''
-      tags:
-      - api
-    post:
-      operationId: createIdea
-      description: ''
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Idea'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Idea'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Idea'
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Idea'
-          description: ''
-      tags:
-      - api
-  /api/idea/idea/{id}/:
-    get:
-      operationId: retrieveIdea
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this idea.
-        schema:
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IdeaDetail'
-          description: ''
-      tags:
-      - api
-    put:
-      operationId: updateIdea
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this idea.
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Idea'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Idea'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Idea'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Idea'
-          description: ''
-      tags:
-      - api
-    patch:
-      operationId: partialUpdateIdea
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this idea.
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Idea'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Idea'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Idea'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Idea'
-          description: ''
-      tags:
-      - api
-    delete:
-      operationId: destroyIdea
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this idea.
-        schema:
-          type: string
-      responses:
-        '204':
-          description: ''
-      tags:
-      - api
-  /api/idea/vote/:
-    get:
-      operationId: listVotes
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Vote'
-          description: ''
-      tags:
-      - api
-    post:
-      operationId: createVote
-      description: ''
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Vote'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Vote'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Vote'
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vote'
-          description: ''
-      tags:
-      - api
-  /api/idea/vote/{id}/:
-    get:
-      operationId: retrieveVote
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this vote.
-        schema:
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vote'
-          description: ''
-      tags:
-      - api
-    put:
-      operationId: updateVote
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this vote.
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Vote'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Vote'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Vote'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vote'
-          description: ''
-      tags:
-      - api
-    patch:
-      operationId: partialUpdateVote
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this vote.
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Vote'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Vote'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Vote'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vote'
-          description: ''
-      tags:
-      - api
-    delete:
-      operationId: destroyVote
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this vote.
-        schema:
-          type: string
-      responses:
-        '204':
-          description: ''
-      tags:
-      - api
-  /api/idea/campaign/{campaign_id}/idea/:
-    get:
-      operationId: listIdeaDetails
-      description: ''
-      parameters:
-      - name: campaign_id
-        in: path
-        required: true
-        description: ''
-        schema:
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/IdeaDetail'
-          description: ''
-      tags:
-      - api
+          description: No response body
   /api/campaign/:
     get:
-      operationId: listCampaigns
-      description: ''
-      parameters: []
+      operationId: campaign_list
+      tags:
+      - campaign
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -444,12 +224,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/Campaign'
           description: ''
-      tags:
-      - api
     post:
-      operationId: createCampaign
-      description: ''
-      parameters: []
+      operationId: campaign_create
+      tags:
+      - campaign
       requestBody:
         content:
           application/json:
@@ -461,6 +239,9 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/Campaign'
+        required: true
+      security:
+      - jwtAuth: []
       responses:
         '201':
           content:
@@ -468,114 +249,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/Campaign'
           description: ''
-      tags:
-      - api
-  /api/campaign/{id}/:
-    get:
-      operationId: retrieveCampaign
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this campaign.
-        schema:
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Campaign'
-          description: ''
-      tags:
-      - api
-    put:
-      operationId: updateCampaign
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this campaign.
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Campaign'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Campaign'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Campaign'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Campaign'
-          description: ''
-      tags:
-      - api
-    patch:
-      operationId: partialUpdateCampaign
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this campaign.
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Campaign'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Campaign'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Campaign'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Campaign'
-          description: ''
-      tags:
-      - api
-    delete:
-      operationId: destroyCampaign
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this campaign.
-        schema:
-          type: string
-      responses:
-        '204':
-          description: ''
-      tags:
-      - api
   /api/campaign/{campaign_id}/round/:
     get:
-      operationId: listCampaignRounds
-      description: ''
+      operationId: campaign_round_list
       parameters:
-      - name: campaign_id
-        in: path
-        required: true
-        description: ''
+      - in: path
+        name: campaign_id
         schema:
           type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - campaign
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -585,18 +272,17 @@ paths:
                 items:
                   $ref: '#/components/schemas/CampaignRound'
           description: ''
-      tags:
-      - api
     post:
-      operationId: createCampaignRound
-      description: ''
+      operationId: campaign_round_create
       parameters:
-      - name: campaign_id
-        in: path
-        required: true
-        description: ''
+      - in: path
+        name: campaign_id
         schema:
           type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - campaign
       requestBody:
         content:
           application/json:
@@ -608,6 +294,9 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/CampaignRound'
+        required: true
+      security:
+      - jwtAuth: []
       responses:
         '201':
           content:
@@ -615,25 +304,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/CampaignRound'
           description: ''
-      tags:
-      - api
   /api/campaign/{campaign_id}/round/{id}/:
     get:
-      operationId: retrieveCampaignRound
-      description: ''
+      operationId: campaign_round_retrieve
       parameters:
-      - name: campaign_id
-        in: path
-        required: true
-        description: ''
+      - in: path
+        name: campaign_id
         schema:
           type: string
-      - name: id
-        in: path
+          pattern: ^\d+$
         required: true
-        description: ''
+      - in: path
+        name: id
         schema:
           type: string
+        required: true
+      tags:
+      - campaign
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -641,24 +330,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/CampaignRound'
           description: ''
-      tags:
-      - api
     put:
-      operationId: updateCampaignRound
-      description: ''
+      operationId: campaign_round_update
       parameters:
-      - name: campaign_id
-        in: path
-        required: true
-        description: ''
+      - in: path
+        name: campaign_id
         schema:
           type: string
-      - name: id
-        in: path
+          pattern: ^\d+$
         required: true
-        description: ''
+      - in: path
+        name: id
         schema:
           type: string
+        required: true
+      tags:
+      - campaign
       requestBody:
         content:
           application/json:
@@ -670,6 +357,9 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/CampaignRound'
+        required: true
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -677,35 +367,35 @@ paths:
               schema:
                 $ref: '#/components/schemas/CampaignRound'
           description: ''
-      tags:
-      - api
     patch:
-      operationId: partialUpdateCampaignRound
-      description: ''
+      operationId: campaign_round_partial_update
       parameters:
-      - name: campaign_id
-        in: path
-        required: true
-        description: ''
+      - in: path
+        name: campaign_id
         schema:
           type: string
-      - name: id
-        in: path
+          pattern: ^\d+$
         required: true
-        description: ''
+      - in: path
+        name: id
         schema:
           type: string
+        required: true
+      tags:
+      - campaign
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CampaignRound'
+              $ref: '#/components/schemas/PatchedCampaignRound'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/CampaignRound'
+              $ref: '#/components/schemas/PatchedCampaignRound'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CampaignRound'
+              $ref: '#/components/schemas/PatchedCampaignRound'
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -713,34 +403,439 @@ paths:
               schema:
                 $ref: '#/components/schemas/CampaignRound'
           description: ''
-      tags:
-      - api
     delete:
-      operationId: destroyCampaignRound
-      description: ''
+      operationId: campaign_round_destroy
       parameters:
-      - name: campaign_id
-        in: path
-        required: true
-        description: ''
+      - in: path
+        name: campaign_id
         schema:
           type: string
-      - name: id
-        in: path
+          pattern: ^\d+$
         required: true
-        description: ''
+      - in: path
+        name: id
         schema:
           type: string
+        required: true
+      tags:
+      - campaign
+      security:
+      - jwtAuth: []
       responses:
         '204':
-          description: ''
+          description: No response body
+  /api/campaign/{id}/:
+    get:
+      operationId: campaign_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this campaign.
+        required: true
       tags:
-      - api
+      - campaign
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+          description: ''
+    put:
+      operationId: campaign_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this campaign.
+        required: true
+      tags:
+      - campaign
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+          description: ''
+    patch:
+      operationId: campaign_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this campaign.
+        required: true
+      tags:
+      - campaign
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCampaign'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCampaign'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCampaign'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+          description: ''
+    delete:
+      operationId: campaign_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this campaign.
+        required: true
+      tags:
+      - campaign
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/idea/campaign/{campaign_id}/idea/:
+    get:
+      operationId: idea_campaign_idea_list
+      parameters:
+      - in: path
+        name: campaign_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - idea
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdeaDetail'
+          description: ''
+  /api/idea/idea/:
+    get:
+      operationId: idea_idea_list
+      tags:
+      - idea
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Idea'
+          description: ''
+    post:
+      operationId: idea_idea_create
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Idea'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idea'
+          description: ''
+  /api/idea/idea/{id}/:
+    get:
+      operationId: idea_idea_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this idea.
+        required: true
+      tags:
+      - idea
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdeaDetail'
+          description: ''
+    put:
+      operationId: idea_idea_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this idea.
+        required: true
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Idea'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idea'
+          description: ''
+    patch:
+      operationId: idea_idea_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this idea.
+        required: true
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedIdea'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedIdea'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedIdea'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idea'
+          description: ''
+    delete:
+      operationId: idea_idea_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this idea.
+        required: true
+      tags:
+      - idea
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/idea/vote/:
+    get:
+      operationId: idea_vote_list
+      tags:
+      - idea
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vote'
+          description: ''
+    post:
+      operationId: idea_vote_create
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Vote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Vote'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+          description: ''
+  /api/idea/vote/{id}/:
+    get:
+      operationId: idea_vote_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this vote.
+        required: true
+      tags:
+      - idea
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+          description: ''
+    put:
+      operationId: idea_vote_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this vote.
+        required: true
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Vote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Vote'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+          description: ''
+    patch:
+      operationId: idea_vote_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this vote.
+        required: true
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVote'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+          description: ''
+    delete:
+      operationId: idea_vote_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this vote.
+        required: true
+      tags:
+      - idea
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/user/me/:
     get:
-      operationId: getForCurrentLoggedInUserUserWithPermissions
-      description: ''
-      parameters: []
+      operationId: user_me_retrieve
+      tags:
+      - user
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -748,13 +843,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserWithPermissions'
           description: ''
-      tags:
-      - api
   /api/user/me/profile/:
     get:
-      operationId: getForLoggedInUserUserProfile
+      operationId: user_me_profile_retrieve
       description: View to work with profile for the currently logged in user
-      parameters: []
+      tags:
+      - user
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -762,84 +858,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserProfile'
           description: ''
-      tags:
-      - api
-  /api/auth/token/:
-    post:
-      operationId: createTokenObtainPair
-      description: 'Takes a set of user credentials and returns an access and refresh
-        JSON web
-
-        token pair to prove the authentication of those credentials.'
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TokenObtainPair'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/TokenObtainPair'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/TokenObtainPair'
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenObtainPair'
-          description: ''
-      tags:
-      - api
-  /api/auth/token/refresh/:
-    post:
-      operationId: createTokenRefresh
-      description: ''
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TokenRefresh'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/TokenRefresh'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/TokenRefresh'
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenRefresh'
-          description: ''
-      tags:
-      - api
-  /api/auth/token/blacklist/:
-    post:
-      operationId: createTokenBlacklist
-      description: ''
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema: {}
-          application/x-www-form-urlencoded:
-            schema: {}
-          multipart/form-data:
-            schema: {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema: {}
-          description: ''
-      tags:
-      - api
 components:
   schemas:
+    AbbreviatedUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        label:
+          type: string
+          nullable: true
+          readOnly: true
+          description: The full name of the user if it exists, otherwise the username
+      required:
+      - id
+      - label
     BusinessArea:
       type: object
       properties:
@@ -860,136 +894,9 @@ components:
           items:
             type: integer
       required:
+      - id
       - name
-    Idea:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        created_by:
-          type: object
-          properties:
-            id:
-              type: integer
-              readOnly: true
-            label:
-              type: string
-              readOnly: true
-              description: The full name of the user if it exists, otherwise the username
-          readOnly: true
-        title:
-          type: string
-          maxLength: 255
-        description:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        visibility:
-          enum:
-          - PUBLIC
-          - BUSINESS_AREA
-          - PRIVATE
-          type: string
-        campaign:
-          type: integer
-      required:
-      - title
-      - description
-      - campaign
-    IdeaDetail:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        created_by:
-          type: object
-          properties:
-            id:
-              type: integer
-              readOnly: true
-            label:
-              type: string
-              readOnly: true
-              description: The full name of the user if it exists, otherwise the username
-          readOnly: true
-        round_votes:
-          type: array
-          items:
-            type: object
-            properties:
-              round_pk:
-                type: integer
-              count:
-                type: integer
-            required:
-            - round_pk
-            - count
-        title:
-          type: string
-          maxLength: 255
-        description:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        visibility:
-          enum:
-          - PUBLIC
-          - BUSINESS_AREA
-          - PRIVATE
-          type: string
-        campaign:
-          type: integer
-      required:
-      - round_votes
-      - title
-      - description
-      - campaign
-    Vote:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        created_by:
-          type: object
-          properties:
-            id:
-              type: integer
-              readOnly: true
-            label:
-              type: string
-              readOnly: true
-              description: The full name of the user if it exists, otherwise the username
-          readOnly: true
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        idea:
-          type: integer
-        round:
-          type: integer
-      required:
-      - idea
-      - round
+      - slug
     Campaign:
       type: object
       properties:
@@ -997,15 +904,8 @@ components:
           type: integer
           readOnly: true
         created_by:
-          type: object
-          properties:
-            id:
-              type: integer
-              readOnly: true
-            label:
-              type: string
-              readOnly: true
-              description: The full name of the user if it exists, otherwise the username
+          allOf:
+          - $ref: '#/components/schemas/AbbreviatedUser'
           readOnly: true
         name:
           type: string
@@ -1025,8 +925,12 @@ components:
           items:
             type: integer
       required:
-      - name
+      - created_at
+      - created_by
       - description
+      - id
+      - name
+      - updated_at
     CampaignRound:
       type: object
       properties:
@@ -1034,15 +938,8 @@ components:
           type: integer
           readOnly: true
         created_by:
-          type: object
-          properties:
-            id:
-              type: integer
-              readOnly: true
-            label:
-              type: string
-              readOnly: true
-              description: The full name of the user if it exists, otherwise the username
+          allOf:
+          - $ref: '#/components/schemas/AbbreviatedUser'
           readOnly: true
         name:
           type: string
@@ -1060,8 +957,272 @@ components:
         campaign:
           type: integer
       required:
-      - name
       - campaign
+      - created_at
+      - created_by
+      - id
+      - name
+      - updated_at
+    Idea:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/AbbreviatedUser'
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        visibility:
+          $ref: '#/components/schemas/VisibilityEnum'
+        campaign:
+          type: integer
+      required:
+      - campaign
+      - created_at
+      - created_by
+      - description
+      - id
+      - title
+      - updated_at
+    IdeaDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/AbbreviatedUser'
+          readOnly: true
+        round_votes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoundVotes'
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        visibility:
+          $ref: '#/components/schemas/VisibilityEnum'
+        campaign:
+          type: integer
+      required:
+      - campaign
+      - created_at
+      - created_by
+      - description
+      - id
+      - round_votes
+      - title
+      - updated_at
+    PatchedBusinessArea:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        name:
+          type: string
+          maxLength: 64
+        description:
+          type: string
+        users:
+          type: array
+          items:
+            type: integer
+    PatchedCampaign:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/AbbreviatedUser'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        business_areas:
+          type: array
+          items:
+            type: integer
+    PatchedCampaignRound:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/AbbreviatedUser'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        campaign:
+          type: integer
+    PatchedIdea:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/AbbreviatedUser'
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        visibility:
+          $ref: '#/components/schemas/VisibilityEnum'
+        campaign:
+          type: integer
+    PatchedVote:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/AbbreviatedUser'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        idea:
+          type: integer
+        round:
+          type: integer
+    RoundVotes:
+      type: object
+      properties:
+        round_pk:
+          type: integer
+        count:
+          type: integer
+      required:
+      - count
+      - round_pk
+    TokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - password
+      - refresh
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TypeEnum:
+      enum:
+      - CONTRIBUTOR
+      - MODERATOR
+      - ADMIN
+      type: string
+      description: |-
+        * `CONTRIBUTOR` - Contributor
+        * `MODERATOR` - Moderator
+        * `ADMIN` - Admin
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        user:
+          type: integer
+          readOnly: true
+      required:
+      - id
+      - user
     UserWithPermissions:
       type: object
       properties:
@@ -1070,17 +1231,19 @@ components:
           readOnly: true
         label:
           type: string
+          nullable: true
           readOnly: true
           description: The full name of the user if it exists, otherwise the username
         username:
           type: string
           description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
             only.
-          pattern: ^[\w.@+-]+\z
+          pattern: ^[\w.@+-]+$
           maxLength: 150
         email:
           type: string
           format: email
+          title: Email address
           maxLength: 254
         first_name:
           type: string
@@ -1089,20 +1252,8 @@ components:
           type: string
           maxLength: 150
         profile:
-          type: object
-          properties:
-            id:
-              type: integer
-              readOnly: true
-            type:
-              enum:
-              - CONTRIBUTOR
-              - MODERATOR
-              - ADMIN
-              type: string
-            user:
-              type: string
-              readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/UserProfile'
           readOnly: true
         permissions:
           type: string
@@ -1117,41 +1268,55 @@ components:
           type: boolean
           readOnly: true
       required:
+      - group_permissions
+      - id
+      - is_staff
+      - is_superuser
+      - label
+      - permissions
+      - profile
       - username
-    UserProfile:
+    VisibilityEnum:
+      enum:
+      - PUBLIC
+      - BUSINESS_AREA
+      - PRIVATE
+      type: string
+      description: |-
+        * `PUBLIC` - Public
+        * `BUSINESS_AREA` - Business Area
+        * `PRIVATE` - Private
+    Vote:
       type: object
       properties:
         id:
           type: integer
           readOnly: true
-        type:
-          enum:
-          - CONTRIBUTOR
-          - MODERATOR
-          - ADMIN
-          type: string
-        user:
-          type: string
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/AbbreviatedUser'
           readOnly: true
-    TokenObtainPair:
-      type: object
-      properties:
-        username:
+        created_at:
           type: string
-          writeOnly: true
-        password:
-          type: string
-          writeOnly: true
-      required:
-      - username
-      - password
-    TokenRefresh:
-      type: object
-      properties:
-        refresh:
-          type: string
-        access:
-          type: string
+          format: date-time
           readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        idea:
+          type: integer
+        round:
+          type: integer
       required:
-      - refresh
+      - created_at
+      - created_by
+      - id
+      - idea
+      - round
+      - updated_at
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

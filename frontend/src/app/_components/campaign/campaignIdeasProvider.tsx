@@ -2,7 +2,7 @@
 // Provide ideas for a specific campaign
 
 import {createContext, useContext, useEffect, useState} from "react";
-import {ApiService} from "@/lib/api";
+import {IdeaService} from "@/lib/api";
 
 const IdeaContext = createContext(
     {
@@ -19,7 +19,7 @@ export const CampaignIdeasProvider = ({campaignId, children}) => {
 
     const refreshIdeas = (campaignId: string) => {
         console.log('CampaignIdeasProvider fetch: "' + String(campaignId) + '"');
-        ApiService.listIdeaDetails(campaignId).then(setIdeas)
+        IdeaService.ideaCampaignIdeaList(campaignId).then(setIdeas)
     }
 
     useEffect(() => {

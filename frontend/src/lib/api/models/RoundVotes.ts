@@ -2,10 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type TokenObtainPair = {
-    username: string;
-    password: string;
-    readonly access: string;
-    readonly refresh: string;
+export type RoundVotes = {
+    round_pk: number;
+    count: number;
 };
 

@@ -61,7 +61,7 @@ makemigrations:
 	docker compose run backend-dev sh -c "python manage.py makemigrations && chmod -R 664 */migrations/*.py && chown -R $(shell id -u):$(shell id -g) */migrations/*.py"
 
 generate-frontend-api-service:
-	docker compose run backend-dev sh -c "python manage.py generateschema --file openapischema.yml; chmod -R 664 openapischema.yml && chown -R $(shell id -u):$(shell id -g) openapischema.yml"
+	docker compose run backend-dev sh -c "python manage.py spectacular --file openapischema.yml; chmod -R 664 openapischema.yml && chown -R $(shell id -u):$(shell id -g) openapischema.yml"
 	mv backend/openapischema.yml openapischema.yml
 	cp openapischema.yml frontend/openapischema.yml
 	docker compose run frontend-dev sh -c "./node_modules/openapi-typescript-codegen/bin/index.js --input openapischema.yml --output src/lib/api --request src/lib/__apiServiceCustomRequest.ts"

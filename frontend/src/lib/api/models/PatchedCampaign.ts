@@ -3,13 +3,13 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AbbreviatedUser } from './AbbreviatedUser';
-export type Campaign = {
-    readonly id: number;
-    readonly created_by: AbbreviatedUser;
-    name: string;
-    description: string;
-    readonly created_at: string;
-    readonly updated_at: string;
+export type PatchedCampaign = {
+    readonly id?: number;
+    readonly created_by?: AbbreviatedUser;
+    name?: string;
+    description?: string;
+    readonly created_at?: string;
+    readonly updated_at?: string;
     business_areas?: Array<number>;
 };
 

@@ -2,8 +2,7 @@
 
 import {useState} from "react";
 import {login, logout} from "@/lib/auth";
-import {ApiService} from "@/lib/api";
-import {Secured, UserPermissions} from "@/lib/userPermissions";
+import {UserService} from "@/lib/api";
 
 
 export default function LoginForm() {
@@ -48,7 +47,7 @@ export default function LoginForm() {
                 </button>
             </form>
             <button type={"button"} onClick={() => {
-                ApiService.getForLoggedInUserUserProfile().then(
+                UserService.userMeProfileRetrieve().then(
                     (data) => {
                         console.log('buttonclick response', data)
                     }

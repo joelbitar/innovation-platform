@@ -1,7 +1,7 @@
 'use client'
 
 import {useEffect, useState} from "react";
-import {ApiService} from "@/lib/api";
+import {CampaignService} from "@/lib/api";
 import CampaignRoundList from "@/app/_components/campaign_round/campaignRoundList";
 
 type Props = {
@@ -13,7 +13,7 @@ export default function CampaignDetails({id}: Props) {
 
     useEffect(() => {
         console.log('CampaignDetails fetch: "' + String(id) + '"');
-        ApiService.retrieveCampaign(id).then(
+        CampaignService.campaignRetrieve(id).then(
             setCampaign
         )
     }, [id]);
@@ -29,7 +29,7 @@ export default function CampaignDetails({id}: Props) {
                     </>
                 )
             }
-            <CampaignRoundList campaignId={id} />
+            <CampaignRoundList campaignId={id}/>
         </>
     )
 }
