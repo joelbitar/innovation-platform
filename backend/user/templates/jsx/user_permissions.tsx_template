@@ -33,6 +33,6 @@ export class UserPermissions {
 export function Secured({children, permissions}) {
     console.log('UserPermission', permissions)
     return <>
-        {% verbatim %} {{ children }} {% endverbatim %}
+        {% verbatim %} { children } {% endverbatim %}
     </>
 }
