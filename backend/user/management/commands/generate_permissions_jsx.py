@@ -48,7 +48,7 @@ class PermissionsGenerator:
 
     @classmethod
     def generate_jsx(cls) -> str:
-        template = get_template('jsx/user_permissions.tsx')
+        template = get_template('jsx/user_permissions.tsx_template')
         return template.render({
             'permissions': list(cls.get_all_permissions())
         })

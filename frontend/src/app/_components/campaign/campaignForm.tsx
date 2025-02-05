@@ -1,8 +1,8 @@
 'use client';
 
-import React, {useState} from 'react';
-import {ApiService, Campaign} from "@/lib/api";
-import {useForm, SubmitHandler} from "react-hook-form";
+import React from 'react';
+import {useForm} from "react-hook-form";
+import {Campaign, CampaignService} from "@/lib/api";
 
 export function CampaignCreateForm() {
     const {
@@ -13,7 +13,7 @@ export function CampaignCreateForm() {
     } = useForm<Campaign>()
 
     const onSubmit: (data: Campaign) => void = (data: Campaign) =>  {
-        ApiService.createCampaign(data).then(
+        CampaignService.campaignCreate(data).then(
             (data) => {
                 window.history.pushState(
                     {},
