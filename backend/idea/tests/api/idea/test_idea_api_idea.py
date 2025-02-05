@@ -60,3 +60,10 @@ class IdeaAPIVoteTests(AuthenticatedClientTestCase):
                 self.user,
                 Idea.objects.first().created_by
             )
+
+    def test_should_be_able_to_get_only_ideas_applicable_for_specific_campaign(self):
+        self.assertTrue(False)
+
+    # Test that we can get ideas for a campaign annotated with the number of votes for each round
+    def test_should_be_able_to_get_ideas_for_a_campaign_annotated_with_the_number_of_votes_for_each_round(self):
+        self.assertTrue(False)
