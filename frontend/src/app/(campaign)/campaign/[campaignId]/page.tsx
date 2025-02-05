@@ -1,9 +1,8 @@
 import Container from "@/app/_components/container";
 import Header from "@/app/_components/header";
 import CampaignDetails from "@/app/_components/campaign/campaignDetails";
-import {IdeaForm} from "@/app/_components/idea/ideaForm";
 import {CampaignIdeasProvider} from "@/app/_components/campaign/campaignIdeasProvider";
-import CampaignIdeaList from "@/app/_components/idea/campaignIdeaList";
+import CampaignIdeas from "@/app/(campaign)/campaign/[campaignId]/campaignIdeas";
 
 type Params = {
     params: Promise<{
@@ -21,9 +20,8 @@ export default async function CampaignPage(props: Params) {
                 <Header/>
                 hello, campaign.
                 <CampaignDetails id={campaignId}/>
-                <IdeaForm campaignId={campaignId}/>
                 <CampaignIdeasProvider campaignId={campaignId}>
-                    <CampaignIdeaList/>
+                    <CampaignIdeas campaignId={campaignId} />
                 </CampaignIdeasProvider>
             </Container>
         </main>

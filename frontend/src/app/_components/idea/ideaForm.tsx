@@ -5,7 +5,7 @@ import {useForm, SubmitHandler} from "react-hook-form";
 
 
 
-export function IdeaForm({campaignId}: {campaignId: string}) {
+export function IdeaForm({campaignId, afterSubmit}: {campaignId: string, afterSubmit: () => void}) {
 
     const {
         register,
@@ -27,6 +27,7 @@ export function IdeaForm({campaignId}: {campaignId: string}) {
                     `/campaign/${data.id}`
                 )
                 console.log(data)
+                afterSubmit()
             },
             (error) => {
                 console.error(error)

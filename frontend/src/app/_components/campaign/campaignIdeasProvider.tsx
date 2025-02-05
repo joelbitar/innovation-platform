@@ -7,6 +7,9 @@ import {ApiService} from "@/lib/api";
 const IdeaContext = createContext(
     {
         ideas: [],
+        refreshIdeas: () => {
+            console.error('not implemented yet.')
+        }
     }
 );
 
@@ -14,15 +17,24 @@ const IdeaContext = createContext(
 export const CampaignIdeasProvider = ({campaignId, children}) => {
     const [ideas, setIdeas] = useState([]);
 
-    useEffect(() => {
+    const refreshIdeas = (campaignId: string) => {
         console.log('CampaignIdeasProvider fetch: "' + String(campaignId) + '"');
-        ApiService.listIdeaDetails(campaignId).then(
-            setIdeas
-        )
+        ApiService.listIdeaDetails(campaignId).then(setIdeas)
+    }
+
+    useEffect(() => {
+        refreshIdeas(campaignId)
     }, [campaignId]);
 
     return (
-        <IdeaContext.Provider value={{ideas}}>
+        <IdeaContext.Provider value={
+            {
+                ideas,
+                'refreshIdeas': () => {
+                    refreshIdeas(campaignId)
+                }
+            }
+        }>
             {children}
         </IdeaContext.Provider>
     )
