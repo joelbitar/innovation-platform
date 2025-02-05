@@ -308,6 +308,22 @@ export class ApiService {
         });
     }
     /**
+     * @param campaignId
+     * @returns IdeaDetail
+     * @throws ApiError
+     */
+    public static listIdeaDetails(
+        campaignId: string,
+    ): CancelablePromise<Array<IdeaDetail>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/idea/campaign/{campaign_id}/idea/',
+            path: {
+                'campaign_id': campaignId,
+            },
+        });
+    }
+    /**
      * @returns Campaign
      * @throws ApiError
      */

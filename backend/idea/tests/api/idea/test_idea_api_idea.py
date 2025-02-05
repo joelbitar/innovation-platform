@@ -62,8 +62,67 @@ class IdeaAPIVoteTests(AuthenticatedClientTestCase):
             )
 
     def test_should_be_able_to_get_only_ideas_applicable_for_specific_campaign(self):
-        self.assertTrue(False)
+        campaign = Campaign.objects.create(
+            name='test campaign',
+            created_by=self.user
+        )
 
-    # Test that we can get ideas for a campaign annotated with the number of votes for each round
-    def test_should_be_able_to_get_ideas_for_a_campaign_annotated_with_the_number_of_votes_for_each_round(self):
-        self.assertTrue(False)
+        for i in range(4):
+            campaign.rounds.create(
+                name=f'test round {i}',
+                created_by=self.user
+            )
+
+        for i in range(5):
+            idea = Idea.objects.create(
+                campaign=campaign,
+                title=f'test idea {i}',
+                description=f'test description {i}',
+                created_by=self.user
+            )
+
+            for campaign_round in campaign.rounds.all():
+                idea.vote_set.create(
+                    round=campaign_round,
+                    created_by=self.user
+                )
+
+        for campaign_i in range(5):
+            campaign_i = Campaign.objects.create(
+                name=f'test campaign {campaign_i}',
+                created_by=self.user
+            )
+            for i in range(5):
+                Idea.objects.create(
+                    campaign=campaign_i,
+                    title=f'test idea {i}',
+                    description=f'test description {i}',
+                    created_by=self.user
+                )
+
+        response = self.client.get(
+            reverse(
+                'campaign-idea-list', kwargs={'campaign_id': campaign.pk}
+            ),
+        )
+
+        with self.subTest('Should return 200'):
+            self.assertEqual(200, response.status_code, response.data)
+
+        with self.subTest('Should have the expected number of ideas'):
+            self.assertEqual(
+                campaign.ideas.all().count(),
+                len(response.data),
+                response.data
+            )
+
+        with self.subTest('Should have vote counts on ideas'):
+            for idea in response.data:
+                self.assertTrue(
+                    'round_votes' in idea
+                )
+                self.assertEqual(
+                    5,
+                    len(idea['round_votes'])
+                )
+

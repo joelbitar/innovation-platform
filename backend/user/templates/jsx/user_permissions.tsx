@@ -16,6 +16,7 @@ export class UserPermissions {
     static hasPermission(permission) {
         if(!this.getAllPermissions().includes(permission)){
             console.error('Permission not found amongst possibilities: ' + permission);
+            return false;
         }
 
         const currentUserPermissions = getUserPermissions()

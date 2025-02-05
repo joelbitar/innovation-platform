@@ -18,6 +18,8 @@ class CampaignModelCampaignCreationTest(TestCase):
             created_by=self.user
         )
 
+        campaign.rounds.all().delete()
+
         campaign_round = CampaignRound.objects.create(
             campaign=campaign,
             name='test round',

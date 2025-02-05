@@ -2,11 +2,13 @@ import Container from "@/app/_components/container";
 import Header from "@/app/_components/header";
 import CampaignDetails from "@/app/_components/campaign/campaignDetails";
 import {IdeaForm} from "@/app/_components/idea/ideaForm";
+import {CampaignIdeasProvider} from "@/app/_components/campaign/campaignIdeasProvider";
+import CampaignIdeaList from "@/app/_components/idea/campaignIdeaList";
 
 type Params = {
-  params: Promise<{
-    campaignId: string;
-  }>;
+    params: Promise<{
+        campaignId: string;
+    }>;
 };
 
 export default async function CampaignPage(props: Params) {
@@ -16,10 +18,13 @@ export default async function CampaignPage(props: Params) {
     return (
         <main>
             <Container>
-                <Header />
+                <Header/>
                 hello, campaign.
-                <CampaignDetails id={campaignId} />
-                <IdeaForm campaignId={campaignId} />
+                <CampaignDetails id={campaignId}/>
+                <IdeaForm campaignId={campaignId}/>
+                <CampaignIdeasProvider campaignId={campaignId}>
+                    <CampaignIdeaList/>
+                </CampaignIdeasProvider>
             </Container>
         </main>
     );

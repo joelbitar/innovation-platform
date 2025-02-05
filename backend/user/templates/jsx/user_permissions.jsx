@@ -48,6 +48,7 @@ hasPermission(permission);
 {
     if (!this.getAllPermissions().includes(permission)) {
         console.error('Permission not found amongst possibilities: ' + permission);
+        return false;
     }
     var currentUserPermissions = (0, auth_1.getUserPermissions)();
     return currentUserPermissions.includes(permission);

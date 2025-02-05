@@ -408,6 +408,28 @@ paths:
           description: ''
       tags:
       - api
+  /api/idea/campaign/{campaign_id}/idea/:
+    get:
+      operationId: listIdeaDetails
+      description: ''
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdeaDetail'
+          description: ''
+      tags:
+      - api
   /api/campaign/:
     get:
       operationId: listCampaigns

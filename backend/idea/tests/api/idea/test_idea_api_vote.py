@@ -151,3 +151,8 @@ class IdeaAPIVoteTests(AuthenticatedClientTestCase):
                     vote_count.count,
                     response_vote_count.get('count')
                 )
+
+    # Test should be able to get if i have voted on an idea
+    def test_should_be_able_to_get_if_i_have_voted_on_an_idea(self):
+        self.assertTrue(False)
+
