@@ -31,7 +31,10 @@ export class UserPermissions {
 }
 
 export function Secured({children, permissions}) {
-    console.log('UserPermission', permissions)
+    if(!!permissions && !permissions.every(permission => UserPermissions.hasPermission(permission))) {
+		return null;
+	}
+
     return <>
         {% verbatim %} { children } {% endverbatim %}
     </>
