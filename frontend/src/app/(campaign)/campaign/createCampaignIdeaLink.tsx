@@ -1,7 +1,3 @@
-type Props = {
-    campaignId: number
-}
-
 import Link from "next/link";
 
 export default function CreateCampaignIdeaLink({campaignId}: { campaignId: number }) {

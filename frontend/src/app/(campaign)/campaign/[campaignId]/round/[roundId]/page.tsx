@@ -9,6 +9,8 @@ type Params = {
     }>
 };
 
+import Link from 'next/link';
+
 export default async function CampaignRoundPage(props: Params) {
     const params = await props.params;
     const roundId = params.roundId;
@@ -18,6 +20,7 @@ export default async function CampaignRoundPage(props: Params) {
         <main>
             <Container>
                 <Header/>
+                <Link className={"btn"} href={`/campaign/${campaignId}/round/${roundId}/edit/`}>Edit</Link>
                 <CampaignRoundDetails campaignId={campaignId} roundId={roundId}/>
             </Container>
         </main>

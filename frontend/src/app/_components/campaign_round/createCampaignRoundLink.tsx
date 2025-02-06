@@ -3,12 +3,8 @@
 import Link from "next/link";
 import {Secured, UserPermissions} from "@/lib/userPermissions";
 
-type Props = {
-    campaignId: string;
-}
 
-
-export default async function ({campaignId}: Props) {
+export default function ({campaignId}: {campaignId: string}) {
     return (
         <Secured permissions={[UserPermissions.campaign__add_campaignround]}>
             <Link

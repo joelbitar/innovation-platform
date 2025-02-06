@@ -59,7 +59,7 @@ export default function IdeaVote({ideaId, roundId, postSubmit}: IdeaVoteProps) {
                 <>
                     {(vote) ? (
                         <>
-                            <button onClick={removeVote}>Remove Vote</button>
+                            <button className={"bg-red-500"} onClick={removeVote}>Remove Vote</button>
                         </>
                     ) : (
                         <>
