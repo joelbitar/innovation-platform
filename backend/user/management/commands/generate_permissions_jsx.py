@@ -31,9 +31,9 @@ class PermissionsGenerator:
     @classmethod
     def get_all_permissions(cls):
         try:
-            superuser = User.objects.get(
+            superuser = User.objects.filter(
                 is_superuser=True
-            )
+            ).first()
         except User.DoesNotExist:
             superuser = User.objects.create_superuser(
                 username='temp_for_generation',

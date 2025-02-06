@@ -2,27 +2,31 @@ import {CancelablePromise, OpenAPIConfig} from "@/lib/api";
 import {ApiRequestOptions} from "@/lib/api/core/ApiRequestOptions";
 
 type RequestConfig = {
-    url: RequestInfo | URL,
-    method: string,
-    data: any | undefined
+    url: RequestInfo | URL;
+    method: string;
+    data: any | undefined;
+    accessToken: string | undefined;
+    refreshToken: string | undefined;
 }
 
 type JWTToken = {
-    exp: number
-    iat: number
-    jti: string
-    user_id: number
-    token_type: string
-    test: string
+    exp: number;
+    iat: number;
+    jti: string;
+    user_id: number;
+    token_type: string;
+    test: string;
 }
 
 let tokenRefreshPromise: Promise<any> | null = null;
 
-const getRequestConfig = (url: string, data: any = undefined, method: string | undefined = undefined) => {
+export const getRequestConfig = (url: string, data: any = undefined, method: string | undefined = undefined, accessToken: string = "", refreshToken: string = "") => {
     const rq: RequestConfig = {
         url: url,
         method: method || 'GET',
-        data: data
+        data: data,
+        accessToken: accessToken || undefined,
+        refreshToken: refreshToken || undefined,
     };
 
     return rq
@@ -30,6 +34,7 @@ const getRequestConfig = (url: string, data: any = undefined, method: string | u
 
 export function setAccessToken(token: string) {
     localStorage.setItem('access-token', token);
+    document.cookie = `access-token=${token}; path=/; max-age=3600`;
 }
 
 export function getAccessToken() {
@@ -38,6 +43,7 @@ export function getAccessToken() {
 
 export function setRefreshToken(token: string) {
     localStorage.setItem('refresh-token', token);
+    document.cookie = `refresh-token=${token}; path=/; max-age=3600`;
 }
 
 export function getRefreshToken() {
@@ -67,8 +73,8 @@ export function isExpired(token: string) {
     return false;
 }
 
-const getResponse = (requestConfig: RequestConfig): Promise<any> => {
-    let accessToken = getAccessToken() || "";
+export const getResponse = (requestConfig: RequestConfig): Promise<any> => {
+    let accessToken = requestConfig.accessToken || getAccessToken() || "";
 
     let headers: any = {}
 
@@ -123,7 +129,7 @@ const getResponse = (requestConfig: RequestConfig): Promise<any> => {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        refresh: getRefreshToken()
+                        refresh: requestConfig.refreshToken || getRefreshToken()
                     })
                 }).then((response) => {
                     if (response.ok) {
@@ -136,6 +142,8 @@ const getResponse = (requestConfig: RequestConfig): Promise<any> => {
                 }).then((data) => {
                     setAccessToken(data.access);
                     setRefreshToken(data.refresh);
+                    requestConfig.accessToken = data.access
+                    requestConfig.refreshToken = data.refresh
                     resolve(getResponse(requestConfig));
                 }).catch((error) => {
                     console.error('Error refreshing token', error)

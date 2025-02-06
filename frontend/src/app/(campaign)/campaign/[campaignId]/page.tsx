@@ -5,6 +5,7 @@ import {CampaignIdeasProvider} from "@/app/_components/campaign/campaignIdeasPro
 import CampaignIdeas from "@/app/(campaign)/campaign/[campaignId]/campaignIdeas";
 import CreateCampaignIdeaLink from "@/app/(campaign)/campaign/createCampaignIdeaLink";
 import CreateCampaignRoundLink from "@/app/_components/campaign_round/createCampaignRoundLink";
+import ServerSideSecured from "@/lib/serverSideSecurity";
 
 
 type Params = {
@@ -27,6 +28,11 @@ export default async function CampaignPage(props: Params) {
                     </div>
                     <div className={""}>
                         <CreateCampaignRoundLink campaignId={campaignId}/>
+                    </div>
+                    <div>
+                        <ServerSideSecured permissions={['hello_world']}>
+                            hello...
+                        </ServerSideSecured>
                     </div>
                 </div>
                 <div>
