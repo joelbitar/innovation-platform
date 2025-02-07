@@ -17,9 +17,5 @@ export function userHasPermissions(userData: UserWithPermissions, permissions: s
         }
     }
     console.log('missingPermissions', missingPermissions)
-    if(missingPermissions.length === 0) {
-        return true
-    }
-
-    return false
+    return missingPermissions.length === 0
 }

@@ -30,7 +30,6 @@ export const getRequestConfig = (url: string, data: any = undefined, method: str
 
 export function setAccessToken(token: string) {
     localStorage.setItem('access-token', token);
-    document.cookie = `access-token=${token}; path=/; max-age=3600`;
 }
 
 export function getAccessToken() {
@@ -39,7 +38,6 @@ export function getAccessToken() {
 
 export function setRefreshToken(token: string) {
     localStorage.setItem('refresh-token', token);
-    document.cookie = `refresh-token=${token}; path=/; max-age=3600`;
 }
 
 export function getRefreshToken() {

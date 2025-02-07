@@ -2,6 +2,7 @@
 
 import {useState} from "react";
 import {login, logout} from "@/lib/auth";
+import {UserWithPermissions} from "@/lib/api";
 
 
 export default function LoginForm() {
@@ -10,7 +11,8 @@ export default function LoginForm() {
 
     const handleOnSubmit = () => {
         login(username, password).then(
-            (data) => {
+            (data :UserWithPermissions) => {
+                document.cookie = `user_id=${data.id}; path=/; max-age=${60*60*24*365}`;
                 console.log(data)
             },
             (error) => {

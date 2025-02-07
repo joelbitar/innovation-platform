@@ -15,14 +15,8 @@ export function getLocalStorageUserData() {
     }
 }
 
-export function getUserPermissions(userData: UserWithPermissions): string[] {
-    return [].concat(
-        userData?.permissions || [],
-        userData?.group_permissions || []
-    )
-}
 
-function fetchUserData() {
+function fetchUserData(): Promise<UserWithPermissions> {
     return new Promise((resolve, reject) => {
         UserService.userMeRetrieve().then(
             (data) => {
@@ -36,7 +30,7 @@ function fetchUserData() {
     })
 }
 
-export function login(username: string, password: string) {
+export function login(username: string, password: string): Promise<UserWithPermissions> {
     return new Promise((resolve, reject) => {
         AuthService.authTokenCreate(<TokenObtainPair>{
             username,
@@ -45,6 +39,7 @@ export function login(username: string, password: string) {
             (data) => {
                 setAccessToken(data.access)
                 setRefreshToken(data.refresh)
+
                 fetchUserData().then(
                     (data) => {
                         resolve(data)
