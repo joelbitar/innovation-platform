@@ -141,7 +141,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(hours=12),
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=10),  # We will have to refresh access token after this time
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(seconds=10),  # We will have to refresh access token after this time
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     #  Just some wiggle room since it can take a few seconds for the servers to wake up.

@@ -4,9 +4,3 @@ export class UserPermissions {
     // List of possible permissions{% for permission in permissions %}
     static {{ permission.key }} = "{{permission.permission}}";{% endfor %}
 }
-
-export function Secured({children, permissions}) {
-    return <>
-        {% verbatim %} { children } {% endverbatim %}
-    </>
-}

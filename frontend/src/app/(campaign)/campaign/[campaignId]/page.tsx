@@ -5,7 +5,7 @@ import {CampaignIdeasProvider} from "@/app/_components/campaign/campaignIdeasPro
 import CampaignIdeas from "@/app/(campaign)/campaign/[campaignId]/campaignIdeas";
 import CreateCampaignIdeaLink from "@/app/(campaign)/campaign/createCampaignIdeaLink";
 import CreateCampaignRoundLink from "@/app/_components/campaign_round/createCampaignRoundLink";
-import ServerSideSecured from "@/lib/serverSideSecurity";
+import ServerSideSecured from "@/lib/secureServer";
 
 
 type Params = {

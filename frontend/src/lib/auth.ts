@@ -1,13 +1,13 @@
 'use client';
 
-import {getRefreshToken, setAccessToken, setRefreshToken} from "@/lib/api/core/request";
-import {AuthService, UserService} from "@/lib/api";
+import {setAccessToken, setRefreshToken} from "@/lib/api/core/request";
+import {AuthService, TokenObtainPair, UserService, UserWithPermissions} from "@/lib/api";
 
-export function setUserData(data: any) {
+export function setLocalStorageUserData(data: any) {
     localStorage.setItem('user', JSON.stringify(data))
 }
 
-export function getUserData() {
+export function getLocalStorageUserData() {
     try{
         return JSON.parse(localStorage.getItem('user') || '{}')
     }catch (e) {
@@ -15,15 +15,18 @@ export function getUserData() {
     }
 }
 
-export function getUserPermissions(): string[] {
-    return getUserData()?.permissions || []
+export function getUserPermissions(userData: UserWithPermissions): string[] {
+    return [].concat(
+        userData?.permissions || [],
+        userData?.group_permissions || []
+    )
 }
 
 function fetchUserData() {
     return new Promise((resolve, reject) => {
         UserService.userMeRetrieve().then(
             (data) => {
-                setUserData(data)
+                setLocalStorageUserData(data)
                 resolve(data)
             },
             (error) => {
@@ -35,7 +38,7 @@ function fetchUserData() {
 
 export function login(username: string, password: string) {
     return new Promise((resolve, reject) => {
-        AuthService.authTokenCreate({
+        AuthService.authTokenCreate(<TokenObtainPair>{
             username,
             password
         }).then(
@@ -59,11 +62,7 @@ export function login(username: string, password: string) {
 }
 
 export function logout() {
-    AuthService.authTokenBlacklistCreate(
-        {
-            'refresh': getRefreshToken()
-        }
-    ).then(
+    AuthService.authTokenBlacklistCreate().then(
         (data) => {
             setAccessToken('')
             setRefreshToken('')

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function CreateCampaignIdeaLink({campaignId}: { campaignId: number }) {
+export default function CreateCampaignIdeaLink({campaignId}: { campaignId: string }) {
     return (
         <Link
             className={"btn"}

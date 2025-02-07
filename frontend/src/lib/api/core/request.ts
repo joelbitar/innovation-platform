@@ -5,8 +5,6 @@ type RequestConfig = {
     url: RequestInfo | URL;
     method: string;
     data: any | undefined;
-    accessToken: string | undefined;
-    refreshToken: string | undefined;
 }
 
 type JWTToken = {
@@ -20,13 +18,11 @@ type JWTToken = {
 
 let tokenRefreshPromise: Promise<any> | null = null;
 
-export const getRequestConfig = (url: string, data: any = undefined, method: string | undefined = undefined, accessToken: string = "", refreshToken: string = "") => {
+export const getRequestConfig = (url: string, data: any = undefined, method: string | undefined = undefined) => {
     const rq: RequestConfig = {
         url: url,
         method: method || 'GET',
         data: data,
-        accessToken: accessToken || undefined,
-        refreshToken: refreshToken || undefined,
     };
 
     return rq
@@ -74,7 +70,7 @@ export function isExpired(token: string) {
 }
 
 export const getResponse = (requestConfig: RequestConfig): Promise<any> => {
-    let accessToken = requestConfig.accessToken || getAccessToken() || "";
+    let accessToken = getAccessToken() || "";
 
     let headers: any = {}
 
@@ -129,7 +125,7 @@ export const getResponse = (requestConfig: RequestConfig): Promise<any> => {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        refresh: requestConfig.refreshToken || getRefreshToken()
+                        refresh: getRefreshToken()
                     })
                 }).then((response) => {
                     if (response.ok) {
@@ -142,8 +138,6 @@ export const getResponse = (requestConfig: RequestConfig): Promise<any> => {
                 }).then((data) => {
                     setAccessToken(data.access);
                     setRefreshToken(data.refresh);
-                    requestConfig.accessToken = data.access
-                    requestConfig.refreshToken = data.refresh
                     resolve(getResponse(requestConfig));
                 }).catch((error) => {
                     console.error('Error refreshing token', error)
