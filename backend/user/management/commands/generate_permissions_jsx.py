@@ -27,6 +27,7 @@ class PermissionHolder:
 
         return camel_cased
 
+
 class PermissionsGenerator:
     @classmethod
     def get_all_permissions(cls):
@@ -40,7 +41,7 @@ class PermissionsGenerator:
                 password='temp_for_generation',
             )
 
-        for permission in superuser.get_all_permissions():
+        for permission in sorted(superuser.get_all_permissions()):
             yield PermissionHolder(permission)
 
         if superuser.username == 'temp_for_generation':
@@ -48,9 +49,9 @@ class PermissionsGenerator:
 
     @classmethod
     def generate_jsx(cls) -> str:
-        template = get_template('jsx/user_permissions.tsx_template')
+        template = get_template('tsx/user_permissions.tsx_template')
         return template.render({
-            'permissions': list(cls.get_all_permissions())
+            'permissions': list(cls.get_all_permissions()),
         })
 
 

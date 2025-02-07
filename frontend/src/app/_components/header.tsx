@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CreateCampaignLink from "@/app/_components/createCampaignLink";
+import SecuredServer from "@/lib/secureServer";
 
 const Header = () => {
     return (
@@ -10,7 +11,9 @@ const Header = () => {
             <Link href="/login/" className="hover:underline ml-4">
                 Login
             </Link>
-            <CreateCampaignLink/>
+            <SecuredServer>
+                <CreateCampaignLink/>
+            </SecuredServer>
         </h2>
     );
 };

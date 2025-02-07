@@ -42,6 +42,7 @@ export function login(username: string, password: string): Promise<UserWithPermi
 
                 fetchUserData().then(
                     (data) => {
+                        document.cookie = `user_id=${data.id}; path=/; max-age=${60*60*24*365}`;
                         resolve(data)
                     },
                     (error) => {
@@ -61,6 +62,7 @@ export function logout() {
         (data) => {
             setAccessToken('')
             setRefreshToken('')
+            document.cookie = `user_id=; path=/; max-age=${60*60*24*365}`;
         }
     )
 }

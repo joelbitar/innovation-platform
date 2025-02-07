@@ -5,8 +5,9 @@ import {CampaignIdeasProvider} from "@/app/_components/campaign/campaignIdeasPro
 import CampaignIdeas from "@/app/(campaign)/campaign/[campaignId]/campaignIdeas";
 import CreateCampaignIdeaLink from "@/app/(campaign)/campaign/createCampaignIdeaLink";
 import CreateCampaignRoundLink from "@/app/_components/campaign_round/createCampaignRoundLink";
-import ServerSideSecured from "@/lib/secureServer";
-
+import SecuredServer from "@/lib/secureServer";
+import SecuredClient from "@/lib/secureClient";
+import {UserPermissions} from "@/lib/userPermissions";
 
 type Params = {
     params: Promise<{
@@ -30,9 +31,12 @@ export default async function CampaignPage(props: Params) {
                         <CreateCampaignRoundLink campaignId={campaignId}/>
                     </div>
                     <div>
-                        <ServerSideSecured permissions={['hello_world']}>
-                            hello...
-                        </ServerSideSecured>
+                        <SecuredServer permissions={[UserPermissions.auth__add_user]}>
+                            add user for server
+                        </SecuredServer>
+                        <SecuredClient permissions={[UserPermissions.auth__add_user]}>
+                            add user for client
+                        </SecuredClient>
                     </div>
                 </div>
                 <div>

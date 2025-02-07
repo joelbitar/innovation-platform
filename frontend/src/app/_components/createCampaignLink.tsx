@@ -3,14 +3,15 @@
 import React from "react";
 
 import Link from "next/link";
-import {Secured, UserPermissions} from "@/lib/userPermissions";
+import {UserPermissions} from "@/lib/userPermissions";
+import SecuredClient from "@/lib/secureClient";
 
 export default function CreateCampaignLink() {
     return (
-        <Secured permissions={[UserPermissions.campaign__add_campaign]}>
+        <SecuredClient permissions={[UserPermissions.campaign__add_campaign]}>
             <Link href="/campaign/create">
                 Create new campaign
             </Link>
-        </Secured>
+        </SecuredClient>
     )
 }

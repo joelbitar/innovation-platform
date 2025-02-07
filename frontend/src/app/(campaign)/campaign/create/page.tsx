@@ -1,7 +1,7 @@
 import Container from "@/app/_components/container";
 import Header from "@/app/_components/header";
 import {CampaignCreateForm} from "@/app/_components/campaign/campaignForm";
-import ServerSideSecured from "@/lib/secureServer";
+import SecuredServer from "@/lib/secureServer";
 import {UserPermissions} from "@/lib/userPermissions";
 
 export default function Create() {
@@ -9,9 +9,9 @@ export default function Create() {
         <main>
             <Container>
                 <Header/>
-                <ServerSideSecured permissions={[UserPermissions.campaign__add_campaign]}>
+                <SecuredServer permissions={[UserPermissions.campaign__add_campaign]}>
                     <CampaignCreateForm/>
-                </ServerSideSecured>
+                </SecuredServer>
             </Container>
         </main>
     );

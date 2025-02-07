@@ -48,10 +48,10 @@ export async function fetchUser(): Promise<UserWithPermissions> {
 
 type ServerSideSecuredProps = {
     children: any
-    permissions: string[]
+    permissions: string[] | undefined
 }
 
-export default async function ServerSideSecured({children, permissions}: ServerSideSecuredProps) {
+export default async function SecuredServer({children, permissions}: ServerSideSecuredProps) {
     let userData = undefined;
     try {
         userData = await fetchUser()
@@ -59,7 +59,7 @@ export default async function ServerSideSecured({children, permissions}: ServerS
         console.log('Could not fetch user data...')
     }
 
-    if (!userData || !userHasPermissions(userData, permissions)) {
+    if ((permissions === undefined && !userData) || !userData || !userHasPermissions(userData, permissions)) {
         return (
             <>
             </>

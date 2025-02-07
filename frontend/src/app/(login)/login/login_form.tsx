@@ -12,7 +12,6 @@ export default function LoginForm() {
     const handleOnSubmit = () => {
         login(username, password).then(
             (data :UserWithPermissions) => {
-                document.cookie = `user_id=${data.id}; path=/; max-age=${60*60*24*365}`;
                 console.log(data)
             },
             (error) => {
