@@ -2,27 +2,27 @@ import {CancelablePromise, OpenAPIConfig} from "@/lib/api";
 import {ApiRequestOptions} from "@/lib/api/core/ApiRequestOptions";
 
 type RequestConfig = {
-    url: RequestInfo | URL,
-    method: string,
-    data: any | undefined
+    url: RequestInfo | URL;
+    method: string;
+    data: any | undefined;
 }
 
 type JWTToken = {
-    exp: number
-    iat: number
-    jti: string
-    user_id: number
-    token_type: string
-    test: string
+    exp: number;
+    iat: number;
+    jti: string;
+    user_id: number;
+    token_type: string;
+    test: string;
 }
 
 let tokenRefreshPromise: Promise<any> | null = null;
 
-const getRequestConfig = (url: string, data: any = undefined, method: string | undefined = undefined) => {
+export const getRequestConfig = (url: string, data: any = undefined, method: string | undefined = undefined) => {
     const rq: RequestConfig = {
         url: url,
         method: method || 'GET',
-        data: data
+        data: data,
     };
 
     return rq
@@ -46,9 +46,9 @@ export function getRefreshToken() {
 
 export function decodeJWTToken(token: string): JWTToken {
     // Decode the token
-    let JWTToken: JWTToken;
+    let t: JWTToken;
 
-    return JWTToken = {
+    return t = {
         ...(JSON.parse(atob(token.split('.')[1]))),
     }
 }
@@ -67,8 +67,8 @@ export function isExpired(token: string) {
     return false;
 }
 
-const getResponse = (requestConfig: RequestConfig): Promise<any> => {
-    let accessToken = getAccessToken() || "";
+export const getResponse = (requestConfig: RequestConfig): Promise<any> => {
+    let accessToken = requestConfig.accessToken || getAccessToken() || "";
 
     let headers: any = {}
 
@@ -96,6 +96,15 @@ const getResponse = (requestConfig: RequestConfig): Promise<any> => {
         return fetch(requestConfig.url, requestData)
     } else {
         // The token is expired
+        if(!tokenRefreshPromise && !getRefreshToken()){
+            // There is no refresh token available
+            // We shall redirect the user to the login page
+            // or show a message that the user needs to login
+            // or do something else
+            return new Promise((resolve, reject) => {
+                reject({error: 'Token is expired and there is no refresh token available'})
+            })
+        }
         // We shall try to refresh the token
         // Then make the request
         return new Promise((resolve, reject) => {
@@ -136,6 +145,8 @@ const getResponse = (requestConfig: RequestConfig): Promise<any> => {
                 }).then((data) => {
                     setAccessToken(data.access);
                     setRefreshToken(data.refresh);
+                    requestConfig.accessToken = data.access
+                    requestConfig.refreshToken = data.refresh
                     resolve(getResponse(requestConfig));
                 }).catch((error) => {
                     console.error('Error refreshing token', error)

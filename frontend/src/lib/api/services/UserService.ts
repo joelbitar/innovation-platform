@@ -9,6 +9,23 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class UserService {
     /**
+     * View to return data about a specific user
+     * @param id
+     * @returns UserWithPermissions
+     * @throws ApiError
+     */
+    public static userRetrieve(
+        id: string,
+    ): CancelablePromise<UserWithPermissions> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/user/{id}/',
+            path: {
+                'id': id,
+            },
+        });
+    }
+    /**
      * @returns UserWithPermissions
      * @throws ApiError
      */

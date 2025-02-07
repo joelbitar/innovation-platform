@@ -6,8 +6,9 @@ import React from "react";
 import {useCampaignIdeas} from "@/app/_components/campaign/campaignIdeasProvider";
 import Link from "next/link";
 import IdeaVote from "@/app/_components/idea/ideaVote";
-import {Secured, UserPermissions} from "@/lib/userPermissions";
+import {UserPermissions} from "@/lib/userPermissions";
 import IdeaVoteCount from "@/app/_components/idea/ideaVoteCount";
+import SecuredClient from "@/lib/secureClient";
 
 type IdeaListProps = {
     campaignId: string,
@@ -39,9 +40,9 @@ export default function IdeaList({campaignId, roundId, voting}: IdeaListProps) {
                         }
                         {voting && (
                             <>
-                                <Secured permissions={[UserPermissions.idea__add_vote]}>
+                                <SecuredClient permissions={[UserPermissions.idea__add_vote]}>
                                     <IdeaVote ideaId={String(idea.id)} roundId={roundId} postSubmit={refreshIdeas}/>
-                                </Secured>
+                                </SecuredClient>
                             </>
                         )}
                     </div>

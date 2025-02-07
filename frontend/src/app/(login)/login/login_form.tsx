@@ -1,7 +1,8 @@
 'use client';
 
 import {useState} from "react";
-import {login, logout} from "@/lib/auth";
+import {login} from "@/lib/auth";
+import {UserWithPermissions} from "@/lib/api";
 
 
 export default function LoginForm() {
@@ -10,8 +11,9 @@ export default function LoginForm() {
 
     const handleOnSubmit = () => {
         login(username, password).then(
-            (data) => {
+            (data: UserWithPermissions) => {
                 console.log(data)
+                window.location.reload()
             },
             (error) => {
                 console.error(error)
@@ -44,10 +46,6 @@ export default function LoginForm() {
                 >Submit
                 </button>
             </form>
-            <button type={"button"} onClick={() => {
-                logout()
-            }}>Logout
-            </button>
         </div>
     );
 }

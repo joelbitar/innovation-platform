@@ -1,0 +1,7 @@
+/* generated using generate_permissions -- do not edit */
+
+{# Class name is obfuscated because otherwise it might be picked up by other editors #}
+export class {{ "UserPermissions" }} {
+    // List of possible permissions{% for permission in permissions %}
+    static {{ permission.key }} = "{{permission.permission}}";{% endfor %}
+}

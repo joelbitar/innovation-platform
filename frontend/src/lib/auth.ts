@@ -1,29 +1,26 @@
 'use client';
 
-import {getRefreshToken, setAccessToken, setRefreshToken} from "@/lib/api/core/request";
-import {AuthService, UserService} from "@/lib/api";
+import {setAccessToken, setRefreshToken} from "@/lib/api/core/request";
+import {AuthService, TokenObtainPair, UserService, UserWithPermissions} from "@/lib/api";
 
-export function setUserData(data: any) {
+export function setLocalStorageUserData(data: any) {
     localStorage.setItem('user', JSON.stringify(data))
 }
 
-export function getUserData() {
-    try{
+export function getLocalStorageUserData() {
+    try {
         return JSON.parse(localStorage.getItem('user') || '{}')
-    }catch (e) {
+    } catch (e) {
         return {}
     }
 }
 
-export function getUserPermissions(): string[] {
-    return getUserData()?.permissions || []
-}
 
-function fetchUserData() {
+function fetchUserData(): Promise<UserWithPermissions> {
     return new Promise((resolve, reject) => {
         UserService.userMeRetrieve().then(
             (data) => {
-                setUserData(data)
+                setLocalStorageUserData(data)
                 resolve(data)
             },
             (error) => {
@@ -33,17 +30,19 @@ function fetchUserData() {
     })
 }
 
-export function login(username: string, password: string) {
+export function login(username: string, password: string): Promise<UserWithPermissions> {
     return new Promise((resolve, reject) => {
-        AuthService.authTokenCreate({
+        AuthService.authTokenCreate(<TokenObtainPair>{
             username,
             password
         }).then(
             (data) => {
                 setAccessToken(data.access)
                 setRefreshToken(data.refresh)
+
                 fetchUserData().then(
                     (data) => {
+                        document.cookie = `user_id=${data.id}; path=/; max-age=${60 * 60 * 24 * 365}`;
                         resolve(data)
                     },
                     (error) => {
@@ -58,15 +57,19 @@ export function login(username: string, password: string) {
     })
 }
 
-export function logout() {
-    AuthService.authTokenBlacklistCreate(
-        {
-            'refresh': getRefreshToken()
-        }
-    ).then(
-        (data) => {
-            setAccessToken('')
-            setRefreshToken('')
-        }
-    )
+export function logout(): Promise<null> {
+    return new Promise((resolve, reject) => {
+        AuthService.authTokenBlacklistCreate().then(
+            (data) => {
+                setAccessToken('')
+                setRefreshToken('')
+                setLocalStorageUserData('')
+                document.cookie = `user_id=; path=/; max-age=1`;
+                resolve(null)
+            },
+            (error) => {
+                reject(error)
+            }
+        )
+    })
 }

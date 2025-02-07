@@ -30,7 +30,10 @@ up-backend-dev:
 up-proxy-dev:
 	docker compose up proxy-dev -d
 
-up: up-frontend-dev up-backend-dev up-proxy-dev
+up-redis-dev:
+	docker compose up redis-dev -d
+
+up: up-redis-dev up-frontend-dev up-backend-dev up-proxy-dev
 	$(info Started)
 
 stop-backend-dev:
@@ -70,7 +73,7 @@ generate-frontend-api-service:
 
 generate-frontend-permissions:
 	docker compose run backend-dev sh -c "python manage.py generate_permissions_jsx temp_generated_permissions.jsx; chmod -R 664 temp_generated_permissions.jsx && chown -R $(shell id -u):$(shell id -g) temp_generated_permissions.jsx"
-	mv backend/temp_generated_permissions.jsx frontend/src/lib/userPermissions.jsx
+	mv backend/temp_generated_permissions.jsx frontend/src/lib/userPermissions.tsx
 
 show_urls:
 	docker compose run backend-dev sh -c "python manage.py show_urls"

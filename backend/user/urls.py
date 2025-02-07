@@ -1,7 +1,7 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .views.me import UserMeView
+from .views.me import UserMeView, UserView
 from .views.token_blacklist import TokenBlacklistView
 from .views.token_refresh_view import CustomTokenRefreshView
 from .views.user_profile import UserMeProfileView
@@ -15,6 +15,7 @@ auth_patterns = [
 user_patterns = [
     path('me/', UserMeView.as_view({'get': 'get_for_current_logged_in_user'}), name='user_me'),
     path('me/profile/', UserMeProfileView.as_view({'get': 'get_for_logged_in_user'}), name='user_me_profile'),
+    re_path('(?P<pk>\d+)/', UserView.as_view({'get': 'retrieve'}), name='user-detail'),
 ]
 
 urlpatterns = [
