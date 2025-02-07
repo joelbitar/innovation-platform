@@ -2,7 +2,7 @@ import {UserWithPermissions} from "@/lib/api";
 
 export type SecuredProps = {
     children: any
-    permissions: string[]
+    permissions: string[] | undefined
 }
 
 function userHasPermission(userData: UserWithPermissions, permission: string) {

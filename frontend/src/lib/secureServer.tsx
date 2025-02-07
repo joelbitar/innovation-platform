@@ -7,10 +7,14 @@ import {UserWithPermissions} from "@/lib/api";
 
 import Redis from 'ioredis'
 
-export async function fetchUser(): Promise<UserWithPermissions> {
+export async function fetchUser(): Promise<UserWithPermissions | null> {
     const cookieStore = await cookies()
 
     const userId = cookieStore.get('user_id')?.value
+
+    if(!userId) {
+        return null
+    }
 
     const redis = new Redis(process.env.REDIS_URL)
 
