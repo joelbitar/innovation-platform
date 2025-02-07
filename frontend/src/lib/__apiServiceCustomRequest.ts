@@ -5,8 +5,6 @@ type RequestConfig = {
     url: RequestInfo | URL;
     method: string;
     data: any | undefined;
-    accessToken: string | undefined;
-    refreshToken: string | undefined;
 }
 
 type JWTToken = {
@@ -20,13 +18,11 @@ type JWTToken = {
 
 let tokenRefreshPromise: Promise<any> | null = null;
 
-export const getRequestConfig = (url: string, data: any = undefined, method: string | undefined = undefined, accessToken: string = "", refreshToken: string = "") => {
+export const getRequestConfig = (url: string, data: any = undefined, method: string | undefined = undefined) => {
     const rq: RequestConfig = {
         url: url,
         method: method || 'GET',
         data: data,
-        accessToken: accessToken || undefined,
-        refreshToken: refreshToken || undefined,
     };
 
     return rq
@@ -100,6 +96,15 @@ export const getResponse = (requestConfig: RequestConfig): Promise<any> => {
         return fetch(requestConfig.url, requestData)
     } else {
         // The token is expired
+        if(!tokenRefreshPromise && !getRefreshToken()){
+            // There is no refresh token available
+            // We shall redirect the user to the login page
+            // or show a message that the user needs to login
+            // or do something else
+            return new Promise((resolve, reject) => {
+                reject({error: 'Token is expired and there is no refresh token available'})
+            })
+        }
         // We shall try to refresh the token
         // Then make the request
         return new Promise((resolve, reject) => {
@@ -127,7 +132,7 @@ export const getResponse = (requestConfig: RequestConfig): Promise<any> => {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        refresh: requestConfig.refreshToken || getRefreshToken()
+                        refresh: getRefreshToken()
                     })
                 }).then((response) => {
                     if (response.ok) {

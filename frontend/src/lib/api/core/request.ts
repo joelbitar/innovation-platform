@@ -46,9 +46,9 @@ export function getRefreshToken() {
 
 export function decodeJWTToken(token: string): JWTToken {
     // Decode the token
-    let JWTToken: JWTToken;
+    let t: JWTToken;
 
-    return JWTToken = {
+    return t = {
         ...(JSON.parse(atob(token.split('.')[1]))),
     }
 }
@@ -68,7 +68,7 @@ export function isExpired(token: string) {
 }
 
 export const getResponse = (requestConfig: RequestConfig): Promise<any> => {
-    let accessToken = getAccessToken() || "";
+    let accessToken = requestConfig.accessToken || getAccessToken() || "";
 
     let headers: any = {}
 
@@ -96,6 +96,17 @@ export const getResponse = (requestConfig: RequestConfig): Promise<any> => {
         return fetch(requestConfig.url, requestData)
     } else {
         // The token is expired
+        console.log('Token is expired... let us try to get a new.', getRefreshToken())
+        if(!tokenRefreshPromise && !getRefreshToken()){
+            // There is no refresh token available
+            // We shall redirect the user to the login page
+            // or show a message that the user needs to login
+            // or do something else
+            console.error('No refresh token available. User needs to login again')
+            return new Promise((resolve, reject) => {
+                reject('No refresh token available. User needs to login again')
+            })
+        }
         // We shall try to refresh the token
         // Then make the request
         return new Promise((resolve, reject) => {
@@ -136,6 +147,8 @@ export const getResponse = (requestConfig: RequestConfig): Promise<any> => {
                 }).then((data) => {
                     setAccessToken(data.access);
                     setRefreshToken(data.refresh);
+                    requestConfig.accessToken = data.access
+                    requestConfig.refreshToken = data.refresh
                     resolve(getResponse(requestConfig));
                 }).catch((error) => {
                     console.error('Error refreshing token', error)

@@ -919,6 +919,28 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/user/{id}/:
+    get:
+      operationId: user_retrieve
+      description: View to return data about a specific user
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - user
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithPermissions'
+          description: ''
   /api/user/me/:
     get:
       operationId: user_me_retrieve
