@@ -9,7 +9,9 @@ export default async function LoginPage() {
         <main>
             <Container>
                 <Header/>
-                <LoginForm/>
+                <SecuredServer inverse>
+                    <LoginForm/>
+                </SecuredServer>
 
                 <SecuredServer>
                     <LogoutButton>

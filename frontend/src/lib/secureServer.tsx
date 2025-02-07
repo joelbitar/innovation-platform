@@ -4,6 +4,7 @@ import {cookies} from "next/headers"
 
 import {userHasPermissions} from "@/lib/secured";
 import {UserWithPermissions} from "@/lib/api";
+import {SecuredProps} from "@/lib/secured";
 
 import Redis from 'ioredis'
 
@@ -50,12 +51,10 @@ export async function fetchUser(): Promise<UserWithPermissions | null> {
 }
 
 
-type ServerSideSecuredProps = {
-    children: any
-    permissions: string[] | undefined
-}
 
-export default async function SecuredServer({children, permissions}: ServerSideSecuredProps) {
+export default async function SecuredServer({children, permissions, inverse}: SecuredProps) {
+    // Inverse is used to check if the user does not have the permission
+    // Default value is undefined (false) and if set to something else, it will be true
     let userData = undefined;
     try {
         userData = await fetchUser()
@@ -63,7 +62,20 @@ export default async function SecuredServer({children, permissions}: ServerSideS
         console.log('Could not fetch user data...')
     }
 
-    if ((permissions === undefined && !userData) || !userData || !userHasPermissions(userData, permissions)) {
+    const prohibited = (permissions === undefined && !userData) || !userData || !userHasPermissions(userData, permissions)
+
+    // Negate the meaning of inverse so
+    // if inverse is false (default) and prohibited is true then we should not render the children
+    /**
+     * inverse      negated inverse      prohibited       abort
+     * false*       true                 true             true
+     * false*       true                 false            false
+     * true         false                true             false
+     * true         false                false            true
+     *
+     * *= default
+     */
+    if (prohibited === (!inverse)) {
         return (
             <>
             </>
