@@ -1,70 +1,48 @@
 'use server'
 
 import {cookies} from "next/headers"
-import {getRequestConfig, getResponse} from "@/lib/api/core/request";
 
 import {userHasPermissions} from "@/lib/secured";
+import {UserWithPermissions} from "@/lib/api";
 
+import Redis from 'ioredis'
 
-export async function fetchUser() {
+export async function fetchUser(): Promise<UserWithPermissions> {
     const cookieStore = await cookies()
 
-    let accessToken = cookieStore.get('access-token')?.value
-    const refreshToken = cookieStore.get('refresh-token')?.value
+    const userId = cookieStore.get('user_id')?.value
 
-    console.log('ACCESS token', accessToken)
+    const redis = new Redis(process.env.REDIS_URL)
 
-    let requestData: RequestInit = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
-        }
-    }
+    const user = await redis.get(userId)
 
-    const response = await fetch(
-        `${process.env.BACKEND_URL}/api/user/me/`,
-        requestData
-    )
-
-    console.log('Response status', response.status)
-
-    if(response.status === 401) {
-        const refreshResponse = await fetch(
-            `${process.env.BACKEND_URL}/api/auth/token/refresh/`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    refresh: refreshToken
-                })
+    if(user) {
+        return JSON.parse(user)
+    }else{
+        let requestData: RequestInit = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Api-Key ${process.env.BACKEND_API_KEY}`
             }
+        }
+
+        const response = await fetch(
+            `${process.env.BACKEND_URL}/api/user/${userId}/`,
+            requestData
         )
 
-        console.log('Refresh response status', refreshResponse.status)
-
-        if(response.ok) {
-            console.log('OK on the refresh.. trying again.')
-            requestData.headers['Authorization'] = `Bearer ${data.access}`
-            const refreshed_response = await fetch(
-                `${process.env.BACKEND_URL}/api/user/me/`,
-                requestData
-            )
-
-            if(refreshed_response.status === 401) {
-                console.log('Could not refresh the token')
-                return {}
-            }
-
-            console.log('returning second try on response')
-
-            return await refreshed_response.json()
+        if (response.status !== 200) {
+            console.error('COULD NOT FETCH USER DATA')
         }
-    }
 
-    return await response.json()
+        const userResponseData = await response.json()
+
+        // Cache the user data for 10 minutes
+        redis.set(userId, JSON.stringify(userResponseData), 'EX', 60 * 10)
+
+        return userResponseData
+    }
 }
 
 
@@ -81,10 +59,7 @@ export default async function ServerSideSecured({children, permissions}: ServerS
         console.log('Could not fetch user data...')
     }
 
-    console.log('userData', userData)
-
     if (!userData || !userHasPermissions(userData, permissions)) {
-        console.log('user did NOT have the permission')
         return (
             <>
             </>

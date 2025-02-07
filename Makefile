@@ -30,7 +30,10 @@ up-backend-dev:
 up-proxy-dev:
 	docker compose up proxy-dev -d
 
-up: up-frontend-dev up-backend-dev up-proxy-dev
+up-redis-dev:
+	docker compose up redis-dev -d
+
+up: up-redis-dev up-frontend-dev up-backend-dev up-proxy-dev
 	$(info Started)
 
 stop-backend-dev:
