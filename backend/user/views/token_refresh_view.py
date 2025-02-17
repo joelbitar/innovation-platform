@@ -1,7 +1,6 @@
-from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.views import TokenRefreshView as SimpleJWTTokenRefreshView
 
-from user.models import Profile
+from user.models import ProfileToken
 
 
 class CustomTokenRefreshView(SimpleJWTTokenRefreshView):
@@ -9,12 +8,12 @@ class CustomTokenRefreshView(SimpleJWTTokenRefreshView):
         response = super().post(request, *args, **kwargs)
 
         # Generate new token for user
-        profile = Profile.objects.get(random_token=request.COOKIES.get('user_token'))
-        profile.re_generate_token()
+        profile_token = ProfileToken.objects.get(token=request.COOKIES.get('user_token'))
+        profile_token.re_generate()
 
         response.set_cookie(
             key='user_token',
-            value=profile.random_token,
+            value=profile_token.token,
             httponly=True,
             secure=True,
             samesite='None',

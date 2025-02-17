@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from user.models import Profile
+from user.models import Profile, ProfileToken
 
 
 class TokenBlacklistViewSerializer(serializers.Serializer):
@@ -48,8 +48,8 @@ class TokenBlacklistView(APIView):
         # clear this token
         try:
             user_token_cookie = request.COOKIES.get('user_token')
-            Profile.objects.get(random_token=user_token_cookie).invalidate_token()
-        except Profile.DoesNotExist:
+            ProfileToken.objects.get(token=user_token_cookie).delete()
+        except ProfileToken.DoesNotExist:
             pass
 
         response = JsonResponse({})
