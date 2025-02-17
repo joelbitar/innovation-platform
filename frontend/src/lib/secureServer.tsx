@@ -55,6 +55,7 @@ export async function fetchUser(): Promise<UserWithPermissions | null> {
 export default async function SecuredServer({children, permissions, inverse}: SecuredProps) {
     // Inverse is used to check if the user does not have the permission
     // Default value is undefined (false) and if set to something else, it will be true
+
     let userData = undefined;
     try {
         userData = await fetchUser()
