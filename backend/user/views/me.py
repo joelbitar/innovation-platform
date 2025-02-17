@@ -45,6 +45,12 @@ class UserView(ModelViewSet):
 
     http_method_names = ['get']
     serializer_class = UserWithPermissionsSerializer
+    lookup_field = 'id'
 
     def get_queryset(self):
         return User.objects.filter().prefetch_related('profile')
+
+    def get_lookup_kwarg(self):
+        return {
+            'id': self.request.query_params.get('id')
+        }
