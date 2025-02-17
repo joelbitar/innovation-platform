@@ -20,7 +20,7 @@ class UserAPIUserAPIKeysTests(TestCase):
         )
 
         response = api_client.get(
-            reverse('user-detail', kwargs={'pk': user.pk}),
+            reverse('user-detail') + f'?id={user.pk}'
         )
 
         with self.subTest('Should NOT return OK since we only can access this api with api keys'):
@@ -44,7 +44,40 @@ class UserAPIUserAPIKeysTests(TestCase):
         )
 
         response = client.get(
-            reverse('user-detail', kwargs={'pk': user.pk}),
+            reverse('user-detail') + f'?id={user.pk}',
+            headers={
+                'Authorization': f'Api-Key {key}'
+            },
+        )
+
+        with self.subTest('Should return 200 ok'):
+            self.assertEqual(
+                200,
+                response.status_code,
+                response.content
+            )
+
+        with self.subTest('Should return the user'):
+            self.assertEqual(
+                user.username,
+                response.data['username'],
+                response.content
+            )
+
+    def test_should_be_able_to_get_user_with_api_keys_by_accessing_through_token(self):
+        api_key, key = APIKey.objects.create_key(
+            name='Test API Key',
+        )
+
+        client = Client()
+
+        user = User.objects.create_user(
+            username='testuser',
+            password='testpassword',
+        )
+
+        response = client.get(
+            reverse('user-detail') + f'?token={user.profile.random_token}',
             headers={
                 'Authorization': f'Api-Key {key}'
             },

@@ -2,6 +2,7 @@ from typing import Optional
 
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import Profile
 
@@ -86,3 +87,14 @@ class AbbreviatedUserSerializer(UserSerializer):
 
 class CreatedByModelSerializer(serializers.ModelSerializer):
     created_by = AbbreviatedUserSerializer(read_only=True)
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        self.user.profile.re_generate_token()
+
+        data['user_token'] = self.user.profile.random_token
+
+        return data

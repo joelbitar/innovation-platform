@@ -2,7 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { TokenObtainPair } from '../models/TokenObtainPair';
+import type { CustomTokenObtainPair } from '../models/CustomTokenObtainPair';
+import type { TokenBlacklistView } from '../models/TokenBlacklistView';
 import type { TokenRefresh } from '../models/TokenRefresh';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -12,12 +13,12 @@ export class AuthService {
      * Takes a set of user credentials and returns an access and refresh JSON web
      * token pair to prove the authentication of those credentials.
      * @param requestBody
-     * @returns TokenObtainPair
+     * @returns CustomTokenObtainPair
      * @throws ApiError
      */
     public static authTokenCreate(
-        requestBody: TokenObtainPair,
-    ): CancelablePromise<TokenObtainPair> {
+        requestBody: CustomTokenObtainPair,
+    ): CancelablePromise<CustomTokenObtainPair> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/auth/token/',
@@ -26,13 +27,18 @@ export class AuthService {
         });
     }
     /**
-     * @returns any No response body
+     * @param requestBody
+     * @returns TokenBlacklistView
      * @throws ApiError
      */
-    public static authTokenBlacklistCreate(): CancelablePromise<any> {
+    public static authTokenBlacklistCreate(
+        requestBody: TokenBlacklistView,
+    ): CancelablePromise<TokenBlacklistView> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/auth/token/blacklist/',
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
     /**

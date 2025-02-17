@@ -11,15 +11,15 @@ import Redis from 'ioredis'
 export async function fetchUser(): Promise<UserWithPermissions | null> {
     const cookieStore = await cookies()
 
-    const userId = cookieStore.get('user_id')?.value
+    const userToken = cookieStore.get('user_token')?.value
 
-    if(!userId) {
+    if(!userToken) {
         return null
     }
 
     const redis = new Redis(process.env.REDIS_URL)
 
-    const user = await redis.get(userId)
+    const user = await redis.get(userToken)
 
     if(user) {
         return JSON.parse(user)
@@ -33,7 +33,7 @@ export async function fetchUser(): Promise<UserWithPermissions | null> {
         }
 
         const response = await fetch(
-            `${process.env.BACKEND_URL}/api/user/${userId}/`,
+            `${process.env.BACKEND_URL}/api/user/?token=${userToken}`,
             requestData
         )
 
@@ -44,7 +44,7 @@ export async function fetchUser(): Promise<UserWithPermissions | null> {
         const userResponseData = await response.json()
 
         // Cache the user data for 10 minutes
-        redis.set(userId, JSON.stringify(userResponseData), 'EX', 60 * 10)
+        redis.set(userToken, JSON.stringify(userResponseData), 'EX', 60 * 10)
 
         return userResponseData
     }

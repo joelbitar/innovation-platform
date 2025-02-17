@@ -15,31 +15,47 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/CustomTokenObtainPair'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/CustomTokenObtainPair'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/CustomTokenObtainPair'
         required: true
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenObtainPair'
+                $ref: '#/components/schemas/CustomTokenObtainPair'
           description: ''
   /api/auth/token/blacklist/:
     post:
       operationId: auth_token_blacklist_create
       tags:
       - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenBlacklistView'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenBlacklistView'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenBlacklistView'
+        required: true
       security:
       - jwtAuth: []
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenBlacklistView'
+          description: ''
   /api/auth/token/refresh/:
     post:
       operationId: auth_token_refresh_create
@@ -919,17 +935,10 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/user/{id}/:
+  /api/user/:
     get:
       operationId: user_retrieve
       description: View to return data about a specific user
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          pattern: ^\d+$
-        required: true
       tags:
       - user
       security:
@@ -1075,6 +1084,18 @@ components:
       - id
       - name
       - updated_at
+    CustomTokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - username
     Idea:
       type: object
       properties:
@@ -1280,26 +1301,13 @@ components:
       required:
       - count
       - round_pk
-    TokenObtainPair:
+    TokenBlacklistView:
       type: object
       properties:
-        username:
-          type: string
-          writeOnly: true
-        password:
-          type: string
-          writeOnly: true
-        access:
-          type: string
-          readOnly: true
         refresh:
           type: string
-          readOnly: true
       required:
-      - access
-      - password
       - refresh
-      - username
     TokenRefresh:
       type: object
       properties:
@@ -1329,6 +1337,9 @@ components:
           readOnly: true
         type:
           $ref: '#/components/schemas/TypeEnum'
+        random_token:
+          type: string
+          maxLength: 32
         user:
           type: integer
           readOnly: true

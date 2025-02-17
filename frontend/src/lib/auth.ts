@@ -1,6 +1,6 @@
 'use client';
 
-import {setAccessToken, setRefreshToken} from "@/lib/api/core/request";
+import {getRefreshToken, setAccessToken, setRefreshToken} from "@/lib/api/core/request";
 import {AuthService, TokenObtainPair, UserService, UserWithPermissions} from "@/lib/api";
 
 export function setLocalStorageUserData(data: any) {
@@ -42,7 +42,6 @@ export function login(username: string, password: string): Promise<UserWithPermi
 
                 fetchUserData().then(
                     (data) => {
-                        document.cookie = `user_id=${data.id}; path=/; max-age=${60 * 60 * 24 * 365}`;
                         resolve(data)
                     },
                     (error) => {
@@ -59,12 +58,14 @@ export function login(username: string, password: string): Promise<UserWithPermi
 
 export function logout(): Promise<null> {
     return new Promise((resolve, reject) => {
-        AuthService.authTokenBlacklistCreate().then(
+        AuthService.authTokenBlacklistCreate(
+            {refresh: getRefreshToken()}
+        ).then(
             (data) => {
                 setAccessToken('')
                 setRefreshToken('')
                 setLocalStorageUserData('')
-                document.cookie = `user_id=; path=/; max-age=1`;
+                document.cookie = `user_token=; path=/; max-age=1`;
                 resolve(null)
             },
             (error) => {

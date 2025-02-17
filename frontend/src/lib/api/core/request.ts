@@ -96,15 +96,13 @@ export const getResponse = (requestConfig: RequestConfig): Promise<any> => {
         return fetch(requestConfig.url, requestData)
     } else {
         // The token is expired
-        console.log('Token is expired... let us try to get a new.', getRefreshToken())
         if(!tokenRefreshPromise && !getRefreshToken()){
             // There is no refresh token available
             // We shall redirect the user to the login page
             // or show a message that the user needs to login
             // or do something else
-            console.error('No refresh token available. User needs to login again')
             return new Promise((resolve, reject) => {
-                reject('No refresh token available. User needs to login again')
+                reject({error: 'Token is expired and there is no refresh token available'})
             })
         }
         // We shall try to refresh the token

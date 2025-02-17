@@ -1,14 +1,31 @@
 from django.core.exceptions import SuspiciousOperation
 from django.http import JsonResponse
 from rest_framework import status
+from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from user.models import Profile
+
+
+class TokenBlacklistViewSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
+
+    def validate(self, attrs):
+        refresh = attrs.get('refresh')
+
+        if refresh is None:
+            raise serializers.ValidationError('No refresh token provided')
+
+        return attrs
+
 
 class TokenBlacklistView(APIView):
     permission_classes = [IsAuthenticated]
+
+    serializer_class = TokenBlacklistViewSerializer
 
     @staticmethod
     def blacklist_refresh_token(refresh_token_string: str):
@@ -28,5 +45,13 @@ class TokenBlacklistView(APIView):
         except TokenError:
             raise SuspiciousOperation('Token is invalid')
 
-        # Return ok.
-        return JsonResponse({})
+        # clear this token
+        try:
+            user_token_cookie = request.COOKIES.get('user_token')
+            Profile.objects.get(random_token=user_token_cookie).invalidate_token()
+        except Profile.DoesNotExist:
+            pass
+
+        response = JsonResponse({})
+        response.delete_cookie('user_token')
+        return response

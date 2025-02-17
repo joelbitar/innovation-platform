@@ -31,3 +31,30 @@ class UserProfileSignalTests(TestCase):
                 0,
                 Profile.objects.all().count()
             )
+
+    # Test should create one profile per user
+    def test_should_create_one_profile_per_user(self):
+        for i in range(2):
+            u = User.objects.create_user(
+                username=f'test{i}',
+                password=f'test{i}',
+            )
+
+            with self.subTest(f'Profile should be created for user {i}'):
+                self.assertEqual(
+                    i + 1,
+                    Profile.objects.all().count()
+                )
+
+            with self.subTest(f'Profile should be attached to user {i}'):
+                self.assertIsNotNone(
+                    u.profile
+                )
+
+        with self.subTest('Should have one profile per user'):
+            self.assertEqual(
+                User.objects.all().count(),
+                Profile.objects.all().count()
+            )
+
+
