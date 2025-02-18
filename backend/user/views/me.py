@@ -58,7 +58,7 @@ class UserView(ModelViewSet):
 
         if query_params.get('token'):
             return {
-                'profile__random_token': query_params.get('token')
+                'profile__tokens__token': query_params.get('token')
             }
 
         raise SuspiciousOperation('no filters applied')

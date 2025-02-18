@@ -11,6 +11,7 @@ export function getLocalStorageUserData() {
     try {
         return JSON.parse(localStorage.getItem('user') || '{}')
     } catch (e) {
+        console.error('Could not parse user data from local storage')
         return {}
     }
 }

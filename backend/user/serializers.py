@@ -93,8 +93,9 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        self.user.profile.re_generate_token()
+        self.user.profile.clear_expired_tokens()
+        profile_token = self.user.profile.generate_token()
 
-        data['user_token'] = self.user.profile.random_token
+        data['user_token'] = profile_token.token
 
         return data

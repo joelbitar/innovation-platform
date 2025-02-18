@@ -1,6 +1,7 @@
 import Link from "next/link";
 import CreateCampaignLink from "@/app/_components/createCampaignLink";
 import SecuredServer from "@/lib/secureServer";
+import LogoutButton from "@/app/_components/user/logout";
 
 const Header = () => {
     return (
@@ -8,11 +9,16 @@ const Header = () => {
             <Link href="/" className="hover:underline">
                 Start
             </Link>
-            <Link href="/login/" className="hover:underline ml-4">
-                Login
-            </Link>
+            <SecuredServer inverse>
+                <Link href="/login/" className="hover:underline ml-4">
+                    Login
+                </Link>
+            </SecuredServer>
             <SecuredServer>
                 <CreateCampaignLink/>
+                <LogoutButton>
+                    Log out
+                </LogoutButton>
             </SecuredServer>
         </h2>
     );

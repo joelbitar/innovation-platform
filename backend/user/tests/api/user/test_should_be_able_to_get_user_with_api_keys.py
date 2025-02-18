@@ -71,13 +71,26 @@ class UserAPIUserAPIKeysTests(TestCase):
 
         client = Client()
 
+        User.objects.create_user(
+            username='foo',
+            password='testpassword',
+        ).profile.generate_token()
+
         user = User.objects.create_user(
             username='testuser',
             password='testpassword',
         )
 
+        profile_token = user.profile.generate_token()
+
+        User.objects.create_user(
+            username='bar',
+            password='testpassword',
+        ).profile.generate_token()
+
+
         response = client.get(
-            reverse('user-detail') + f'?token={user.profile.random_token}',
+            reverse('user-detail') + f'?token={profile_token.token}',
             headers={
                 'Authorization': f'Api-Key {key}'
             },
