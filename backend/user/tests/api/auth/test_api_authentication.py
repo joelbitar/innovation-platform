@@ -319,7 +319,7 @@ class AuthenticationAPITests(TestCase):
             self.user,
         )
 
-        self.client.cookies['user_token'] = response.cookies['user_token']
+        self.client.cookies['user_token'] = (first_response_user_token := response.cookies['user_token'])
 
         response = self.client.post(
             reverse('auth_jwt_token_blacklist'),
@@ -358,7 +358,7 @@ class AuthenticationAPITests(TestCase):
                 ).exists()
             )
 
-        # Should we be able to use the old refresh token
+        # Should NOT be able to use the old refresh token
         response = self.client.post(
             reverse('auth_jwt_token_refresh'),
             {
@@ -371,4 +371,62 @@ class AuthenticationAPITests(TestCase):
                 401,
                 response.status_code,
                 response.content,
+            )
+
+        with self.subTest('Should clear user_token cookie even if the refresh token old'):
+            self.assertIn(
+                'user_token',
+                self.client.cookies,
+            )
+
+            blacklist_response = self.client.post(
+                reverse('auth_jwt_token_blacklist'),
+                {
+                    'refresh': refresh_token,
+                },
+            )
+
+            self.assertEqual(
+                401,
+                blacklist_response.status_code,
+            )
+
+            self.assertIsNotNone(
+                user_token_cookie := self.client.cookies.get('user_token')
+            )
+
+            self.assertEqual(
+                "",
+                user_token_cookie.value,
+            )
+
+        with self.subTest('Should clear cookie if the users is not authenticated'):
+            self.client.logout()
+
+            self.client.cookies['user_token'] = first_response_user_token
+
+            self.assertIn(
+                'user_token',
+                self.client.cookies,
+            )
+
+            blacklist_response = self.client.post(
+                reverse('auth_jwt_token_blacklist'),
+                {
+                    'refresh': refresh_token,
+                },
+            )
+
+            self.assertEqual(
+                401,
+                blacklist_response.status_code,
+            )
+
+            self.assertIsNotNone(
+                blacklist_response_user_token_cookie := blacklist_response.cookies.get('user_token')
+            )
+
+            self.assertEqual(
+                "",
+                blacklist_response_user_token_cookie.value,
             )

@@ -1,7 +1,7 @@
 'use client';
 
 import {getRefreshToken, setAccessToken, setRefreshToken} from "@/lib/api/core/request";
-import {AuthService, TokenObtainPair, UserService, UserWithPermissions} from "@/lib/api";
+import {AuthService, CustomTokenObtainPair, TokenBlacklistView, UserService, UserWithPermissions} from "@/lib/api";
 
 export function setLocalStorageUserData(data: any) {
     localStorage.setItem('user', JSON.stringify(data))
@@ -33,7 +33,7 @@ function fetchUserData(): Promise<UserWithPermissions> {
 
 export function login(username: string, password: string): Promise<UserWithPermissions> {
     return new Promise((resolve, reject) => {
-        AuthService.authTokenCreate(<TokenObtainPair>{
+        AuthService.authTokenCreate(<CustomTokenObtainPair>{
             username,
             password
         }).then(
@@ -60,17 +60,21 @@ export function login(username: string, password: string): Promise<UserWithPermi
 export function logout(): Promise<null> {
     return new Promise((resolve, reject) => {
         AuthService.authTokenBlacklistCreate(
-            {refresh: getRefreshToken()}
+            <TokenBlacklistView>{refresh: getRefreshToken()}
         ).then(
             (data) => {
-                setAccessToken('')
-                setRefreshToken('')
-                setLocalStorageUserData('')
-                document.cookie = `user_token=; path=/; max-age=1`;
                 resolve(null)
             },
             (error) => {
                 reject(error)
+            }
+        ).finally(
+            () => {
+                setAccessToken('')
+                setRefreshToken('')
+                setLocalStorageUserData('')
+                document.cookie = `user_token=; path=/; max-age=1`;
+                window.location.reload()
             }
         )
     })

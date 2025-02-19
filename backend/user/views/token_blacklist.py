@@ -1,13 +1,11 @@
-from django.core.exceptions import SuspiciousOperation
 from django.http import JsonResponse
-from rest_framework import status
 from rest_framework import serializers
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from user.models import Profile, ProfileToken
+from user.models import ProfileToken
 
 
 class TokenBlacklistViewSerializer(serializers.Serializer):
@@ -23,7 +21,8 @@ class TokenBlacklistViewSerializer(serializers.Serializer):
 
 
 class TokenBlacklistView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
+    authentication_classes = []
 
     serializer_class = TokenBlacklistViewSerializer
 
@@ -32,18 +31,19 @@ class TokenBlacklistView(APIView):
         refresh_token = RefreshToken(refresh_token_string)
         refresh_token.blacklist()
 
+    @staticmethod
+    def get_response_object(data: dict = None, status_code: int = status.HTTP_200_OK):
+        response = JsonResponse(
+            data or {},
+            status=status_code,
+        )
+
+        response.delete_cookie('user_token')
+
+        return response
+
     def post(self, request):
         refresh_token_string = request.data.get('refresh')
-
-        # If there is no token in the request, return bad request
-        if refresh_token_string is None:
-            return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Blacklist token
-        try:
-            self.blacklist_refresh_token(refresh_token_string)
-        except TokenError:
-            raise SuspiciousOperation('Token is invalid')
 
         # Delete the token used on the call
         try:
@@ -52,6 +52,20 @@ class TokenBlacklistView(APIView):
         except ProfileToken.DoesNotExist:
             pass
 
-        response = JsonResponse({})
-        response.delete_cookie('user_token')
-        return response
+        # If there is no token in the request, return bad request
+        if refresh_token_string is None:
+            return self.get_response_object(
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Blacklist token
+        try:
+            self.blacklist_refresh_token(refresh_token_string)
+        except TokenError:
+            return self.get_response_object(
+                status_code=status.HTTP_401_UNAUTHORIZED
+            )
+
+        return self.get_response_object(
+            status_code=status.HTTP_200_OK
+        )
