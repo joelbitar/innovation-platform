@@ -26,7 +26,7 @@ services:
     environment:
       - NODE_ENV=development
       - BACKEND_URL=http://backend.dkr:8000
-      - BACKEND_API_KEY=T3M6kxoK.WMmgBJ7Z9hpjRmvcMkPaaI28gZlVJNZa
+      - BACKEND_API_KEY=SC43LSTp.TK1nQ35WGPQTvV0ELQImmVX5Dani1jsV
       - REDIS_URL=redis://redis.dkr:6379
     volumes:
       - ./frontend:/app

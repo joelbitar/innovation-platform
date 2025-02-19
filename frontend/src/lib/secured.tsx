@@ -7,6 +7,7 @@ export type SecuredProps = {
 }
 
 function userHasPermission(userData: UserWithPermissions, permission: string) {
+    console.log('permissions', userData)
     return userData.permissions?.includes(permission) || userData.group_permissions?.includes(permission)
 }
 

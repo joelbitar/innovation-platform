@@ -24,11 +24,13 @@ export async function fetchUser(): Promise<UserWithPermissions | null> {
     if(user) {
         return JSON.parse(user)
     }else{
+        const backend_api_key = process.env.BACKEND_API_KEY
+
         let requestData: RequestInit = {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Api-Key ${process.env.BACKEND_API_KEY}`
+                'Authorization': `Api-Key ${backend_api_key}`
             }
         }
 
@@ -38,7 +40,12 @@ export async function fetchUser(): Promise<UserWithPermissions | null> {
         )
 
         if (response.status !== 200) {
-            console.error('COULD NOT FETCH USER DATA')
+            if(response.status === 401) {
+                console.error('Not authenticated')
+                return null
+            }
+            console.error('Could not fetch user data')
+            return null
         }
 
         const userResponseData = await response.json()
