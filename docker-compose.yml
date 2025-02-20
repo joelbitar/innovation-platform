@@ -26,8 +26,9 @@ services:
     environment:
       - NODE_ENV=development
       - BACKEND_URL=http://backend.dkr:8000
-      - BACKEND_API_KEY=T3M6kxoK.WMmgBJ7Z9hpjRmvcMkPaaI28gZlVJNZa
       - REDIS_URL=redis://redis.dkr:6379
+    env_file:
+      - path: frontend/.env
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -64,12 +65,10 @@ services:
       target: ip_dev
     environment:
       - ALLOWED_HOSTS=localhost,backend.dkr
-      - DEFAULT_DATABASE_URL=sqlite:////src/db.sqlite3
-      - DEBUG=on
       - STATIC_URL=/static/
       - MEDIA_URL=/media/
-      - SECRET_KEY=django-insecure-)c%s=kj@d9l-n9uv!p&8&60=k74n(y4mf3g*c5r+)5ode7p%k8
-      - DJANGO_SETTINGS_MODULE=app.settings-development
+    env_file:
+      - path: backend/.env
     ports:
       - "8000:8000"
     volumes:
