@@ -9,15 +9,7 @@ from user.models import ProfileToken
 
 
 class TokenBlacklistViewSerializer(serializers.Serializer):
-    refresh = serializers.CharField()
-
-    def validate(self, attrs):
-        refresh = attrs.get('refresh')
-
-        if refresh is None:
-            raise serializers.ValidationError('No refresh token provided')
-
-        return attrs
+    refresh = serializers.CharField(write_only=True, required=True)
 
 
 class TokenBlacklistView(APIView):
@@ -43,24 +35,25 @@ class TokenBlacklistView(APIView):
         return response
 
     def post(self, request):
-        refresh_token_string = request.data.get('refresh')
-
         # Delete the token used on the call
         try:
-            user_token_cookie = request.COOKIES.get('user_token')
-            ProfileToken.objects.get(token=user_token_cookie).delete()
+            if user_token_cookie := request.COOKIES.get('user_token'):
+                ProfileToken.objects.get(token=user_token_cookie).delete()
         except ProfileToken.DoesNotExist:
             pass
 
-        # If there is no token in the request, return bad request
-        if refresh_token_string is None:
+        serializer = self.serializer_class(data=request.data)
+        if not serializer.is_valid():
             return self.get_response_object(
+                data=serializer.errors,
                 status_code=status.HTTP_400_BAD_REQUEST
             )
 
         # Blacklist token
         try:
-            self.blacklist_refresh_token(refresh_token_string)
+            self.blacklist_refresh_token(
+                serializer.validated_data.get('refresh')
+            )
         except TokenError:
             return self.get_response_object(
                 status_code=status.HTTP_401_UNAUTHORIZED

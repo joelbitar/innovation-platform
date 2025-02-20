@@ -6,7 +6,6 @@ import type { TypeEnum } from './TypeEnum';
 export type UserProfile = {
     readonly id: number;
     type?: TypeEnum;
-    random_token?: string;
     readonly user: number;
 };
 

@@ -53,7 +53,7 @@ class Profile(models.Model):
 
 class ProfileToken(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="tokens")
-    token = models.CharField(max_length=32, default=get_random_token)
+    token = models.CharField(max_length=32, default=get_random_token, unique=True, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     expires_at = models.DateTimeField(default=get_expires_at)

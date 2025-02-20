@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import SuspiciousOperation
 from django.http import QueryDict
+from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -51,14 +52,14 @@ class UserView(ModelViewSet):
         return User.objects.filter().prefetch_related('profile')
 
     def get_filter_kwargs(self, query_params: QueryDict):
-        if query_params.get('id'):
+        if user_id := query_params.get('id'):
             return {
-                'id': query_params.get('id')
+                'id': user_id
             }
 
-        if query_params.get('token'):
+        if profile_token := query_params.get('token'):
             return {
-                'profile__tokens__token': query_params.get('token')
+                'profile__tokens__token': profile_token
             }
 
         raise SuspiciousOperation('no filters applied')
@@ -71,20 +72,12 @@ class UserView(ModelViewSet):
         )
 
         if not user_queryset.exists():
-            raise SuspiciousOperation('User not found')
+            raise NotFound('User not found with supplied filters')
 
-        if user_queryset.count() > 1:
-            raise SuspiciousOperation('Multiple users found')
-
-        user = user_queryset.first()
+        user = user_queryset.get()
 
         return Response(
             self.serializer_class(
                 user
             ).data
         )
-
-    def get_lookup_kwarg(self):
-        return {
-            'id': self.request.query_params.get('id')
-        }

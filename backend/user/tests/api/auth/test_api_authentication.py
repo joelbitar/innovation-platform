@@ -358,6 +358,9 @@ class AuthenticationAPITests(TestCase):
                 ).exists()
             )
 
+        # Set a new and valid token
+        self.client.cookies['user_token'] = self.user.profile.generate_token().token
+
         # Should NOT be able to use the old refresh token
         response = self.client.post(
             reverse('auth_jwt_token_refresh'),
@@ -419,6 +422,33 @@ class AuthenticationAPITests(TestCase):
 
             self.assertEqual(
                 401,
+                blacklist_response.status_code,
+                blacklist_response.content,
+            )
+
+            self.assertIsNotNone(
+                blacklist_response_user_token_cookie := blacklist_response.cookies.get('user_token')
+            )
+
+            self.assertEqual(
+                "",
+                blacklist_response_user_token_cookie.value,
+            )
+
+    # Test should return 400 if refresh token is omitted
+    def test_should_return_400_if_refresh_token_is_omitted(self):
+        with self.subTest('Should clear cookie even if the refresh token is not set'):
+            self.client.logout()
+
+            blacklist_response = self.client.post(
+                reverse('auth_jwt_token_blacklist'),
+                {
+                    'refresh': '',
+                },
+            )
+
+            self.assertEqual(
+                400,
                 blacklist_response.status_code,
             )
 

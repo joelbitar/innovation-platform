@@ -47,8 +47,6 @@ paths:
             schema:
               $ref: '#/components/schemas/TokenBlacklistView'
         required: true
-      security:
-      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1306,6 +1304,7 @@ components:
       properties:
         refresh:
           type: string
+          writeOnly: true
       required:
       - refresh
     TokenRefresh:
@@ -1337,9 +1336,6 @@ components:
           readOnly: true
         type:
           $ref: '#/components/schemas/TypeEnum'
-        random_token:
-          type: string
-          maxLength: 32
         user:
           type: integer
           readOnly: true

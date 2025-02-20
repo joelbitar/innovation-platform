@@ -88,7 +88,6 @@ class UserAPIUserAPIKeysTests(TestCase):
             password='testpassword',
         ).profile.generate_token()
 
-
         response = client.get(
             reverse('user-detail') + f'?token={profile_token.token}',
             headers={
@@ -109,3 +108,36 @@ class UserAPIUserAPIKeysTests(TestCase):
                 response.data['username'],
                 response.content
             )
+
+        with self.subTest('Should return 404 if no user could be found'):
+            response = client.get(
+                reverse('user-detail') + f'?token=nonexistingtoken',
+                headers={
+                    'Authorization': f'Api-Key {key}'
+                },
+            )
+
+            self.assertEqual(
+                404,
+                response.status_code,
+                response.content
+            )
+
+    # Test should return 400 error if no id or token is provided
+    def test_should_return_400_error_if_no_id_or_token_is_provided(self):
+        api_key, key = APIKey.objects.create_key(
+            name='Test API Key',
+        )
+
+        response = self.client.get(
+            reverse('user-detail'),
+            headers={
+                'Authorization': f'Api-Key {key}'
+            },
+        )
+
+        self.assertEqual(
+            400,
+            response.status_code,
+            response.content
+        )
