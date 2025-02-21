@@ -11,52 +11,59 @@ import Redis from 'ioredis'
 export async function fetchUser(): Promise<UserWithPermissions | null> {
     const cookieStore = await cookies()
 
-    const userToken = cookieStore.get('user_token')?.value
+    const sessionId = cookieStore.get('sessionid')?.value
 
-    if(!userToken) {
+    if (!sessionId) {
         return null
     }
 
     const redis = new Redis(process.env.REDIS_URL)
 
-    const user = await redis.get(userToken)
+    const user = await redis.get(sessionId)
 
-    if(user) {
+    if (user) {
         return JSON.parse(user)
-    }else{
+    } else {
         const backend_api_key = process.env.BACKEND_API_KEY
 
+        // Set auth header and sessionid coookie
         let requestData: RequestInit = {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Cookie': `sessionid=${sessionId}`,
                 'Authorization': `Api-Key ${backend_api_key}`
             }
         }
 
         const response = await fetch(
-            `${process.env.BACKEND_URL}/api/user/?token=${userToken}`,
+            `${process.env.BACKEND_URL}/api/user/session/`,
             requestData
         )
 
+        if (response.status === 401) {
+            console.error('Not authenticated')
+            return null
+        }
+
+        if (response.status === 404) {
+            // No user in session.
+            return null
+        }
+
         if (response.status !== 200) {
-            if(response.status === 401) {
-                console.error('Not authenticated')
-                return null
-            }
-            console.error('Could not fetch user data')
+            console.error('Unknown error while fetching user')
             return null
         }
 
         const userResponseData = await response.json()
 
         // Cache the user data for 10 minutes
-        redis.set(userToken, JSON.stringify(userResponseData), 'EX', 60 * 10)
+        redis.set(sessionId, JSON.stringify(userResponseData), 'EX', 1)
 
         return userResponseData
     }
 }
-
 
 
 export default async function SecuredServer({children, permissions, inverse}: SecuredProps) {

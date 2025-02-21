@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name='ProfileToken',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('token', models.CharField(default=user.models.get_random_token, max_length=32)),
+                ('token', models.CharField(default="abc123", max_length=32)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('expires_at', models.DateTimeField()),

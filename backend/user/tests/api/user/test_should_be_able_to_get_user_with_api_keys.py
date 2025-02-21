@@ -64,7 +64,7 @@ class UserAPIUserAPIKeysTests(TestCase):
                 response.content
             )
 
-    def test_should_be_able_to_get_user_with_api_keys_by_accessing_through_token(self):
+    def test_should_be_able_to_get_user_with_api_keys_by_accessing_through_current_session(self):
         api_key, key = APIKey.objects.create_key(
             name='Test API Key',
         )
@@ -74,22 +74,24 @@ class UserAPIUserAPIKeysTests(TestCase):
         User.objects.create_user(
             username='foo',
             password='testpassword',
-        ).profile.generate_token()
+        )
 
         user = User.objects.create_user(
             username='testuser',
             password='testpassword',
         )
 
-        profile_token = user.profile.generate_token()
-
         User.objects.create_user(
             username='bar',
             password='testpassword',
-        ).profile.generate_token()
+        )
+
+        session = client.session
+        session.update({'user_id': user.pk})
+        session.save()
 
         response = client.get(
-            reverse('user-detail') + f'?token={profile_token.token}',
+            reverse('session-user-detail'),
             headers={
                 'Authorization': f'Api-Key {key}'
             },
@@ -109,9 +111,17 @@ class UserAPIUserAPIKeysTests(TestCase):
                 response.content
             )
 
+    # Test should return 404 is no user is set on the session
+    def test_should_return_404_is_no_user_is_set_on_the_session(self):
+        client = Client()
+
+        api_key, key = APIKey.objects.create_key(
+            name='Test API Key',
+        )
+
         with self.subTest('Should return 404 if no user could be found'):
             response = client.get(
-                reverse('user-detail') + f'?token=nonexistingtoken',
+                reverse('user-detail') + f'?id=12345',
                 headers={
                     'Authorization': f'Api-Key {key}'
                 },

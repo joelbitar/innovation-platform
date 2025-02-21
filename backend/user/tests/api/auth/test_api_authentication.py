@@ -1,11 +1,10 @@
 import datetime
+from typing import Optional
 
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
-
-from user.models import ProfileToken
 
 
 class AuthenticationAPITests(TestCase):
@@ -22,8 +21,8 @@ class AuthenticationAPITests(TestCase):
 
         self.client = APIClient()
 
-    def helper_obtain_jwt_token_pair(self, username, password):
-        return self.client.post(
+    def helper_obtain_jwt_token_pair(self, username, password, client: Optional[APIClient] = None):
+        return (client or self.client).post(
             reverse('auth_jwt_token_obtain_pair'),
             {
                 'username': username,
@@ -44,9 +43,12 @@ class AuthenticationAPITests(TestCase):
             obtain_response_one.content,
         )
 
+        client2 = APIClient()
+
         obtain_response_two = self.helper_obtain_jwt_token_pair(
             self.username,
             self.password,
+            client=client2,
         )
 
         self.assertEqual(
@@ -61,7 +63,6 @@ class AuthenticationAPITests(TestCase):
         )
 
         # should be able to refresh both tokens
-        self.client.cookies['user_token'] = obtain_response_one.cookies['user_token']
         refresh_response_one = self.client.post(
             reverse('auth_jwt_token_refresh'),
             {
@@ -75,13 +76,17 @@ class AuthenticationAPITests(TestCase):
             refresh_response_one.content,
         )
 
-        self.client.cookies['user_token'] = obtain_response_two.cookies['user_token']
-
-        refresh_response_two = self.client.post(
+        refresh_response_two = client2.post(
             reverse('auth_jwt_token_refresh'),
             {
                 'refresh': obtain_response_two.data['refresh'],
             }
+        )
+
+        self.assertEqual(
+            200,
+            refresh_response_two.status_code,
+            refresh_response_two.content,
         )
 
     # Test should be able to login
@@ -91,56 +96,48 @@ class AuthenticationAPITests(TestCase):
             self.password,
         )
 
-        self.assertEqual(
-            200,
-            response.status_code,
-            response.content,
-        )
+        with self.subTest('Should return 200'):
+            self.assertEqual(
+                200,
+                response.status_code,
+                response.content,
+            )
 
-    # Test should re-generate random token when logging in
-    def test_should_re_generate_random_token_when_logging_in(self):
-        obtain_response = self.helper_obtain_jwt_token_pair(
-            self.username,
-            self.password,
-        )
+        with self.subTest('Should have access and refresh tokens'):
+            self.assertIn(
+                'access',
+                response.data,
+            )
 
-        self.assertEqual(ProfileToken.objects.all().count(), 1)
+            self.assertIn(
+                'refresh',
+                response.data,
+            )
 
-        profile_token = ProfileToken.objects.first()
+            self.assertNotIn(
+                'user_id',
+                response.data,
+            )
 
-        pre_refresh_token = str(profile_token.token)
+            self.assertEqual(
+                ['refresh', 'access'],
+                list(response.data.keys()),
+            )
 
-        self.client.cookies['user_token'] = obtain_response.cookies['user_token']
-        refresh_response = self.client.post(
-            reverse('auth_jwt_token_refresh'),
-            {
-                'refresh': obtain_response.data['refresh'],
-            }
-        )
+        with self.subTest('Should have user id in session'):
+            session = self.client.session
 
-        self.assertEqual(ProfileToken.objects.all().count(), 1)
+            self.assertIsNotNone(
+                session_user_id := session.get('user_id')
+            )
 
-        self.assertNotEqual(
-            pre_refresh_token,
-            str(ProfileToken.objects.first().token),
-        )
-
-    # Test should remove expired tokens when we log in
-    def test_should_remove_expired_tokens_when_we_log_in(self):
-        for i in range(1, 6):
-            profile_token = self.user.profile.generate_token()
-            profile_token.expires_at = profile_token.expires_at - datetime.timedelta(days=i)
-            profile_token.save()
-
-        obtain_response = self.helper_obtain_jwt_token_pair(
-            self.username,
-            self.password,
-        )
-
-        self.assertEqual(ProfileToken.objects.all().count(), 1)
+            self.assertEqual(
+                self.user.pk,
+                session_user_id,
+            )
 
     # Test should set user token cookie on response from obtain token view
-    def test_should_set_user_token_cookie_on_response_from_obtain_token_view(self):
+    def test_should_set_sessionid_cookie_on_response_from_obtain_token_view(self):
         response = self.helper_obtain_jwt_token_pair(
             self.username,
             self.password,
@@ -148,7 +145,7 @@ class AuthenticationAPITests(TestCase):
 
         with self.subTest('Should have token cookie'):
             self.assertIn(
-                'user_token',
+                'sessionid',
                 response.cookies,
             )
 
@@ -217,15 +214,11 @@ class AuthenticationAPITests(TestCase):
                 first_refresh_token := response.data.get('refresh')
             )
 
-        with self.subTest('Should have user_token in cookie from obtain token view'):
+        with self.subTest('Should have sessionid in cookie from obtain token view'):
             self.assertIn(
-                'user_token',
+                'sessionid',
                 response.cookies,
             )
-
-        user_token = response.cookies['user_token'].value
-
-        self.client.cookies['user_token'] = user_token
 
         # Refresh token
         response = self.client.post(
@@ -262,42 +255,12 @@ class AuthenticationAPITests(TestCase):
                 refresh_token := response.data.get('refresh')
             )
 
-        with self.subTest('Should have new user_token in cookie from refresh token view'):
-            self.assertIn(
-                'user_token',
-                response.cookies,
-            )
-
-            self.assertNotEqual(
-                user_token,
-                response.cookies['user_token'].value,
-            )
-
-        self.client.cookies['user_token'] = user_token
-        # Should we be able to use the old refresh token
-        response = self.client.post(
-            reverse('auth_jwt_token_refresh'),
-            {
-                'refresh': first_refresh_token,
-            }
-        )
-
-        with self.subTest('Should get 401'):
-            self.assertEqual(
-                401,
-                response.status_code,
-                response.content,
-            )
-
     # Test should be able to logout, that is blacklist a token
     def test_should_be_able_to_logout_and_blacklist_a_token(self):
         response = self.helper_obtain_jwt_token_pair(
             self.username,
             self.password,
         )
-
-        pre_blacklist_profile_token = str(self.user.profile.tokens.first().token)
-        pre_blacklist_profile_token_pk = self.user.profile.tokens.first().pk
 
         self.assertEqual(
             200,
@@ -319,7 +282,9 @@ class AuthenticationAPITests(TestCase):
             self.user,
         )
 
-        self.client.cookies['user_token'] = (first_response_user_token := response.cookies['user_token'])
+        self.assertTrue(
+            self.client.session.get('user_id'),
+        )
 
         response = self.client.post(
             reverse('auth_jwt_token_blacklist'),
@@ -335,31 +300,15 @@ class AuthenticationAPITests(TestCase):
                 response.content,
             )
 
-        with self.subTest('Should have cleared the user token cookie'):
-            self.assertIn(
-                'user_token',
-                self.client.cookies,
+        with self.subTest('Should have cleared the user id from the session'):
+            self.assertTrue(
+                not self.client.session.get('user_id'),
+                f'User id should not be in session but is; "{self.client.session.get('user_id')}"'
             )
-
-            self.assertEqual(
-                "",
-                self.client.cookies['user_token'].value,
+            self.assertNotIn(
+                'user_id',
+                self.client.session,
             )
-
-        with self.subTest('Should have deleted the profile token'):
-            self.assertFalse(
-                ProfileToken.objects.filter(
-                    token=pre_blacklist_profile_token,
-                ).exists()
-            )
-            self.assertFalse(
-                ProfileToken.objects.filter(
-                    pk=pre_blacklist_profile_token_pk,
-                ).exists()
-            )
-
-        # Set a new and valid token
-        self.client.cookies['user_token'] = self.user.profile.generate_token().token
 
         # Should NOT be able to use the old refresh token
         response = self.client.post(
@@ -376,42 +325,8 @@ class AuthenticationAPITests(TestCase):
                 response.content,
             )
 
-        with self.subTest('Should clear user_token cookie even if the refresh token old'):
-            self.assertIn(
-                'user_token',
-                self.client.cookies,
-            )
-
-            blacklist_response = self.client.post(
-                reverse('auth_jwt_token_blacklist'),
-                {
-                    'refresh': refresh_token,
-                },
-            )
-
-            self.assertEqual(
-                401,
-                blacklist_response.status_code,
-            )
-
-            self.assertIsNotNone(
-                user_token_cookie := self.client.cookies.get('user_token')
-            )
-
-            self.assertEqual(
-                "",
-                user_token_cookie.value,
-            )
-
-        with self.subTest('Should clear cookie if the users is not authenticated'):
+        with self.subTest('Should clear session if the users is not authenticated'):
             self.client.logout()
-
-            self.client.cookies['user_token'] = first_response_user_token
-
-            self.assertIn(
-                'user_token',
-                self.client.cookies,
-            )
 
             blacklist_response = self.client.post(
                 reverse('auth_jwt_token_blacklist'),
@@ -426,13 +341,9 @@ class AuthenticationAPITests(TestCase):
                 blacklist_response.content,
             )
 
-            self.assertIsNotNone(
-                blacklist_response_user_token_cookie := blacklist_response.cookies.get('user_token')
-            )
-
-            self.assertEqual(
-                "",
-                blacklist_response_user_token_cookie.value,
+            self.assertNotIn(
+                'user_id',
+                self.client.session,
             )
 
     # Test should return 400 if refresh token is omitted
@@ -452,11 +363,6 @@ class AuthenticationAPITests(TestCase):
                 blacklist_response.status_code,
             )
 
-            self.assertIsNotNone(
-                blacklist_response_user_token_cookie := blacklist_response.cookies.get('user_token')
-            )
-
-            self.assertEqual(
-                "",
-                blacklist_response_user_token_cookie.value,
+            self.assertTrue(
+                not self.client.session.get('user_id'),
             )

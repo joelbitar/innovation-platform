@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='profiletoken',
             name='expires_at',
-            field=models.DateTimeField(default=user.models.get_expires_at),
+            field=models.DateTimeField(default=None, null=True),
         ),
     ]

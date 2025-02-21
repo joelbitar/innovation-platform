@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='profiletoken',
             name='token',
-            field=models.CharField(db_index=True, default=user.models.get_random_token, max_length=32, unique=True),
+            field=models.CharField(db_index=True, default="abc123", max_length=32, unique=True),
         ),
     ]

@@ -57,27 +57,36 @@ class UserView(ModelViewSet):
                 'id': user_id
             }
 
-        if profile_token := query_params.get('token'):
-            return {
-                'profile__tokens__token': profile_token
-            }
-
         raise SuspiciousOperation('no filters applied')
 
-    def get_user_detail(self, request):
-        lookup_kwargs = self.get_filter_kwargs(request.query_params)
+    def get_user_response(self, user_id: int):
+        if not user_id:
+            raise SuspiciousOperation('No user id provided')
 
-        user_queryset = self.get_queryset().filter(
-            **lookup_kwargs
-        )
-
-        if not user_queryset.exists():
-            raise NotFound('User not found with supplied filters')
-
-        user = user_queryset.get()
+        try:
+            user = self.get_queryset().get(
+                pk=user_id
+            )
+        except User.DoesNotExist:
+            raise NotFound('User not found')
 
         return Response(
             self.serializer_class(
                 user
             ).data
+        )
+
+    def get_user_detail(self, request):
+        return self.get_user_response(
+            request.query_params.get('id')
+        )
+
+    def get_session_user_detail(self, request):
+        user_id = request.session.get('user_id')
+
+        if not user_id:
+            raise NotFound('No user id in session')
+
+        return self.get_user_response(
+            user_id=user_id
         )
