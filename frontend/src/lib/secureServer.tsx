@@ -58,7 +58,7 @@ export async function fetchUser(): Promise<UserWithPermissions | null> {
 
         const userResponseData = await response.json()
 
-        // Cache the user data for 10 minutes
+        // Cache the user data
         redis.set(sessionId, JSON.stringify(userResponseData), 'EX', 1)
 
         return userResponseData
