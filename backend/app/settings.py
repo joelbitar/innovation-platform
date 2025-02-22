@@ -167,3 +167,10 @@ LOGGING = {
 
 USER_SESSION_PREFIX = env('USER_SESSION_PREFIX')
 REDIS_URL = env.url('REDIS_URL', None)
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": env.str('REDIS_URL'),
+    }
+}

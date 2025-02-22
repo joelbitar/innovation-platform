@@ -27,7 +27,6 @@ export async function fetchUser(): Promise<UserWithPermissions | null> {
         console.log('User data from cache')
         return JSON.parse(user)
     } else {
-        console.error('User data not found in cache')
         return null
     }
 }
