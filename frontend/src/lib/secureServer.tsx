@@ -17,7 +17,7 @@ export async function fetchUser(): Promise<UserWithPermissions | null> {
         return null
     }
 
-    const redis_session_key = `${process.env.USER_SESSION_PREFIX}${sessionId}`
+    const redis_session_key = `session_user_${sessionId}`
 
     const redis = new Redis(process.env.REDIS_URL)
 

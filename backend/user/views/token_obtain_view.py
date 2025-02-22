@@ -25,7 +25,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
         redis_client = RedisClient()
         redis_client.set(
-            f'{settings.USER_SESSION_PREFIX}{request.session.session_key}',
+            f'session_user_{request.session.session_key}',
             json.dumps(UserWithPermissionsSerializer(user).data)
         )
 

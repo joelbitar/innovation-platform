@@ -18,7 +18,7 @@ class CustomTokenBlacklistView(OriginalTokenBlacklistView):
 
         # Clear permissions from redis
         RedisClient().delete(
-            f'{settings.USER_SESSION_PREFIX}{request.session.session_key}',
+            f'session_user_{request.session.session_key}',
         )
 
         return super().post(request, *args, **kwargs)

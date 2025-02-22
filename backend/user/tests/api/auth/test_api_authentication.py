@@ -398,15 +398,13 @@ class AuthenticationAPITests(TestCase):
                 self.client.session,
             )
 
-        from django.conf import settings
-
         self.assertIsNotNone(
             session_key := self.client.session.session_key
         )
 
         with self.subTest('Should have cleared the session from redis'):
             mocked_redis_client_delete.assert_called_with(
-                f'{settings.USER_SESSION_PREFIX}{session_key}',
+                f'session_user_{session_key}',
             )
 
     # Tests that all user permissions should be saved in redis
@@ -435,10 +433,8 @@ class AuthenticationAPITests(TestCase):
             session_key := self.client.session.session_key
         )
 
-        from django.conf import settings
-
         with self.subTest('Should save permissions'):
             mocked_redis_client_set.assert_called_with(
-                f'{settings.USER_SESSION_PREFIX}{session_key}',
+                f'session_user_{session_key}',
                 json.dumps(UserWithPermissionsSerializer(self.user).data),
             )
