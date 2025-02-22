@@ -17,51 +17,18 @@ export async function fetchUser(): Promise<UserWithPermissions | null> {
         return null
     }
 
+    const redis_session_key = `${process.env.USER_SESSION_PREFIX}${sessionId}`
+
     const redis = new Redis(process.env.REDIS_URL)
 
-    const user = await redis.get(sessionId)
+    const user = await redis.get(redis_session_key)
 
     if (user) {
+        console.log('User data from cache')
         return JSON.parse(user)
     } else {
-        const backend_api_key = process.env.BACKEND_API_KEY
-
-        // Set auth header and sessionid coookie
-        let requestData: RequestInit = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Cookie': `sessionid=${sessionId}`,
-                'Authorization': `Api-Key ${backend_api_key}`
-            }
-        }
-
-        const response = await fetch(
-            `${process.env.BACKEND_URL}/api/user/session/`,
-            requestData
-        )
-
-        if (response.status === 401) {
-            console.error('Not authenticated')
-            return null
-        }
-
-        if (response.status === 404) {
-            // No user in session.
-            return null
-        }
-
-        if (response.status !== 200) {
-            console.error('Unknown error while fetching user')
-            return null
-        }
-
-        const userResponseData = await response.json()
-
-        // Cache the user data
-        redis.set(sessionId, JSON.stringify(userResponseData), 'EX', 1)
-
-        return userResponseData
+        console.error('User data not found in cache')
+        return null
     }
 }
 

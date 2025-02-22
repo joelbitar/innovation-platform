@@ -1,4 +1,7 @@
+from django.conf import settings
 from rest_framework_simplejwt.views import TokenBlacklistView as OriginalTokenBlacklistView
+
+from lib.redis import RedisClient
 
 
 class CustomTokenBlacklistView(OriginalTokenBlacklistView):
@@ -12,5 +15,10 @@ class CustomTokenBlacklistView(OriginalTokenBlacklistView):
         except KeyError:
             # User id is not set, never mind.
             pass
+
+        # Clear permissions from redis
+        RedisClient().delete(
+            f'{settings.USER_SESSION_PREFIX}{request.session.session_key}',
+        )
 
         return super().post(request, *args, **kwargs)

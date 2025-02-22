@@ -1,7 +1,11 @@
-from rest_framework import status
+import json
+
+from django.conf import settings
+from django.contrib.auth.models import User
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from user.serializers import CustomTokenObtainPairSerializer
+from lib.redis import RedisClient
+from user.serializers import CustomTokenObtainPairSerializer, UserWithPermissionsSerializer
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -10,7 +14,22 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
 
-        # Set user_id in session and remove from response data
-        request.session['user_id'] = response.data.pop('user_id')
+
+        # Create session if not exists
+        if not request.session.session_key:
+            request.session.create()
+
+        user = User.objects.get(
+            pk=response.data.pop('user_id')
+        )
+
+        redis_client = RedisClient()
+        redis_client.set(
+            f'{settings.USER_SESSION_PREFIX}{request.session.session_key}',
+            json.dumps(UserWithPermissionsSerializer(user).data)
+        )
+
+        # Set user_id in session
+        request.session['user_id'] = user.pk
 
         return response

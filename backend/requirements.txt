@@ -6,3 +6,4 @@ djangorestframework_simplejwt==5.4.0
 djangorestframework-api-key==3.0.0
 drf-spectacular==0.28.0
 sqlparse==0.5.3
+redis==5.2.1

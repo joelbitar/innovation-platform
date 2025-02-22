@@ -1,10 +1,15 @@
 import datetime
+import json
 from typing import Optional
+from unittest.mock import patch
 
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
+from environ import environ
 from rest_framework.test import APIClient
+
+from user.serializers import UserWithPermissionsSerializer
 
 
 class AuthenticationAPITests(TestCase):
@@ -365,4 +370,75 @@ class AuthenticationAPITests(TestCase):
 
             self.assertTrue(
                 not self.client.session.get('user_id'),
+            )
+
+    # test should clear redis after we blacklist token
+    @patch('redis.Redis.delete')
+    @override_settings(REDIS_URL=environ.Env().url('REDIS_URLS', 'redis://localhost:6379/0'))
+    def test_should_clear_redis_after_we_blacklist_token(self, mocked_redis_client_delete):
+        self.helper_obtain_jwt_token_pair(
+            self.username,
+            self.password,
+        )
+
+        self.client.post(
+            reverse('auth_jwt_token_blacklist'),
+            {
+                'refresh': 'abc123',
+            },
+        )
+
+        with self.subTest('Should have cleared the user id from the session'):
+            self.assertTrue(
+                not self.client.session.get('user_id'),
+                f'User id should not be in session but is; "{self.client.session.get('user_id')}"'
+            )
+            self.assertNotIn(
+                'user_id',
+                self.client.session,
+            )
+
+        from django.conf import settings
+
+        self.assertIsNotNone(
+            session_key := self.client.session.session_key
+        )
+
+        with self.subTest('Should have cleared the session from redis'):
+            mocked_redis_client_delete.assert_called_with(
+                f'{settings.USER_SESSION_PREFIX}{session_key}',
+            )
+
+    # Tests that all user permissions should be saved in redis
+    @patch('redis.Redis.set')
+    @override_settings(REDIS_URL=environ.Env().url('REDIS_URLS', 'redis://localhost:6379/0'))
+    def test_should_save_all_user_permissions_in_redis(self, mocked_redis_client_set):
+        self.user.is_superuser = True
+        self.user.save()
+
+        response = self.helper_obtain_jwt_token_pair(
+            self.username,
+            self.password,
+        )
+
+        self.assertEqual(
+            200,
+            response.status_code,
+            response.content,
+        )
+
+        self.client.force_authenticate(
+            self.user,
+        )
+
+        self.assertIsNotNone(
+            session_key := self.client.session.session_key
+        )
+
+        from django.conf import settings
+
+        with self.subTest('Should save permissions'):
+            mocked_redis_client_set.assert_called_with(
+                f'{settings.USER_SESSION_PREFIX}{session_key}',
+                json.dumps(UserWithPermissionsSerializer(self.user).data),
             )

@@ -22,6 +22,7 @@ env = environ.Env(
     ALLOWED_HOSTS=(list, []),
     STATIC_URL=(str, 'static/'),
     DEFAULT_DATABASE_URL=(str, ''),
+    USER_SESSION_PREFIX=(str, 'user_session_'),
 )
 
 # Quick-start development settings - unsuitable for production
@@ -163,3 +164,6 @@ LOGGING = {
         'level': 'WARNING',
     },
 }
+
+USER_SESSION_PREFIX = env('USER_SESSION_PREFIX')
+REDIS_URL = env.url('REDIS_URL', None)
