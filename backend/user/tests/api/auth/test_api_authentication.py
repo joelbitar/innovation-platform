@@ -134,12 +134,12 @@ class AuthenticationAPITests(TestCase):
             session = self.client.session
 
             self.assertIsNotNone(
-                session_user_id := session.get('user_id')
+                session_user_id := session.get('_auth_user_id')
             )
 
             self.assertEqual(
                 self.user.pk,
-                session_user_id,
+                int(session_user_id),
             )
 
     # Test should set user token cookie on response from obtain token view
@@ -345,10 +345,6 @@ class AuthenticationAPITests(TestCase):
             self.user,
         )
 
-        self.assertTrue(
-            self.client.session.get('user_id'),
-        )
-
         response = self.client.post(
             reverse('auth_jwt_token_blacklist'),
             {
@@ -364,13 +360,11 @@ class AuthenticationAPITests(TestCase):
             )
 
         with self.subTest('Should have cleared the user id from the session'):
-            self.assertTrue(
-                not self.client.session.get('user_id'),
-                f'User id should not be in session but is; "{self.client.session.get('user_id')}"'
-            )
-            self.assertNotIn(
-                'user_id',
-                self.client.session,
+            session_user_id = self.client.session.get('_auth_user_id')
+
+            self.assertIsNone(
+                session_user_id,
+                f'User id should not be in session but is; "{session_user_id}"'
             )
 
         # Should NOT be able to use the old refresh token

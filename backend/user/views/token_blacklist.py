@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth import logout
 from rest_framework_simplejwt.views import TokenBlacklistView as OriginalTokenBlacklistView
 
 from lib.redis import RedisClient
@@ -16,7 +17,7 @@ class CustomTokenBlacklistView(OriginalTokenBlacklistView):
                 f'session_user_{session_key}',
             )
 
-        # Clear session
-        request.session.flush()
+        # Clear session and logout
+        logout(request)
 
         return super().post(request, *args, **kwargs)

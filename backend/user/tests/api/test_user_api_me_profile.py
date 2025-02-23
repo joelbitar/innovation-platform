@@ -52,3 +52,5 @@ class UserMeAPITests(AuthenticatedClientTestCase):
                 response.status_code,
                 response.content,
             )
+
+
