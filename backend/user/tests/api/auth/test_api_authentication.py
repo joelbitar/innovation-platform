@@ -4,6 +4,7 @@ from typing import Optional
 from unittest.mock import patch
 
 from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from environ import environ
@@ -198,9 +199,12 @@ class AuthenticationAPITests(TestCase):
 
     # Test should be able to refresh token
     def test_should_be_able_to_refresh_token(self):
+        client = APIClient()
+
         response = self.helper_obtain_jwt_token_pair(
             self.username,
             self.password,
+            client=client,
         )
 
         self.assertEqual(
@@ -219,18 +223,43 @@ class AuthenticationAPITests(TestCase):
                 first_refresh_token := response.data.get('refresh')
             )
 
+        with self.subTest('Should have user id set on session after refresh'):
+            self.assertEqual(
+                client.session.get('user_id'),
+                self.user.pk,
+            )
+
         with self.subTest('Should have sessionid in cookie from obtain token view'):
             self.assertIn(
                 'sessionid',
                 response.cookies,
             )
 
+            self.assertIsNotNone(
+                sessionid := response.cookies.get('sessionid').value
+            )
+
+        with self.subTest('Should have the new session available'):
+            self.assertEqual(
+                1,
+                Session.objects.all().count()
+            )
+            self.assertEqual(
+                Session.objects.all().first().session_key,
+                sessionid,
+            )
+            self.assertTrue(
+                Session.objects.filter(
+                    session_key=sessionid,
+                ).exists(),
+            )
+
         # Refresh token
-        response = self.client.post(
+        response = client.post(
             reverse('auth_jwt_token_refresh'),
             {
                 'refresh': first_refresh_token,
-            }
+            },
         )
 
         with self.subTest('Should get 200'):
@@ -250,7 +279,7 @@ class AuthenticationAPITests(TestCase):
                 access_token := response.data.get('access')
             )
 
-        with self.subTest('Should have refresh token'):
+        with self.subTest('Should have new refresh token'):
             self.assertIn(
                 'refresh',
                 response.data,
@@ -258,6 +287,35 @@ class AuthenticationAPITests(TestCase):
 
             self.assertIsNotNone(
                 refresh_token := response.data.get('refresh')
+            )
+
+            self.assertNotEqual(
+                first_refresh_token,
+                refresh_token,
+            )
+
+        with self.subTest('Should have new session'):
+            self.assertIn(
+                'sessionid',
+                response.cookies,
+            )
+
+            self.assertIsNotNone(
+                new_sessionid := response.cookies.get('sessionid').value,
+            )
+
+            self.assertNotEqual(
+                sessionid,
+                new_sessionid,
+            )
+
+        with self.subTest('Old session should have expiry in one minute'):
+            old_session = Session.objects.get(
+                session_key=sessionid,
+            )
+
+            self.assertTrue(
+                (old_session.expire_date - datetime.datetime.now(old_session.expire_date.tzinfo)).seconds <= 60,
             )
 
     # Test should be able to logout, that is blacklist a token
@@ -381,12 +439,21 @@ class AuthenticationAPITests(TestCase):
             self.password,
         )
 
+        session_key = str(self.client.session.session_key)
+
         self.client.post(
             reverse('auth_jwt_token_blacklist'),
             {
                 'refresh': 'abc123',
             },
         )
+
+        with self.subTest('Should have the session key'):
+            self.assertEqual(
+                len(session_key),
+                32,
+                session_key
+            )
 
         with self.subTest('Should have cleared the user id from the session'):
             self.assertTrue(
@@ -398,9 +465,10 @@ class AuthenticationAPITests(TestCase):
                 self.client.session,
             )
 
-        self.assertIsNotNone(
-            session_key := self.client.session.session_key
-        )
+        with self.subTest('Should have cleared the session'):
+            self.assertIsNone(
+                self.client.session.session_key
+            )
 
         with self.subTest('Should have cleared the session from redis'):
             mocked_redis_client_delete.assert_called_with(

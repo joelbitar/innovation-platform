@@ -9,16 +9,14 @@ class CustomTokenBlacklistView(OriginalTokenBlacklistView):
     authentication_classes = []
 
     def post(self, request, *args, **kwargs):
-        # Delete the token used on the call
-        try:
-            del request.session['user_id']
-        except KeyError:
-            # User id is not set, never mind.
-            pass
+        # Clear redis permissions
+        if session_key := request.session.session_key:
+            # Clear permissions from redis
+            RedisClient().delete(
+                f'session_user_{session_key}',
+            )
 
-        # Clear permissions from redis
-        RedisClient().delete(
-            f'session_user_{request.session.session_key}',
-        )
+        # Clear session
+        request.session.flush()
 
         return super().post(request, *args, **kwargs)

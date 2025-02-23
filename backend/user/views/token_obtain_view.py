@@ -14,7 +14,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
 
-
         # Create session if not exists
         if not request.session.session_key:
             request.session.create()
