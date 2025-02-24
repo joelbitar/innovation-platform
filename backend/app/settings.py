@@ -137,21 +137,11 @@ REST_FRAMEWORK = {
         'lib.permissions.model_permissions.ModelPermissions',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
 }
 
 AUTHENTICATION_LIFETIME = 60 * 60 * 12  # 12 hours
-
-SIMPLE_JWT = {
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(seconds=AUTHENTICATION_LIFETIME),
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(seconds=60 * 10),  # We will have to refresh access token after this time
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
-    #  Just some wiggle room since it can take a few seconds for the servers to wake up.
-    'LEEWAY': 10,  # Seconds. with current version of package it broke tests when using timedelta.
-}
 
 # Logging
 LOGGING = {

@@ -20,6 +20,7 @@ export class UserService {
         });
     }
     /**
+     * View to return data about the currently logged in user
      * @returns UserWithPermissions
      * @throws ApiError
      */

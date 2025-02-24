@@ -2,7 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type TokenBlacklistView = {
-    refresh: string;
+export type Login = {
+    username: string;
+    password: string;
 };
 

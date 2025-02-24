@@ -96,3 +96,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['user_id'] = self.user.pk
 
         return data
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()

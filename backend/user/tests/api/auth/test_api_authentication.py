@@ -14,6 +14,9 @@ from user.serializers import UserWithPermissionsSerializer
 
 
 class AuthenticationAPITests(TestCase):
+    """
+    JWT Authentication tests
+    """
     def setUp(self) -> None:
         self.username = 'testuser'
         self.password = 'testpassword'

@@ -1,7 +1,6 @@
 'use client';
 
-import {getRefreshToken, setAccessToken, setRefreshToken} from "@/lib/api/core/request";
-import {AuthService, CustomTokenObtainPair, TokenBlacklistView, UserService, UserWithPermissions} from "@/lib/api";
+import {AuthService, Login, UserService, UserWithPermissions} from "@/lib/api";
 
 export function setLocalStorageUserData(data: any) {
     localStorage.setItem('user', JSON.stringify(data))
@@ -33,22 +32,12 @@ function fetchUserData(): Promise<UserWithPermissions> {
 
 export function login(username: string, password: string): Promise<UserWithPermissions> {
     return new Promise((resolve, reject) => {
-        AuthService.authTokenCreate(<CustomTokenObtainPair>{
+        AuthService.authLoginCreate(<Login>{
             username,
             password
         }).then(
             (data) => {
-                setAccessToken(data.access)
-                setRefreshToken(data.refresh)
-
-                fetchUserData().then(
-                    (data) => {
-                        resolve(data)
-                    },
-                    (error) => {
-                        reject(error)
-                    }
-                )
+                setLocalStorageUserData(data)
             },
             (error) => {
                 reject(error)
@@ -59,9 +48,7 @@ export function login(username: string, password: string): Promise<UserWithPermi
 
 export function logout(): Promise<null> {
     return new Promise((resolve, reject) => {
-        AuthService.authTokenBlacklistCreate(
-            <TokenBlacklistView>{refresh: getRefreshToken()}
-        ).then(
+        AuthService.authLogoutCreate().then(
             (data) => {
                 resolve(null)
             },
@@ -70,10 +57,7 @@ export function logout(): Promise<null> {
             }
         ).finally(
             () => {
-                setAccessToken('')
-                setRefreshToken('')
                 setLocalStorageUserData('')
-                document.cookie = `user_token=; path=/; max-age=1`;
                 window.location.reload()
             }
         )
