@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import datetime
 from pathlib import Path
 import environ
-from django.conf.global_settings import SESSION_COOKIE_AGE
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -134,20 +133,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'user.permissions.user_session_with_api_key_or_authenticated.UserSessionWithAPIKeyOrAuthenticated',
         'lib.permissions.model_permissions.ModelPermissions',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
 }
 
-AUTHENTICATION_LIFETIME = 60 * 60 * 12
-AUTHENTICATION_TOKEN_REFRESH_INTERVAL = 60 * 10
+AUTHENTICATION_LIFETIME = 60 * 60 * 12  # 12 hours
 
 SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(seconds=AUTHENTICATION_LIFETIME),
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(seconds=AUTHENTICATION_TOKEN_REFRESH_INTERVAL),  # We will have to refresh access token after this time
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(seconds=60 * 10),  # We will have to refresh access token after this time
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     #  Just some wiggle room since it can take a few seconds for the servers to wake up.
@@ -178,3 +177,5 @@ CACHES = {
         "LOCATION": env.str('REDIS_URL', None),
     }
 }
+
+SESSION_COOKIE_AGE = AUTHENTICATION_LIFETIME

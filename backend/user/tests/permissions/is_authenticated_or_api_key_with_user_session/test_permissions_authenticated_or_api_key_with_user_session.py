@@ -1,11 +1,14 @@
+from django.contrib.auth.middleware import AuthenticationMiddleware
 from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient, APIRequestFactory
 from rest_framework_api_key.models import APIKey
 
-from user.permissions.is_authenticated_or_api_key_with_user_session import IsAuthenticatedOrApiKeyWithUserSession
+from user.permissions.user_session_with_api_key_or_authenticated import UserSessionWithAPIKeyOrAuthenticated
 from user.serializers import UserWithPermissionsSerializer
+import mock
 
 
 class PermissionsTests(TestCase):
@@ -67,53 +70,64 @@ class PermissionsTests(TestCase):
             request,
         )
 
-        self.assertTrue(
-            IsAuthenticatedOrApiKeyWithUserSession().has_permission(
-                request=request,
-                view=None
+        with self.subTest('Should have permissions if we use use jwt token'):
+            self.assertTrue(
+                UserSessionWithAPIKeyOrAuthenticated().has_permission(
+                    request=request,
+                    view=None
+                )
             )
-        )
 
     # check session id
     def test_authenticate_with_key_and_session(self):
+        client_with_new_session = APIClient()
+        client_with_new_session.force_authenticate(user=self.user)
+
+        self.assertIsNotNone(
+            client_with_new_session.session.session_key
+        )
+
         headers_and_expected_response_statuses = (
             (
-                'Authorization AND session cookie',
+                'API Key and AND authenticated',
                 True,
                 {
                     'Authorization': f'Api-Key {self.api_key}',
-                    'cookie': f'sessionid={self.client.session.session_key}',
-                }
+                    'cookie': f'sessionid={client_with_new_session.session.session_key}',
+                },
+                self.user,
             ),
             (
-                'Authorization AND no session cookie',
+                'API Key but not authenticated',
                 False,
                 {
                     'Authorization': f'Api-Key {self.api_key}',
-                }
+                },
+                AnonymousUser(),
             ),
             (
-                'No authorization, with  session cookie',
+                'Authententicated but no API Key ',
                 False,
                 {
-                    'cookie': f'sessionid={self.client.session.session_key}',
-                }
+                    'cookie': f'sessionid={client_with_new_session.session.session_key}',
+                },
+                self.user,
             )
         )
 
-        for description, expected_result, headers in headers_and_expected_response_statuses:
+        for description, expected_result, headers, request_user in headers_and_expected_response_statuses:
             with self.subTest(description=description, expected_result=expected_result):
                 request = self.helper_get_request(
                     headers=headers
                 )
 
-                request.user = AnonymousUser()
+                request.user = request_user
+                request.is_authenticated = not request_user.is_anonymous
 
                 self.assertEqual(
                     expected_result,
-                    IsAuthenticatedOrApiKeyWithUserSession().has_permission(
+                    UserSessionWithAPIKeyOrAuthenticated().has_permission(
                         request=request,
                         view=None
                     )
                 )
-

@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_api_key.permissions import HasAPIKey
 
+from ..permissions.user_session_with_api_key_or_authenticated import UserSessionWithAPIKeyOrAuthenticated
 from ..serializers import UserWithPermissionsSerializer
 
 
@@ -22,7 +23,6 @@ class CurrentUserViewBase(APIView):
 
 
 class UserMeView(CurrentUserViewBase, ModelViewSet):
-    permission_classes = [IsAuthenticated]
     """
     View to return data about the currently logged in user
     """
@@ -30,6 +30,9 @@ class UserMeView(CurrentUserViewBase, ModelViewSet):
     http_method_names = ['get']
 
     serializer_class = UserWithPermissionsSerializer
+
+    def get_queryset(self):
+        return User.objects.all()
 
     def get_for_current_logged_in_user(self, request):
         return Response(

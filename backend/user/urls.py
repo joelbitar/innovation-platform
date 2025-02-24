@@ -13,7 +13,6 @@ auth_patterns = [
 ]
 
 user_patterns = [
-    path('session/', UserView.as_view({'get': 'get_session_user_detail'}), name='session-user-detail'),
     path('me/', UserMeView.as_view({'get': 'get_for_current_logged_in_user'}), name='user_me'),
     path('me/profile/', UserMeProfileView.as_view({'get': 'get_for_logged_in_user'}), name='user_me_profile'),
     path('', UserView.as_view({'get': 'get_user_detail'}), name='user-detail'),

@@ -76,7 +76,7 @@ class UserAPIUserAPIKeysTests(TestCase):
             password='testpassword',
         )
 
-        user = User.objects.create_user(
+        user = User.objects.create_superuser(
             username='testuser',
             password='testpassword',
         )
@@ -86,12 +86,10 @@ class UserAPIUserAPIKeysTests(TestCase):
             password='testpassword',
         )
 
-        session = client.session
-        session.update({'user_id': user.pk})
-        session.save()
+        client.force_login(user)
 
         response = client.get(
-            reverse('session-user-detail'),
+            reverse('user_me'),
             headers={
                 'Authorization': f'Api-Key {key}'
             },

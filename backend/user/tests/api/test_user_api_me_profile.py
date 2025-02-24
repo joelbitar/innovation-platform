@@ -3,7 +3,7 @@ from django.urls import reverse
 from user.tests.helpers.authenticated_test_case import AuthenticatedClientTestCase
 
 
-class UserMeAPITests(AuthenticatedClientTestCase):
+class UserMeProfileAPITests(AuthenticatedClientTestCase):
     # Test should be able to get myself
     def test_should_only_be_able_to_get_myself_when_logged_in_with_an_active_user(self):
         response = self.client.get(
@@ -33,7 +33,7 @@ class UserMeAPITests(AuthenticatedClientTestCase):
             )
 
             self.assertEqual(
-                400,
+                403,
                 response.status_code,
                 response.content,
             )
