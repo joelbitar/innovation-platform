@@ -38,6 +38,7 @@ export function login(username: string, password: string): Promise<UserWithPermi
         }).then(
             (data) => {
                 setLocalStorageUserData(data)
+                resolve(data)
             },
             (error) => {
                 reject(error)

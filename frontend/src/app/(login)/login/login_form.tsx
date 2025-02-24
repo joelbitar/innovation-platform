@@ -40,6 +40,7 @@ export default function LoginForm() {
                 <button type="submit"
                         onClick={(e) => {
                             e.preventDefault()
+                            console.log('logging in...')
                             handleOnSubmit()
                         }
                         }
