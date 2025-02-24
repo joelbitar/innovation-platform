@@ -5,15 +5,15 @@
 import type { BusinessArea } from '../models/BusinessArea';
 import type { PatchedBusinessArea } from '../models/PatchedBusinessArea';
 import type { CancelablePromise } from '../core/CancelablePromise';
-import { OpenAPI } from '../core/OpenAPI';
-import { request as __request } from '../core/request';
+import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class BusinessService {
+    constructor(public readonly httpRequest: BaseHttpRequest) {}
     /**
      * @returns BusinessArea
      * @throws ApiError
      */
-    public static businessBusinessAreaList(): CancelablePromise<Array<BusinessArea>> {
-        return __request(OpenAPI, {
+    public businessBusinessAreaList(): CancelablePromise<Array<BusinessArea>> {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/business/business_area//',
         });
@@ -23,10 +23,10 @@ export class BusinessService {
      * @returns BusinessArea
      * @throws ApiError
      */
-    public static businessBusinessAreaCreate(
+    public businessBusinessAreaCreate(
         requestBody: BusinessArea,
     ): CancelablePromise<BusinessArea> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'POST',
             url: '/api/business/business_area//',
             body: requestBody,
@@ -38,10 +38,10 @@ export class BusinessService {
      * @returns BusinessArea
      * @throws ApiError
      */
-    public static businessBusinessAreaRetrieve(
+    public businessBusinessAreaRetrieve(
         id: number,
     ): CancelablePromise<BusinessArea> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/business/business_area//{id}/',
             path: {
@@ -55,11 +55,11 @@ export class BusinessService {
      * @returns BusinessArea
      * @throws ApiError
      */
-    public static businessBusinessAreaUpdate(
+    public businessBusinessAreaUpdate(
         id: number,
         requestBody: BusinessArea,
     ): CancelablePromise<BusinessArea> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'PUT',
             url: '/api/business/business_area//{id}/',
             path: {
@@ -75,11 +75,11 @@ export class BusinessService {
      * @returns BusinessArea
      * @throws ApiError
      */
-    public static businessBusinessAreaPartialUpdate(
+    public businessBusinessAreaPartialUpdate(
         id: number,
         requestBody?: PatchedBusinessArea,
     ): CancelablePromise<BusinessArea> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'PATCH',
             url: '/api/business/business_area//{id}/',
             path: {
@@ -94,10 +94,10 @@ export class BusinessService {
      * @returns void
      * @throws ApiError
      */
-    public static businessBusinessAreaDestroy(
+    public businessBusinessAreaDestroy(
         id: number,
     ): CancelablePromise<void> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'DELETE',
             url: '/api/business/business_area//{id}/',
             path: {

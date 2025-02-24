@@ -68,6 +68,7 @@ services:
       - STATIC_URL=/static/
       - MEDIA_URL=/media/
       - REDIS_URL=redis://redis.dkr:6379
+      - CSRF_TRUSTED_ORIGINS=http://localhost:4000
     env_file:
       - path: backend/.env
     ports:

@@ -1,4 +1,4 @@
-import {CancelablePromise, OpenAPIConfig} from "@/lib/api";
+import {CancelablePromise, OpenAPIConfig} from "@/lib/apiClientServer";
 import {ApiRequestOptions} from "@/lib/api/core/ApiRequestOptions";
 
 type RequestConfig = {

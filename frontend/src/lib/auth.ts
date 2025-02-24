@@ -1,6 +1,9 @@
 'use client';
 
-import {AuthService, Login, UserService, UserWithPermissions} from "@/lib/api";
+import {ApiClient} from "@/lib/api/ApiClient";
+import {UserWithPermissions} from "@/lib/api/models/UserWithPermissions";
+
+const apiClient = new ApiClient()
 
 export function setLocalStorageUserData(data: any) {
     localStorage.setItem('user', JSON.stringify(data))
@@ -16,23 +19,9 @@ export function getLocalStorageUserData() {
 }
 
 
-function fetchUserData(): Promise<UserWithPermissions> {
-    return new Promise((resolve, reject) => {
-        UserService.userMeRetrieve().then(
-            (data) => {
-                setLocalStorageUserData(data)
-                resolve(data)
-            },
-            (error) => {
-                reject(error)
-            }
-        )
-    })
-}
-
 export function login(username: string, password: string): Promise<UserWithPermissions> {
     return new Promise((resolve, reject) => {
-        AuthService.authLoginCreate(<Login>{
+        apiClient.auth.authLoginCreate({
             username,
             password
         }).then(
@@ -49,7 +38,7 @@ export function login(username: string, password: string): Promise<UserWithPermi
 
 export function logout(): Promise<null> {
     return new Promise((resolve, reject) => {
-        AuthService.authLogoutCreate().then(
+        apiClient.auth.authLogoutCreate().then(
             (data) => {
                 resolve(null)
             },

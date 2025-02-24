@@ -1,16 +1,8 @@
-'use client'
+import {getClientAPIClient} from "@/lib/apiClientServer";
 
-import React from 'react';
-import {useEffect, useState} from "react";
-import {IdeaService} from "@/lib/api";
-
-
-export default function IdeaDetails({id}: { id: string }) {
-    const [idea, setIdea] = useState(null);
-
-    useEffect(() => {
-        IdeaService.ideaIdeaRetrieve(id).then(setIdea)
-    }, [id]);
+export default async function IdeaDetails({id}: { id: string }) {
+    const apiClient = await getClientAPIClient()
+    const idea = await apiClient.idea.ideaIdeaRetrieve(id)
 
     return (
         <div>

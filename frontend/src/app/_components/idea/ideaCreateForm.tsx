@@ -1,7 +1,7 @@
 'use client'
 
 import {useForm, SubmitHandler} from "react-hook-form";
-import {Campaign, Idea, IdeaService} from "@/lib/api";
+import {Campaign, Idea, IdeaService} from "@/lib/apiClientServer";
 
 
 

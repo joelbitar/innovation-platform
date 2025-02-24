@@ -5,16 +5,16 @@
 import type { UserProfile } from '../models/UserProfile';
 import type { UserWithPermissions } from '../models/UserWithPermissions';
 import type { CancelablePromise } from '../core/CancelablePromise';
-import { OpenAPI } from '../core/OpenAPI';
-import { request as __request } from '../core/request';
+import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class UserService {
+    constructor(public readonly httpRequest: BaseHttpRequest) {}
     /**
      * View to return data about a specific user
      * @returns UserWithPermissions
      * @throws ApiError
      */
-    public static userRetrieve(): CancelablePromise<UserWithPermissions> {
-        return __request(OpenAPI, {
+    public userRetrieve(): CancelablePromise<UserWithPermissions> {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/user/',
         });
@@ -24,8 +24,8 @@ export class UserService {
      * @returns UserWithPermissions
      * @throws ApiError
      */
-    public static userMeRetrieve(): CancelablePromise<UserWithPermissions> {
-        return __request(OpenAPI, {
+    public userMeRetrieve(): CancelablePromise<UserWithPermissions> {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/user/me/',
         });
@@ -35,8 +35,8 @@ export class UserService {
      * @returns UserProfile
      * @throws ApiError
      */
-    public static userMeProfileRetrieve(): CancelablePromise<UserProfile> {
-        return __request(OpenAPI, {
+    public userMeProfileRetrieve(): CancelablePromise<UserProfile> {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/user/me/profile/',
         });

@@ -7,15 +7,15 @@ import type { CampaignRound } from '../models/CampaignRound';
 import type { PatchedCampaign } from '../models/PatchedCampaign';
 import type { PatchedCampaignRound } from '../models/PatchedCampaignRound';
 import type { CancelablePromise } from '../core/CancelablePromise';
-import { OpenAPI } from '../core/OpenAPI';
-import { request as __request } from '../core/request';
+import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class CampaignService {
+    constructor(public readonly httpRequest: BaseHttpRequest) {}
     /**
      * @returns Campaign
      * @throws ApiError
      */
-    public static campaignList(): CancelablePromise<Array<Campaign>> {
-        return __request(OpenAPI, {
+    public campaignList(): CancelablePromise<Array<Campaign>> {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/campaign/',
         });
@@ -25,10 +25,10 @@ export class CampaignService {
      * @returns Campaign
      * @throws ApiError
      */
-    public static campaignCreate(
+    public campaignCreate(
         requestBody: Campaign,
     ): CancelablePromise<Campaign> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'POST',
             url: '/api/campaign/',
             body: requestBody,
@@ -40,10 +40,10 @@ export class CampaignService {
      * @returns CampaignRound
      * @throws ApiError
      */
-    public static campaignRoundList(
+    public campaignRoundList(
         campaignId: string,
     ): CancelablePromise<Array<CampaignRound>> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/campaign/{campaign_id}/round/',
             path: {
@@ -57,11 +57,11 @@ export class CampaignService {
      * @returns CampaignRound
      * @throws ApiError
      */
-    public static campaignRoundCreate(
+    public campaignRoundCreate(
         campaignId: string,
         requestBody: CampaignRound,
     ): CancelablePromise<CampaignRound> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'POST',
             url: '/api/campaign/{campaign_id}/round/',
             path: {
@@ -77,11 +77,11 @@ export class CampaignService {
      * @returns CampaignRound
      * @throws ApiError
      */
-    public static campaignRoundRetrieve(
+    public campaignRoundRetrieve(
         campaignId: string,
         id: string,
     ): CancelablePromise<CampaignRound> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/campaign/{campaign_id}/round/{id}/',
             path: {
@@ -97,12 +97,12 @@ export class CampaignService {
      * @returns CampaignRound
      * @throws ApiError
      */
-    public static campaignRoundUpdate(
+    public campaignRoundUpdate(
         campaignId: string,
         id: string,
         requestBody: CampaignRound,
     ): CancelablePromise<CampaignRound> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'PUT',
             url: '/api/campaign/{campaign_id}/round/{id}/',
             path: {
@@ -120,12 +120,12 @@ export class CampaignService {
      * @returns CampaignRound
      * @throws ApiError
      */
-    public static campaignRoundPartialUpdate(
+    public campaignRoundPartialUpdate(
         campaignId: string,
         id: string,
         requestBody?: PatchedCampaignRound,
     ): CancelablePromise<CampaignRound> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'PATCH',
             url: '/api/campaign/{campaign_id}/round/{id}/',
             path: {
@@ -142,11 +142,11 @@ export class CampaignService {
      * @returns void
      * @throws ApiError
      */
-    public static campaignRoundDestroy(
+    public campaignRoundDestroy(
         campaignId: string,
         id: string,
     ): CancelablePromise<void> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'DELETE',
             url: '/api/campaign/{campaign_id}/round/{id}/',
             path: {
@@ -160,10 +160,10 @@ export class CampaignService {
      * @returns Campaign
      * @throws ApiError
      */
-    public static campaignRetrieve(
+    public campaignRetrieve(
         id: number,
     ): CancelablePromise<Campaign> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/campaign/{id}/',
             path: {
@@ -177,11 +177,11 @@ export class CampaignService {
      * @returns Campaign
      * @throws ApiError
      */
-    public static campaignUpdate(
+    public campaignUpdate(
         id: number,
         requestBody: Campaign,
     ): CancelablePromise<Campaign> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'PUT',
             url: '/api/campaign/{id}/',
             path: {
@@ -197,11 +197,11 @@ export class CampaignService {
      * @returns Campaign
      * @throws ApiError
      */
-    public static campaignPartialUpdate(
+    public campaignPartialUpdate(
         id: number,
         requestBody?: PatchedCampaign,
     ): CancelablePromise<Campaign> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'PATCH',
             url: '/api/campaign/{id}/',
             path: {
@@ -216,10 +216,10 @@ export class CampaignService {
      * @returns void
      * @throws ApiError
      */
-    public static campaignDestroy(
+    public campaignDestroy(
         id: number,
     ): CancelablePromise<void> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'DELETE',
             url: '/api/campaign/{id}/',
             path: {

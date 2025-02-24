@@ -1,22 +1,13 @@
-'use client'
-
-import {useEffect, useState} from "react";
-import {CampaignService} from "@/lib/api";
+import {getClientAPIClient} from "@/lib/apiClientServer";
 import CampaignRoundList from "@/app/_components/campaign_round/campaignRoundList";
 
 type Props = {
     id: number
 }
 
-export default function CampaignDetails({id}: Props) {
-    const [campaign, setCampaign] = useState([]);
-
-    useEffect(() => {
-        console.log('CampaignDetails fetch: "' + String(id) + '"');
-        CampaignService.campaignRetrieve(id).then(
-            setCampaign
-        )
-    }, [id]);
+export default async function CampaignDetails({id}: Props) {
+    const apiClient = await getClientAPIClient()
+    const campaign = await apiClient.campaign.campaignRetrieve(id)
 
     return (
         <>

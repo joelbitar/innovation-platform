@@ -1,6 +1,3 @@
-'use client'
-
-
 import React from "react";
 import IdeaList from "@/app/_components/idea/ideaList";
 

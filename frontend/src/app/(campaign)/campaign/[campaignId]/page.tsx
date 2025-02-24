@@ -1,7 +1,6 @@
 import Container from "@/app/_components/container";
 import Header from "@/app/_components/header";
 import CampaignDetails from "@/app/_components/campaign/campaignDetails";
-import {CampaignIdeasProvider} from "@/app/_components/campaign/campaignIdeasProvider";
 import CampaignIdeas from "@/app/(campaign)/campaign/[campaignId]/campaignIdeas";
 import CreateCampaignIdeaLink from "@/app/(campaign)/campaign/createCampaignIdeaLink";
 import CreateCampaignRoundLink from "@/app/_components/campaign_round/createCampaignRoundLink";
@@ -42,13 +41,11 @@ export default async function CampaignPage(props: Params) {
                 <div>
                     <h2>Information</h2>
                     <CampaignDetails id={campaignId}/>
-                    <CampaignIdeasProvider campaignId={campaignId}>
-                        <h3>
-                            Ideas submitted on this campaign
-                        </h3>
+                    <h3>
+                        Ideas submitted on this campaign
+                    </h3>
 
-                        <CampaignIdeas campaignId={campaignId}/>
-                    </CampaignIdeasProvider>
+                    <CampaignIdeas campaignId={campaignId}/>
                 </div>
             </Container>
         </main>

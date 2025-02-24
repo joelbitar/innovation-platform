@@ -8,18 +8,18 @@ import type { PatchedIdea } from '../models/PatchedIdea';
 import type { PatchedVote } from '../models/PatchedVote';
 import type { Vote } from '../models/Vote';
 import type { CancelablePromise } from '../core/CancelablePromise';
-import { OpenAPI } from '../core/OpenAPI';
-import { request as __request } from '../core/request';
+import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class IdeaService {
+    constructor(public readonly httpRequest: BaseHttpRequest) {}
     /**
      * @param campaignId
      * @returns IdeaDetail
      * @throws ApiError
      */
-    public static ideaCampaignIdeaList(
+    public ideaCampaignIdeaList(
         campaignId: string,
     ): CancelablePromise<Array<IdeaDetail>> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/idea/campaign/{campaign_id}/idea/',
             path: {
@@ -31,8 +31,8 @@ export class IdeaService {
      * @returns Idea
      * @throws ApiError
      */
-    public static ideaIdeaList(): CancelablePromise<Array<Idea>> {
-        return __request(OpenAPI, {
+    public ideaIdeaList(): CancelablePromise<Array<Idea>> {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/idea/idea/',
         });
@@ -42,10 +42,10 @@ export class IdeaService {
      * @returns Idea
      * @throws ApiError
      */
-    public static ideaIdeaCreate(
+    public ideaIdeaCreate(
         requestBody: Idea,
     ): CancelablePromise<Idea> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'POST',
             url: '/api/idea/idea/',
             body: requestBody,
@@ -57,10 +57,10 @@ export class IdeaService {
      * @returns IdeaDetail
      * @throws ApiError
      */
-    public static ideaIdeaRetrieve(
+    public ideaIdeaRetrieve(
         id: number,
     ): CancelablePromise<IdeaDetail> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/idea/idea/{id}/',
             path: {
@@ -74,11 +74,11 @@ export class IdeaService {
      * @returns Idea
      * @throws ApiError
      */
-    public static ideaIdeaUpdate(
+    public ideaIdeaUpdate(
         id: number,
         requestBody: Idea,
     ): CancelablePromise<Idea> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'PUT',
             url: '/api/idea/idea/{id}/',
             path: {
@@ -94,11 +94,11 @@ export class IdeaService {
      * @returns Idea
      * @throws ApiError
      */
-    public static ideaIdeaPartialUpdate(
+    public ideaIdeaPartialUpdate(
         id: number,
         requestBody?: PatchedIdea,
     ): CancelablePromise<Idea> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'PATCH',
             url: '/api/idea/idea/{id}/',
             path: {
@@ -113,10 +113,10 @@ export class IdeaService {
      * @returns void
      * @throws ApiError
      */
-    public static ideaIdeaDestroy(
+    public ideaIdeaDestroy(
         id: number,
     ): CancelablePromise<void> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'DELETE',
             url: '/api/idea/idea/{id}/',
             path: {
@@ -130,11 +130,11 @@ export class IdeaService {
      * @returns Vote
      * @throws ApiError
      */
-    public static ideaRoundIdeaVoteMeList(
+    public ideaRoundIdeaVoteMeList(
         ideaId: string,
         roundId: string,
     ): CancelablePromise<Array<Vote>> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/idea/round/{round_id}/idea/{idea_id}/vote/me/',
             path: {
@@ -150,12 +150,12 @@ export class IdeaService {
      * @returns Vote
      * @throws ApiError
      */
-    public static ideaRoundIdeaVoteMeCreate(
+    public ideaRoundIdeaVoteMeCreate(
         ideaId: string,
         roundId: string,
         requestBody: Vote,
     ): CancelablePromise<Vote> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'POST',
             url: '/api/idea/round/{round_id}/idea/{idea_id}/vote/me/',
             path: {
@@ -171,10 +171,10 @@ export class IdeaService {
      * @returns Vote
      * @throws ApiError
      */
-    public static ideaRoundVoteMeList(
+    public ideaRoundVoteMeList(
         roundId: string,
     ): CancelablePromise<Array<Vote>> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/idea/round/{round_id}/vote/me/',
             path: {
@@ -186,8 +186,8 @@ export class IdeaService {
      * @returns Vote
      * @throws ApiError
      */
-    public static ideaVoteList(): CancelablePromise<Array<Vote>> {
-        return __request(OpenAPI, {
+    public ideaVoteList(): CancelablePromise<Array<Vote>> {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/idea/vote/',
         });
@@ -197,10 +197,10 @@ export class IdeaService {
      * @returns Vote
      * @throws ApiError
      */
-    public static ideaVoteCreate(
+    public ideaVoteCreate(
         requestBody: Vote,
     ): CancelablePromise<Vote> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'POST',
             url: '/api/idea/vote/',
             body: requestBody,
@@ -212,10 +212,10 @@ export class IdeaService {
      * @returns Vote
      * @throws ApiError
      */
-    public static ideaVoteRetrieve(
+    public ideaVoteRetrieve(
         id: number,
     ): CancelablePromise<Vote> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'GET',
             url: '/api/idea/vote/{id}/',
             path: {
@@ -229,11 +229,11 @@ export class IdeaService {
      * @returns Vote
      * @throws ApiError
      */
-    public static ideaVoteUpdate(
+    public ideaVoteUpdate(
         id: number,
         requestBody: Vote,
     ): CancelablePromise<Vote> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'PUT',
             url: '/api/idea/vote/{id}/',
             path: {
@@ -249,11 +249,11 @@ export class IdeaService {
      * @returns Vote
      * @throws ApiError
      */
-    public static ideaVotePartialUpdate(
+    public ideaVotePartialUpdate(
         id: number,
         requestBody?: PatchedVote,
     ): CancelablePromise<Vote> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'PATCH',
             url: '/api/idea/vote/{id}/',
             path: {
@@ -268,10 +268,10 @@ export class IdeaService {
      * @returns void
      * @throws ApiError
      */
-    public static ideaVoteDestroy(
+    public ideaVoteDestroy(
         id: number,
     ): CancelablePromise<void> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'DELETE',
             url: '/api/idea/vote/{id}/',
             path: {

@@ -1,14 +1,11 @@
-'use client'
-
-
-import {Idea} from "@/lib/api";
+import {getClientAPIClient} from "@/lib/apiClientServer";
 import React from "react";
-import {useCampaignIdeas} from "@/app/_components/campaign/campaignIdeasProvider";
 import Link from "next/link";
 import IdeaVote from "@/app/_components/idea/ideaVote";
 import {UserPermissions} from "@/lib/userPermissions";
 import IdeaVoteCount from "@/app/_components/idea/ideaVoteCount";
-import SecuredClient from "@/lib/secureClient";
+import SecuredServer from "@/lib/secureClient";
+import {Idea} from "@/lib/api";
 
 type IdeaListProps = {
     campaignId: string,
@@ -16,8 +13,9 @@ type IdeaListProps = {
     voting: boolean,
 }
 
-export default function IdeaList({campaignId, roundId, voting}: IdeaListProps) {
-    const {ideas, refreshIdeas} = useCampaignIdeas();
+export default async function IdeaList({campaignId, roundId, voting}: IdeaListProps) {
+    const apiClient = await getClientAPIClient()
+    const ideas = await apiClient.idea.ideaCampaignIdeaList(campaignId)
 
     return (
         <>
@@ -40,9 +38,9 @@ export default function IdeaList({campaignId, roundId, voting}: IdeaListProps) {
                         }
                         {voting && (
                             <>
-                                <SecuredClient permissions={[UserPermissions.idea__add_vote]}>
-                                    <IdeaVote ideaId={String(idea.id)} roundId={roundId} postSubmit={refreshIdeas}/>
-                                </SecuredClient>
+                                <SecuredServer permissions={[UserPermissions.idea__add_vote]}>
+                                    <IdeaVote ideaId={String(idea.id)} roundId={roundId}/>
+                                </SecuredServer>
                             </>
                         )}
                     </div>

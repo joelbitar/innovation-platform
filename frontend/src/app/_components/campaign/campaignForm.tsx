@@ -2,9 +2,13 @@
 
 import React from 'react';
 import {useForm} from "react-hook-form";
-import {Campaign, CampaignService} from "@/lib/api";
+import {Campaign} from "@/lib/api/models/Campaign";
+import {ApiClient} from "@/lib/api/ApiClient";
+import {getClientAPIClient} from "@/lib/apiClientClient";
 
 export function CampaignCreateForm() {
+    const apiClient = getClientAPIClient();
+
     const {
         register,
         handleSubmit,
@@ -12,8 +16,10 @@ export function CampaignCreateForm() {
         formState: {errors},
     } = useForm<Campaign>()
 
+    console.log('create campaign..?')
     const onSubmit: (data: Campaign) => void = (data: Campaign) =>  {
-        CampaignService.campaignCreate(data).then(
+        console.log('posting...')
+        apiClient.campaign.campaignCreate(data).then(
             (data) => {
                 window.history.pushState(
                     {},

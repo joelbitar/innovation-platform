@@ -3,7 +3,7 @@
 import {cookies} from "next/headers"
 
 import {userHasPermissions} from "@/lib/secured";
-import {UserWithPermissions} from "@/lib/api";
+import {UserWithPermissions} from "@/lib/apiClientServer";
 import {SecuredProps} from "@/lib/secured";
 
 import Redis from 'ioredis'

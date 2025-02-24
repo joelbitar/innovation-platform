@@ -1,4 +1,4 @@
-import {IdeaDetail} from "@/lib/api";
+import {IdeaDetail} from "@/lib/apiClientServer";
 
 type Props = {
     idea: IdeaDetail,

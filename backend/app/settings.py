@@ -23,6 +23,7 @@ env = environ.Env(
     STATIC_URL=(str, 'static/'),
     DEFAULT_DATABASE_URL=(str, ''),
     USER_SESSION_PREFIX=(str, 'user_session_'),
+    CSRF_TRUSTED_ORIGINS=(list, []),
 )
 
 # Quick-start development settings - unsuitable for production
@@ -169,3 +170,4 @@ CACHES = {
 }
 
 SESSION_COOKIE_AGE = AUTHENTICATION_LIFETIME
+CSRF_TRUSTED_ORIGINS = env('CSRF_TRUSTED_ORIGINS')

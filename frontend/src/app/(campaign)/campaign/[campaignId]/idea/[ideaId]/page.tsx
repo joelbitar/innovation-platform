@@ -1,8 +1,5 @@
 import Container from "@/app/_components/container";
 import Header from "@/app/_components/header";
-import CampaignDetails from "@/app/_components/campaign/campaignDetails";
-import {CampaignIdeasProvider} from "@/app/_components/campaign/campaignIdeasProvider";
-import CampaignIdeas from "@/app/(campaign)/campaign/[campaignId]/campaignIdeas";
 import IdeaDetails from "@/app/_components/idea/ideaDetails";
 import IdeaEditLink from "@/app/_components/idea/ideaEditLink";
 

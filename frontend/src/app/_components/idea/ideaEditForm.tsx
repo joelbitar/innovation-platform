@@ -1,14 +1,16 @@
 'use client'
 
 import {useForm, SubmitHandler} from "react-hook-form";
-import {Campaign, Idea, IdeaService} from "@/lib/api";
+import {getClientAPIClient} from "@/lib/apiClientClient";
 import {useEffect, useState} from "react";
+import {Campaign, Idea} from "@/lib/api";
 
 type Props = {
-    ideaId: string
+    ideaId: number
 }
 
 export function IdeaEditForm({ideaId}: Props) {
+    const apiClient = getClientAPIClient()
     const [campaign, setCampaign] = useState(undefined);
 
     const {
@@ -19,7 +21,7 @@ export function IdeaEditForm({ideaId}: Props) {
     } = useForm<Campaign>()
 
     useEffect(() => {
-        IdeaService.ideaIdeaRetrieve(ideaId).then(
+        apiClient.idea.ideaIdeaRetrieve(ideaId).then(
             setCampaign
         )
     }, [ideaId]);
@@ -31,7 +33,7 @@ export function IdeaEditForm({ideaId}: Props) {
     }, [campaign]);
 
     const onSubmit: (data: Idea) => void = (data: Idea) =>  {
-        IdeaService.ideaIdeaUpdate(ideaId, data).then(
+        apiClient.idea.ideaIdeaUpdate(ideaId, data).then(
             (data) => {
 
             },

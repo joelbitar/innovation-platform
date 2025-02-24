@@ -1,16 +1,9 @@
-'use client'
+import {getClientAPIClient} from "@/lib/apiClientServer";
 
-import {useEffect, useState} from "react";
-import {CampaignService} from "@/lib/api";
+export default async function CampaignList() {
+    const apiClient = await getClientAPIClient();
+    const campaigns = await apiClient.campaign.campaignList();
 
-export default function CampaignList() {
-    const [campaigns, setCampaigns] = useState([]);
-
-    useEffect(() => {
-        CampaignService.campaignList().then(
-            setCampaigns
-        )
-    }, []);
     return (
         <>
             {

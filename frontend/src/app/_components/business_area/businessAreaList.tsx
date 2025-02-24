@@ -1,7 +1,6 @@
 'use client';
 
 import {useEffect, useState} from "react";
-import {ApiService} from "@/lib/api";
 
 export function BusinessAreaList() {
     const [businessAreas, setBusinessAreas] = useState([]);

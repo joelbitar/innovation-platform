@@ -1,4 +1,4 @@
-import {UserWithPermissions} from "@/lib/api";
+import {UserWithPermissions} from "@/lib/apiClientServer";
 
 export type SecuredProps = {
     children: any

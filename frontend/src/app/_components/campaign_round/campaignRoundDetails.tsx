@@ -1,21 +1,14 @@
-'use client';
-
-import {CampaignService} from "@/lib/api";
-import React, {useEffect, useState} from "react";
-import {CampaignIdeasProvider} from "@/app/_components/campaign/campaignIdeasProvider";
 import CampaignIdeaList from "@/app/_components/idea/campaignIdeaList";
+import {getClientAPIClient} from "@/lib/apiClientServer";
 
 type Props = {
     campaignId: string,
     roundId: string,
 }
 
-export default function CampaignRoundDetails({campaignId, roundId}: Props) {
-    const [campaignRound, setCampaignRound] = useState([]);
-
-    useEffect(() => {
-        CampaignService.campaignRoundRetrieve(campaignId, roundId).then(setCampaignRound)
-    }, [campaignId, roundId]);
+export default async function CampaignRoundDetails({campaignId, roundId}: Props) {
+    const apiClient = await getClientAPIClient()
+    const campaignRound = await apiClient.campaign.campaignRoundRetrieve(campaignId, roundId)
 
     return (
         <>
@@ -24,18 +17,16 @@ export default function CampaignRoundDetails({campaignId, roundId}: Props) {
                         <h1
                             className={"text-3xl font-bold mt-1 mb-3"}
                         >{campaignRound.name}</h1>
-                        <CampaignIdeasProvider campaignId={campaignId}>
-                            <h2
-                                className={"text-2xl font-bold mt-1 mb-2"}
-                            >
-                                Ideas
-                            </h2>
-                            <CampaignIdeaList
-                                campaignId={campaignId}
-                                roundId={roundId}
-                                voting={true}
-                            />
-                        </CampaignIdeasProvider>
+                        <h2
+                            className={"text-2xl font-bold mt-1 mb-2"}
+                        >
+                            Ideas
+                        </h2>
+                        <CampaignIdeaList
+                            campaignId={campaignId}
+                            roundId={roundId}
+                            voting={true}
+                        />
                     </>
                 )
             }

@@ -11,6 +11,7 @@
     "gray-matter": "^4.0.3",
     "ioredis": "^5.4.2",
     "next": "15.1",
+    "next-client-cookies": "^2.0.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-hook-form": "^7.54.2",

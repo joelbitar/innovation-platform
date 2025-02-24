@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import {CampaignRound, CampaignService} from "@/lib/api";
+import {CampaignRound, CampaignService} from "@/lib/apiClientServer";
 import {useForm} from "react-hook-form";
 
 import {useEffect, useState} from "react";

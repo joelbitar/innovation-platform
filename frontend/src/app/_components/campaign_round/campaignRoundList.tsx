@@ -1,19 +1,14 @@
-'use client';
-
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Link from "next/link";
-import {CampaignService} from "@/lib/api";
+import {getClientAPIClient} from "@/lib/apiClientServer";
 
 type Props = {
     campaignId: string
 }
 
-export default function CampaignRoundList({campaignId}: Props) {
-    const [campaignRounds, setCampaignRounds] = useState([]);
-
-    useEffect(() => {
-        CampaignService.campaignRoundList(campaignId).then(setCampaignRounds)
-    }, [campaignId]);
+export default async function CampaignRoundList({campaignId}: Props) {
+    const apiClient = await getClientAPIClient()
+    const campaignRounds = await apiClient.campaign.campaignRoundList(campaignId)
 
     return (
         <>

@@ -4,18 +4,18 @@
 /* eslint-disable */
 import type { Login } from '../models/Login';
 import type { CancelablePromise } from '../core/CancelablePromise';
-import { OpenAPI } from '../core/OpenAPI';
-import { request as __request } from '../core/request';
+import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class AuthService {
+    constructor(public readonly httpRequest: BaseHttpRequest) {}
     /**
      * @param requestBody
      * @returns Login
      * @throws ApiError
      */
-    public static authLoginCreate(
+    public authLoginCreate(
         requestBody: Login,
     ): CancelablePromise<Login> {
-        return __request(OpenAPI, {
+        return this.httpRequest.request({
             method: 'POST',
             url: '/api/auth/login/',
             body: requestBody,
@@ -26,8 +26,8 @@ export class AuthService {
      * @returns any No response body
      * @throws ApiError
      */
-    public static authLogoutCreate(): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    public authLogoutCreate(): CancelablePromise<any> {
+        return this.httpRequest.request({
             method: 'POST',
             url: '/api/auth/logout/',
         });

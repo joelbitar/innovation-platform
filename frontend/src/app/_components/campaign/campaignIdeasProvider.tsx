@@ -1,8 +1,9 @@
+/*
 'use client';
 // Provide ideas for a specific campaign
 
 import {createContext, useContext, useEffect, useState} from "react";
-import {IdeaService} from "@/lib/api";
+import {AppClient} from "@/lib/api";
 
 const IdeaContext = createContext(
     {
@@ -16,6 +17,7 @@ const IdeaContext = createContext(
 
 export const CampaignIdeasProvider = ({campaignId, children}) => {
     const [ideas, setIdeas] = useState([]);
+    const apiClient = new AppClient()
 
     const refreshIdeas = (campaignId: string) => {
         console.log('CampaignIdeasProvider fetch: "' + String(campaignId) + '"');
@@ -43,3 +45,5 @@ export const CampaignIdeasProvider = ({campaignId, children}) => {
 export const useCampaignIdeas = () => {
     return useContext(IdeaContext);
 }
+
+*/
