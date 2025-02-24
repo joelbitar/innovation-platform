@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import datetime
 from pathlib import Path
 import environ
+from django.conf.global_settings import SESSION_COOKIE_AGE
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -141,9 +142,12 @@ REST_FRAMEWORK = {
     ),
 }
 
+AUTHENTICATION_LIFETIME = 60 * 60 * 12
+AUTHENTICATION_TOKEN_REFRESH_INTERVAL = 60 * 10
+
 SIMPLE_JWT = {
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(hours=12),
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=10),  # We will have to refresh access token after this time
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(seconds=AUTHENTICATION_LIFETIME),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(seconds=AUTHENTICATION_TOKEN_REFRESH_INTERVAL),  # We will have to refresh access token after this time
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     #  Just some wiggle room since it can take a few seconds for the servers to wake up.
