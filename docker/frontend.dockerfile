@@ -30,7 +30,8 @@ WORKDIR /app
 
 COPY --from=ip_frontend_deps /app/node_modules ./node_modules
 COPY ./frontend .
-RUN npm install openapi-typescript-codegen
+#RUN npm install openapi-typescript-codegen
+RUN npm install @hey-api/client-fetch && npm install @hey-api/openapi-ts -D
 
 
 ########################################################################################################################
