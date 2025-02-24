@@ -225,8 +225,8 @@ class AuthenticationAPITests(TestCase):
 
         with self.subTest('Should have user id set on session after refresh'):
             self.assertEqual(
-                client.session.get('user_id'),
-                self.user.pk,
+                client.session.get('_auth_user_id'),
+                str(self.user.pk),
             )
 
         with self.subTest('Should have sessionid in cookie from obtain token view'):
