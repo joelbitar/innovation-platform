@@ -55,7 +55,7 @@ stop: stop-frontend-dev stop-backend-dev stop-proxy-dev stop-celery-worker-dev
 	$(info Done stopping)
 
 logs:
-	docker compose logs -f -n 50 frontend-dev backend-dev
+	docker compose logs -f -n 50 frontend-dev backend-dev celery-worker-dev
 
 restart: stop up
 	$(info Done restarting)
