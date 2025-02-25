@@ -180,15 +180,7 @@ CELERY_TIMEZONE = "Europe/Stockholm"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BROKER_URL = env.str('REDIS_URL', None)
-#CELERY_BROKER_URL = 'redis://example.com:6379/0'
-#CELERY_BROKER_URL = 'amqp://guest:guest@localhost'
-print('Celery broker url', CELERY_BROKER_URL)
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
-
-#: Only add pickle to this list if your broker is secured
-#: from unwanted access (see userguide/security.html)
 CELERY_ACCEPT_CONTENT = ['json']
-#CELERY_RESULT_BACKEND = 'db+sqlite:///results.sqlite'
-#CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_TASK_SERIALIZER = 'json'
