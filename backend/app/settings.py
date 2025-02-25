@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'rest_framework_api_key',
+    'django_celery_beat',
+    'django_celery_results',
     'user',
     'business',
     'campaign',
@@ -171,3 +173,8 @@ CACHES = {
 
 SESSION_COOKIE_AGE = AUTHENTICATION_LIFETIME
 CSRF_TRUSTED_ORIGINS = env('CSRF_TRUSTED_ORIGINS')
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TIMEZONE = "Europe/Stockholm"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60

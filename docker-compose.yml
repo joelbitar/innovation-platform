@@ -56,7 +56,7 @@ services:
     ports:
       - "8000:8000"
 
-  backend-dev:
+  backend-dev: &backend_dev
     <<: *backend
     container_name: ip_backend_dev
     build:
@@ -118,7 +118,29 @@ services:
       ip_network:
         aliases:
           - redis.dkr
+  
+  celery-worker-dev:
+    container_name: ip_celery_worker_dev
+    build:
+      context: .
+      dockerfile: docker/backend.dockerfile
+      target: ip_dev
+    environment:
+      - REDIS_URL=redis://redis.dkr:6379
+    env_file:
+      - path: backend/.env
+    volumes:
+      - ./backend:/src
+    depends_on:
+      - redis-dev
+    networks:
+      ip_network:
+        aliases:
+          - celery.dkr
 
+    entrypoint: celery -A app worker -B -l INFO
+    # script ; celery -A app worker -B -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    # script ; celery -A app worker -B -l DEBUG --scheduler django_celery_beat.schedulers:DatabaseScheduler
 networks:
   ip_network:
     name: ip_network

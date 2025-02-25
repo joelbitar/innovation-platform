@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenBlacklistView as OriginalTokenBlacklistView
 
 from lib.redis import RedisClient
+from user.tasks import temp_task
 
 
 class LogoutView(APIView):
@@ -22,6 +23,8 @@ class LogoutView(APIView):
 
         # Clear session and logout
         logout(request)
+
+        temp_task().delay()
 
         return Response(
             status=status.HTTP_200_OK,
