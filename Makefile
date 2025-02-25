@@ -88,6 +88,9 @@ show_urls:
 createsuperuser:
 	docker compose run backend-dev sh -c "python manage.py createsuperuser"
 
+shell_plus:
+	docker compose run backend-dev sh -c "python manage.py shell_plus"
+
 generate_api_key:
 	docker compose run backend-dev sh -c "python manage.py shell_plus -c \"print(APIKey.objects.create_key(name='frontend'))\""
 

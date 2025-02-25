@@ -137,8 +137,7 @@ services:
       ip_network:
         aliases:
           - celery.dkr
-
-    entrypoint: celery -A app worker -B -l INFO
+    entrypoint: celery -A app worker -l INFO
     # script ; celery -A app worker -B -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
     # script ; celery -A app worker -B -l DEBUG --scheduler django_celery_beat.schedulers:DatabaseScheduler
 networks:

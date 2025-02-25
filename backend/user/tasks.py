@@ -1,13 +1,11 @@
 import logging
 
-from celery import Celery, shared_task
+from celery import shared_task
 
-app = Celery('app')
-
-
+s = """
 @app.on_after_finalize.connect
 def setup_periodic_tasks(sender: Celery, **kwargs):
-    print('hello, world.')
+    print('hello, world. periodic task')
     sender.add_periodic_task(
         10.0,  # Every minute
         clear_expired_sessions.s(),
@@ -22,8 +20,9 @@ def clear_expired_sessions():
     print('Clearing expired sessions..')
     logging.log('Clearing expired sessions..')
     call_command('clearsessions')
-
+"""
 
 @shared_task
 def temp_task(x, y):
+    print(f'Adding {x} and {y}')
     return x + y
