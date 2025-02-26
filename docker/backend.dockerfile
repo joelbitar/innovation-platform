@@ -10,8 +10,8 @@ WORKDIR /src
 COPY backend/requirements.txt /src/requirements.txt
 RUN python -m venv /py && \
 	/py/bin/pip install --upgrade pip && \
+	/py/bin/pip install uwsgi && \
 	/py/bin/pip install -r /src/requirements.txt
-
 
 # #############################################################################
 # #############                   Base image                     ##############
@@ -32,18 +32,31 @@ ENV PATH="/py/bin:$PATH"
 
 
 # #############################################################################
-# ############                   App image                          ###########
+# ############                   Prod image                          ###########
 # #############################################################################
 FROM app_base as app_prod
 
 #COPY ./backend/uwsgi_params /
-COPY ./entrypoint_app.sh /
+COPY ./docker/entrypoint_app.sh /
 RUN ["chmod", "+x", "/entrypoint_app.sh"]
-RUN ["chown", "django-user:django-user", "/entrypoint_app.sh"]
+#RUN ["chown", "django-user:django-user", "/entrypoint_app.sh"]
 
 WORKDIR /src/
 
 ENTRYPOINT ["/entrypoint_app.sh"]
+
+
+# #############################################################################
+# ############                   Dev image                           ##########
+# #############################################################################
+FROM app_base as app_dev
+
+# Install the dev dependencies
+COPY backend/requirements-dev.txt .
+RUN /py/bin/pip install -r requirements-dev.txt
+
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 # #############################################################################
 # ############                Celery worker image                   ###########
@@ -59,19 +72,6 @@ RUN ["chmod", "+x", "/entrypoint_celery_worker.sh"]
 WORKDIR /src/
 
 ENTRYPOINT ["/entrypoint_celery_worker.sh"]
-
-
-# #############################################################################
-# ############                   Dev image                           ##########
-# #############################################################################
-FROM app_base as app_dev
-
-# Install the dev dependencies
-COPY backend/requirements-dev.txt .
-RUN /py/bin/pip install -r requirements-dev.txt
-
-
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 # #############################################################################
 # ############                   Test image 						###########
