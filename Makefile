@@ -47,19 +47,19 @@ up: up-redis-dev up-frontend-dev up-backend-dev up-proxy-dev up-celery-worker-de
 	$(info Started)
 
 stop-backend-dev:
-	docker stop ip_backend_dev
+	docker compose stop backend_dev
 
 stop-frontend-dev:
-	docker stop ip_frontend_dev
+	docker compose stop frontend_dev
 
 stop-proxy-dev:
-	docker stop ip_proxy_dev
+	docker compose stop proxy_dev
 
 stop-redis-dev:
-	docker stop ip_redis_dev
+	docker compose stop redis_dev
 
 stop-celery-worker-dev:
-	docker stop ip_celery_worker_dev
+	docker compose stop celery_worker_dev
 
 stop: stop-frontend-dev stop-backend-dev stop-proxy-dev stop-celery-worker-dev stop-redis-dev
 	$(info Done stopping)
