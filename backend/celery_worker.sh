@@ -1,1 +1,0 @@
-celery -A app worker -l DEBUG

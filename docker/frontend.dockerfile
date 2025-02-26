@@ -2,10 +2,14 @@
 ######################################################### BASE #########################################################
 ########################################################################################################################
 
-FROM node:18-alpine AS ip_frontend_base
+FROM node:18-alpine AS app_frontend_base
 
+
+########################################################################################################################
+##################################################### Dependenceis #####################################################
+########################################################################################################################
 # Install dependencies only when needed
-FROM ip_frontend_base AS ip_frontend_deps
+FROM app_frontend_base AS app_frontend_deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -24,11 +28,11 @@ RUN \
 ######################################################### DEV ##########################################################
 ########################################################################################################################
 
-FROM ip_frontend_base AS ip_frontend_dev
+FROM app_frontend_base AS app_frontend_dev
 
 WORKDIR /app
 
-COPY --from=ip_frontend_deps /app/node_modules ./node_modules
+COPY --from=app_frontend_deps /app/node_modules ./node_modules
 COPY ./frontend .
 RUN npm install openapi-typescript-codegen
 
@@ -38,10 +42,10 @@ RUN npm install openapi-typescript-codegen
 ########################################################################################################################
 
 # Rebuild the source code only when needed
-FROM ip_frontend_base AS ip_frontend_builder
+FROM app_frontend_base AS app_frontend_builder
 
 WORKDIR /app
-COPY --from=ip_frontend_deps /app/node_modules ./node_modules
+COPY --from=app_frontend_deps /app/node_modules ./node_modules
 COPY ./frontend .
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -60,7 +64,7 @@ RUN yarn build
 ########################################################################################################################
 
 # Production image, copy all the files and run next
-FROM ip_frontend_base AS ip_frontend_prod
+FROM app_frontend_base AS app_frontend_prod
 
 ARG BACKEND_URL
 ENV BACKEND_URL=$BACKEND_URL

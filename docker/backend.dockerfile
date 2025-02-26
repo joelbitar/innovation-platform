@@ -1,4 +1,4 @@
-FROM python:3.13-slim as ip_python
+FROM python:3.13-slim as app_python
 
 RUN apt-get update && apt-get -y install \
 	gcc \
@@ -17,7 +17,7 @@ RUN python -m venv /py && \
 # #############                   Base image                     ##############
 # #############################################################################
 
-FROM ip_python as ip_base
+FROM app_python as app_base
 
 WORKDIR /src
 
@@ -25,7 +25,7 @@ WORKDIR /src
 COPY backend /src
 
 # Copy in the python packages
-COPY --from=ip_python /py /py
+COPY --from=app_python /py /py
 
 # Set python path
 ENV PATH="/py/bin:$PATH"
@@ -34,32 +34,47 @@ ENV PATH="/py/bin:$PATH"
 # #############################################################################
 # ############                   App image                          ###########
 # #############################################################################
-FROM ip_base as ip_app
+FROM app_base as app_prod
 
 #COPY ./backend/uwsgi_params /
-#COPY ./docker/backend_entrypoint.sh /
-#RUN ["chmod", "+x", "/app_entrypoint.sh"]
-#RUN ["chown", "django-user:django-user", "/app_entrypoint.sh"]
-
-# Set environment variables from build args
+COPY ./entrypoint_app.sh /
+RUN ["chmod", "+x", "/entrypoint_app.sh"]
+RUN ["chown", "django-user:django-user", "/entrypoint_app.sh"]
 
 WORKDIR /src/
+
+ENTRYPOINT ["/entrypoint_app.sh"]
+
+# #############################################################################
+# ############                Celery worker image                   ###########
+# #############################################################################
+FROM app_base as celery_worker
+
+
+COPY docker/entrypoint_celery_worker.sh /
+#COPY ./entrypoint_celery_worker.sh /
+RUN ["chmod", "+x", "/entrypoint_celery_worker.sh"]
+#RUN ["chown", "django-user:django-user", "/entrypoint_celery_worker.sh"]
+
+WORKDIR /src/
+
+ENTRYPOINT ["/entrypoint_celery_worker.sh"]
 
 
 # #############################################################################
 # ############                   Dev image                           ##########
 # #############################################################################
-FROM ip_app as ip_dev
+FROM app_base as app_dev
 
+# Install the dev dependencies
 COPY backend/requirements-dev.txt .
 RUN /py/bin/pip install -r requirements-dev.txt
 
 
-# Install the dev dependencies
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 # #############################################################################
 # ############                   Test image 						###########
 # #############################################################################
 
-FROM ip_app as ip_test
+FROM app_dev as app_test

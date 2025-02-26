@@ -15,7 +15,14 @@ build-backend-dev-no-cache:
 	docker compose build --no-cache backend-dev
 	$(info Done building backend)
 
-rebuild: build-frontend-dev-no-cache build-backend-dev-no-cache
+build-celery-worker-dev-no-cache:
+	docker compose build --no-cache celery-worker-dev
+	$(info Done building celery worker)
+
+rebuild-app: build-backend-dev-no-cache build-celery-worker-dev-no-cache
+	$(info Done rebuilding app)
+
+rebuild: build-frontend-dev-no-cache rebuild-app
 	$(info Done rebuilding)
 
 reset: stop rebuild up
@@ -48,10 +55,13 @@ stop-frontend-dev:
 stop-proxy-dev:
 	docker stop ip_proxy_dev
 
+stop-redis-dev:
+	docker stop ip_redis_dev
+
 stop-celery-worker-dev:
 	docker stop ip_celery_worker_dev
 
-stop: stop-frontend-dev stop-backend-dev stop-proxy-dev stop-celery-worker-dev
+stop: stop-frontend-dev stop-backend-dev stop-proxy-dev stop-celery-worker-dev stop-redis-dev
 	$(info Done stopping)
 
 logs:

@@ -1,5 +1,5 @@
 #!/bin/sh
-#python /src/manage.py migrate --noinput
+python /src/manage.py migrate --noinput
 #python /src/manage.py compilemessages
 
 echo "####### Starting uWSGI server"
