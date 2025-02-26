@@ -45,10 +45,16 @@ services:
       context: .
       dockerfile: docker/backend.dockerfile
       target: app_prod
+    environment:
+      - DJANGO_SETTINGS_MODULE=app.settings
     env_file:
       - path: backend/.env
     ports:
       - "8001:8000"
+    networks:
+      ip_network:
+        aliases:
+          - backend.dkr
 
   backend-dev:
     <<: *backend
@@ -56,14 +62,10 @@ services:
       context: .
       dockerfile: docker/backend.dockerfile
       target: app_dev
-    env_file:
-      - path: backend/.env
+    environment:
+        - DJANGO_SETTINGS_MODULE=app.settings-development
     volumes:
       - ./backend:/src
-    networks:
-      ip_network:
-        aliases:
-          - backend.dkr
     ports:
       - "8000:8000"
 
@@ -108,16 +110,10 @@ services:
       target: celery_worker
     environment:
       - DJANGO_SETTINGS_MODULE=app.settings
-    env_file:
-      - path: backend/.env
     volumes:
       - ./backend:/src
     depends_on:
       - redis-dev
-    networks:
-      ip_network:
-        aliases:
-          - celery.dkr
 
 networks:
   ip_network:
