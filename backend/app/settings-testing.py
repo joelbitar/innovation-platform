@@ -10,3 +10,16 @@ DATABASES = {
 DEBUG = True
 
 SECRET_KEY = 'testing_secret_key'
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {
+            "location": "/tmp/",
+            "base_url": "/media/",
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
