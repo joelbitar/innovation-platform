@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from user.serializers import CreatedByModelSerializer
-from .models import Idea, Vote
+from .models import Idea, Vote, Information
 
 
 class RoundVotesSerializer(serializers.Serializer):
@@ -27,4 +27,27 @@ class IdeaDetailSerializer(IdeaSerializer):
 class VoteSerializer(CreatedByModelSerializer):
     class Meta:
         model = Vote
+        fields = '__all__'
+
+
+class IdeaInformationSerializer(CreatedByModelSerializer):
+    def create(self, validated_data):
+        validated_data['idea'] = self.context.get('idea')
+        validated_data['round'] = self.context.get('round', None)
+
+        return super().create(validated_data)
+
+    def get_extra_kwargs(self):
+        extra_kwargs = super().get_extra_kwargs()
+        extra_kwargs.update(
+            {
+                'idea': {
+                    'required': False,  # This is set in create method
+                }
+            }
+        )
+        return extra_kwargs
+
+    class Meta:
+        model = Information
         fields = '__all__'

@@ -45,39 +45,6 @@ class PermissionsTests(TestCase):
             headers=headers
         )
 
-    def test_should_be_able_to_authenticate_with_access_token(self):
-        client = APIClient()
-
-        response = client.post(
-            reverse('auth_jwt_token_obtain_pair'),
-            {
-                'username': self.username,
-                'password': self.password,
-            }
-        )
-
-        access_token = response.data['access']
-
-        request = self.helper_get_request(
-            headers={
-                'Authorization': f'Bearer {access_token}'
-            }
-        )
-
-        # Need to use jwt authentication for this to work
-        from rest_framework_simplejwt.authentication import JWTAuthentication
-        request.user, _ = JWTAuthentication().authenticate(
-            request,
-        )
-
-        with self.subTest('Should have permissions if we use use jwt token'):
-            self.assertTrue(
-                UserSessionWithAPIKeyOrAuthenticated().has_permission(
-                    request=request,
-                    view=None
-                )
-            )
-
     # check session id
     def test_authenticate_with_key_and_session(self):
         client_with_new_session = APIClient()

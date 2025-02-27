@@ -48,7 +48,7 @@ class UserMeProfileAPITests(AuthenticatedClientTestCase):
 
         with self.subTest('Should return 401 if not authenticated'):
             self.assertEqual(
-                401,
+                403,
                 response.status_code,
                 response.content,
             )

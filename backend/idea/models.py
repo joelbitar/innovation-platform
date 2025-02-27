@@ -5,6 +5,7 @@ from django.db import models
 from django.utils import timezone
 
 from campaign.models import CampaignRound, Campaign
+from lib.models.created_by_model_mixin import CreatedByModel
 
 
 # Create your models here.
@@ -33,27 +34,38 @@ class Idea(models.Model):
         return self.title
 
 
-class IdeaData(models.Model):
+# Abstract classes for IdeaData, All data around ideas should inherit this class.
+class IdeaData(CreatedByModel):
     idea = models.ForeignKey(Idea, on_delete=models.CASCADE)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
+    class Meta(CreatedByModel.Meta):
         abstract = True
 
 
+# Abstract classes for IdeaRoundData, All data around ideas in a specific round should inherit this class.
 class IdeaRoundData(IdeaData):
     round = models.ForeignKey(CampaignRound, on_delete=models.CASCADE)
 
-    class Meta:
+    class Meta(IdeaData.Meta):
         abstract = True
 
 
+class IdeaFolder(IdeaData):
+    title = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.title
+
+
+# Holds all kinds of information about an idea
 class Information(IdeaRoundData):
     def get_file_path(self, filename):
         return f"idea/{self.idea.pk}/files/{timezone.now().isoformat('-')[:10]}/{uuid.uuid4()}/{filename}"
 
+    deleted = models.BooleanField(default=False)
+    folder = models.ForeignKey(IdeaFolder, on_delete=models.CASCADE, related_name="information", null=True, blank=True)
     round = models.ForeignKey(CampaignRound, on_delete=models.CASCADE, related_name="information", null=True, blank=True)
     title = models.CharField(max_length=255, default="", blank=True)
     text = models.TextField(default="", blank=True)
@@ -69,12 +81,12 @@ class Comment(IdeaRoundData):
 
 
 class Star(IdeaData):
-    class Meta:
+    class Meta(IdeaData.Meta):
         unique_together = ("created_by", "idea")
 
 
 class Vote(IdeaRoundData):
-    class Meta:
+    class Meta(IdeaRoundData.Meta):
         unique_together = ("created_by", "idea", "round")
 
 
@@ -86,5 +98,5 @@ class RoundVoteCount(models.Model):
     def __str__(self):
         return f"{self.idea.title} - {self.count}"
 
-    class Meta:
+    class Meta(CreatedByModel.Meta):
         unique_together = ("idea", "round")

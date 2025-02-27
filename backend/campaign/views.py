@@ -1,6 +1,6 @@
 from campaign.models import Campaign, CampaignRound
 from campaign.serializers import CampaignSerializer, CampaignRoundSerializer
-from lib.created_by_current_user_helper import CreatedByModelViewSet
+from lib.views.created_by_current_user_helper import CreatedByModelViewSet
 
 
 # Create your views here.

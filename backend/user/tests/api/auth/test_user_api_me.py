@@ -54,9 +54,9 @@ class UserMeAPITests(AuthenticatedClientTestCase):
             reverse('user_me'),
         )
 
-        with self.subTest('Should return 401 if not authenticated'):
+        with self.subTest('Should return 403 if not authenticated'):
             self.assertEqual(
-                401,
+                403,
                 response.status_code,
                 response.content,
             )
@@ -72,7 +72,7 @@ class UserMeAPITests(AuthenticatedClientTestCase):
 
         authenticated_client = APIClient()
         authenticated_client.post(
-            reverse('auth_jwt_token_obtain_pair'),
+            reverse('auth_login'),
             {
                 'username': username,
                 'password': password,

@@ -245,6 +245,11 @@ class SessionAuthenticationAPITests(TestCase):
             session_key := self.client.session.session_key
         )
 
+        self.assertIsNotNone(
+            "x",
+            json.dumps(UserWithPermissionsSerializer(self.user).data, indent=4),
+        )
+
         with self.subTest('Should save permissions'):
             mocked_redis_client_set.assert_called_with(
                 f'session_user_{session_key}',

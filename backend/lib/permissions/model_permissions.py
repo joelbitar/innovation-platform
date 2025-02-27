@@ -1,5 +1,7 @@
 from rest_framework.permissions import DjangoModelPermissions
 
+from lib.models.created_by_model_mixin import CreatedByModel
+
 
 class ModelPermissions(DjangoModelPermissions):
     @property
@@ -16,3 +18,22 @@ class ModelPermissions(DjangoModelPermissions):
         ]
 
         return perms_map
+
+    def has_permission(self, request, view):
+        if super().has_permission(request, view):
+            return True
+
+        # For delete calls
+        if request.method == 'DELETE':
+            model = self._queryset(view).model
+
+            # If the model inherits from CreatedByModel
+            if isinstance(model(), CreatedByModel):
+                return request.user.has_perm(
+                    'lib.delete_own_created_by_instances'
+                )
+
+        return False
+
+    def has_object_permission(self, request, view, obj):
+        return obj.created_by == request.user

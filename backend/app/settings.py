@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework_api_key',
     'django_celery_beat',
     'django_celery_results',
+    'lib',
     'user',
     'business',
     'campaign',

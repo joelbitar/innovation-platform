@@ -746,6 +746,203 @@ paths:
                 items:
                   $ref: '#/components/schemas/Vote'
           description: ''
+  /api/idea/round/{var}/idea/api/idea/round/(P{round_id}\d)/idea/{var}/information//:
+    get:
+      operationId: idea_round_idea_api_idea_round_(P\d)_idea_information_list
+      parameters:
+      - in: path
+        name: round_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: var
+        schema:
+          type: string
+        required: true
+      tags:
+      - idea
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdeaInformation'
+          description: ''
+    post:
+      operationId: idea_round_idea_api_idea_round_(P\d)_idea_information_create
+      parameters:
+      - in: path
+        name: round_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: var
+        schema:
+          type: string
+        required: true
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdeaInformation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IdeaInformation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IdeaInformation'
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdeaInformation'
+          description: ''
+  /api/idea/round/{var}/idea/api/idea/round/(P{round_id}\d)/idea/{var}/information//{id}/:
+    get:
+      operationId: idea_round_idea_api_idea_round_(P\d)_idea_information_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: round_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: var
+        schema:
+          type: string
+        required: true
+      tags:
+      - idea
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdeaInformation'
+          description: ''
+    put:
+      operationId: idea_round_idea_api_idea_round_(P\d)_idea_information_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: round_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: var
+        schema:
+          type: string
+        required: true
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdeaInformation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IdeaInformation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IdeaInformation'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdeaInformation'
+          description: ''
+    patch:
+      operationId: idea_round_idea_api_idea_round_(P\d)_idea_information_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: round_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: var
+        schema:
+          type: string
+        required: true
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedIdeaInformation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedIdeaInformation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedIdeaInformation'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdeaInformation'
+          description: ''
+    delete:
+      operationId: idea_round_idea_api_idea_round_(P\d)_idea_information_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: round_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: var
+        schema:
+          type: string
+        required: true
+      tags:
+      - idea
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/idea/vote/:
     get:
       operationId: idea_vote_list
@@ -1112,6 +1309,48 @@ components:
       - round_votes
       - title
       - updated_at
+    IdeaInformation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/AbbreviatedUser'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted:
+          type: boolean
+        title:
+          type: string
+          maxLength: 255
+        text:
+          type: string
+        file:
+          type: string
+          format: uri
+          nullable: true
+        idea:
+          type: integer
+        folder:
+          type: integer
+          nullable: true
+        round:
+          type: integer
+          nullable: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - updated_at
     Login:
       type: object
       properties:
@@ -1220,6 +1459,43 @@ components:
           $ref: '#/components/schemas/VisibilityEnum'
         campaign:
           type: integer
+    PatchedIdeaInformation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/AbbreviatedUser'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted:
+          type: boolean
+        title:
+          type: string
+          maxLength: 255
+        text:
+          type: string
+        file:
+          type: string
+          format: uri
+          nullable: true
+        idea:
+          type: integer
+        folder:
+          type: integer
+          nullable: true
+        round:
+          type: integer
+          nullable: true
     PatchedVote:
       type: object
       properties:

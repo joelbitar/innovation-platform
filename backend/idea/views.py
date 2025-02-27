@@ -4,9 +4,9 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from campaign.models import CampaignRound
-from lib.created_by_current_user_helper import CreatedByModelViewSet
-from .models import Idea, Vote
-from .serializers import IdeaSerializer, VoteSerializer, IdeaDetailSerializer
+from lib.views.created_by_current_user_helper import CreatedByModelViewSet
+from .models import Idea, Vote, Information
+from .serializers import IdeaSerializer, VoteSerializer, IdeaDetailSerializer, IdeaInformationSerializer
 
 
 # Create your views here.
@@ -80,3 +80,24 @@ class RoundIdeaMyVoteViewSet(RoundMyVoteViewSet):
             VoteSerializer(vote).data,
             status=201
         )
+
+
+class RoundIdeaInformationViewSet(CreatedByModelViewSet):
+    def get_queryset(self):
+        return Information.objects.filter(
+            round_id=self.kwargs['round_id'],
+            idea_id=self.kwargs['idea_id']
+        )
+
+    def get_serializer_class(self):
+        return IdeaInformationSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update(
+            {
+                'idea': get_object_or_404(Idea, pk=self.kwargs['idea_id']),
+                'round': get_object_or_404(CampaignRound, pk=self.kwargs['round_id']),
+            }
+        )
+        return context
