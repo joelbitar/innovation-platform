@@ -36,12 +36,16 @@ ENV PATH="/py/bin:$PATH"
 # #############################################################################
 FROM app_base as app_prod
 
+RUN adduser --disabled-password --gecos "" django-user
 #COPY ./backend/uwsgi_params /
 COPY ./docker/entrypoint_app.sh /
 RUN ["chmod", "+x", "/entrypoint_app.sh"]
-#RUN ["chown", "django-user:django-user", "/entrypoint_app.sh"]
+RUN ["chown", "django-user:django-user", "/entrypoint_app.sh"]
 
 WORKDIR /src/
+
+# Switch to django-user
+USER django-user
 
 ENTRYPOINT ["/entrypoint_app.sh"]
 
