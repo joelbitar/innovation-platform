@@ -9,8 +9,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-import datetime
 from pathlib import Path
+
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,6 +22,8 @@ env = environ.Env(
     ALLOWED_HOSTS=(list, []),
     STATIC_URL=(str, 'static/'),
     DEFAULT_DATABASE_URL=(str, ''),
+    USER_SESSION_PREFIX=(str, 'user_session_'),
+    CSRF_TRUSTED_ORIGINS=(list, []),
 )
 
 # Quick-start development settings - unsuitable for production
@@ -47,6 +49,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'rest_framework_api_key',
+    'django_celery_beat',
+    'django_celery_results',
+    'lib',
     'user',
     'business',
     'campaign',
@@ -132,20 +138,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
+        'lib.permissions.model_permissions.ModelPermissions',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
 }
 
-SIMPLE_JWT = {
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(hours=12),
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=10),  # We will have to refresh access token after this time
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
-    #  Just some wiggle room since it can take a few seconds for the servers to wake up.
-    'LEEWAY': 10,  # Seconds. with current version of package it broke tests when using timedelta.
-}
+AUTHENTICATION_LIFETIME = 60 * 60 * 12  # 12 hours
 
 # Logging
 LOGGING = {
@@ -161,3 +161,27 @@ LOGGING = {
         'level': 'WARNING',
     },
 }
+
+USER_SESSION_PREFIX = env('USER_SESSION_PREFIX')
+REDIS_URL = env.url('REDIS_URL', None)
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": env.str('REDIS_URL', None),
+    }
+}
+
+SESSION_COOKIE_AGE = AUTHENTICATION_LIFETIME
+CSRF_TRUSTED_ORIGINS = env('CSRF_TRUSTED_ORIGINS')
+
+# Celery settings
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_TIMEZONE = "Europe/Stockholm"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = env.str('REDIS_URL', None)
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TASK_SERIALIZER = 'json'

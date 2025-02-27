@@ -3,6 +3,7 @@ backend/venv
 *.swp
 frontend/node_modules
 frontend/.next
+frontend/.env
 .idea
 backend/db.sqlite3
 .run

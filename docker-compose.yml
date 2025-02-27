@@ -1,15 +1,11 @@
-version: "3.8"
 services:
   frontend: &frontend
-    container_name: ip-frontend
     build:
       context: .
       dockerfile: docker/frontend.dockerfile
-      target: ip_frontend_prod
+      target: app_frontend_prod
     environment:
-      - NODE_ENV=development
-      #if you’re using Windows, you may need to uncomment the next line - Sol from @Kobe E
-      #- WATCHPACK_POLLING=true
+      - NODE_ENV=production
     volumes:
       - ./frontend:/app
     ports:
@@ -17,78 +13,107 @@ services:
 
   frontend-dev:
     <<: *frontend
-    container_name: ip_frontend_dev
     build:
       context: .
       dockerfile: docker/frontend.dockerfile
-      target: ip_frontend_dev
+      target: app_frontend_dev
     restart: always
     command: yarn dev
     environment:
       - NODE_ENV=development
       - BACKEND_URL=http://backend.dkr:8000
-      #if you’re using Windows, you may need to uncomment the next line - Sol from @Kobe E
-      #- WATCHPACK_POLLING=true
+      - REDIS_URL=redis://redis.dkr:6379
+    env_file:
+      - path: frontend/.env
     volumes:
       - ./frontend:/app
       - /app/node_modules
       - /app/.next
     networks:
-      - ip_network
+      ip_network:
+        aliases:
+          - frontend.dkr
 
   frontend-test:
     <<: *frontend
-    container_name: ip_frontend_test
     command: yarn test
     environment:
       - NODE_ENV=development
 
   backend: &backend
-    image: "ip_backend"
-    container_name: ip_backend
     build:
       context: .
       dockerfile: docker/backend.dockerfile
-      target: ip_backend
-
-    ports:
-      - "8000:8000"
-
-  backend-dev:
-    <<: *backend
-    container_name: ip_backend_dev
-    build:
-      context: .
-      dockerfile: docker/backend.dockerfile
-      target: ip_dev
+      target: app_prod
     environment:
-      - ALLOWED_HOSTS=localhost,backend.dkr
-      - DEFAULT_DATABASE_URL=sqlite:////src/db.sqlite3
-      - DEBUG=on
-      - STATIC_URL=/static/
-      - MEDIA_URL=/media/
-      - SECRET_KEY=django-insecure-)c%s=kj@d9l-n9uv!p&8&60=k74n(y4mf3g*c5r+)5ode7p%k8
+      - DJANGO_SETTINGS_MODULE=app.settings
+    env_file:
+      - path: backend/.env
     ports:
-      - "8000:8000"
-    volumes:
-      - ./backend:/src
+      - "8001:8000"
     networks:
       ip_network:
         aliases:
           - backend.dkr
 
+  backend-dev:
+    <<: *backend
+    build:
+      context: .
+      dockerfile: docker/backend.dockerfile
+      target: app_dev
+    environment:
+        - DJANGO_SETTINGS_MODULE=app.settings-development
+    volumes:
+      - ./backend:/src
+    ports:
+      - "8000:8000"
+
   backend-test:
     <<: *backend
-    container_name: ip-backend-test
     command: python manage.py test
     build:
       context: .
       dockerfile: docker/backend.dockerfile
-      target: ip_test
-    ports:
-      - "8000:8000"
+      target: app_test
     volumes:
       - ./backend:/src
+
+  proxy-dev:
+    build:
+      context: .
+      dockerfile: docker/proxy.dockerfile
+      target: proxy_dev
+    ports:
+      - "4000:80"
+    depends_on:
+      - frontend-dev
+      - backend-dev
+    networks:
+      ip_network:
+        aliases:
+          - proxy.dkr
+
+  redis-dev:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    networks:
+      ip_network:
+        aliases:
+          - redis.dkr
+  
+  celery-worker-dev:
+    build:
+      context: .
+      dockerfile: docker/backend.dockerfile
+      target: celery_worker
+    environment:
+      - DJANGO_SETTINGS_MODULE=app.settings
+    volumes:
+      - ./backend:/src
+    depends_on:
+      - redis-dev
 
 networks:
   ip_network:

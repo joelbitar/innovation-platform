@@ -5,10 +5,18 @@ from django.dispatch import receiver
 from ..models import Vote
 
 
-@receiver(post_delete, sender=Vote)
+def update_round_vote_count(idea, round):
+    idea.roundvotecount_set.update_or_create(
+        round=round,
+        defaults={"count": Vote.objects.filter(idea=idea, round=round).count()}
+    )
+
+
 @receiver(post_save, sender=Vote)
 def create_round_vote_count(sender, instance: Vote, created, **kwargs):
-    instance.idea.roundvotecount_set.update_or_create(
-        round=instance.round,
-        defaults={"count": Vote.objects.filter(idea=instance.idea, round=instance.round).count()}
-    )
+    update_round_vote_count(instance.idea, instance.round)
+
+
+@receiver(post_delete, sender=Vote)
+def delete_round_vote_count(sender, instance: Vote, **kwargs):
+    update_round_vote_count(instance.idea, instance.round)

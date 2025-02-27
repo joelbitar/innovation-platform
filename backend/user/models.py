@@ -10,3 +10,6 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     type = models.CharField(max_length=32, choices=Type.choices, default=Type.CONTRIBUTOR)
+
+    def __str__(self):
+        return f"{self.user.username}'s profile <{self.type.lower()}>"

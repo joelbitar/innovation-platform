@@ -2,13 +2,14 @@ from typing import Optional
 
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import Profile
 
 
 class UserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    label = serializers.SerializerMethodField()
+    label = serializers.SerializerMethodField(help_text='The full name of the user if it exists, otherwise the username')
 
     @staticmethod
     def get_label(obj: Optional[User]) -> Optional[str]:
@@ -37,7 +38,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         # IssueWatcherViewPayloadSerializer
         model = Profile
         fields = '__all__'
-        read_only_fields = ('user', )
+        read_only_fields = ('user',)
 
 
 class UserWithProfileSerializer(UserSerializer):
@@ -50,7 +51,7 @@ class UserWithProfileSerializer(UserSerializer):
         ]
 
 
-class ExtendedUserSerializer(UserWithProfileSerializer):
+class UserWithPermissionsSerializer(UserWithProfileSerializer):
     permissions = serializers.SerializerMethodField()
     group_permissions = serializers.SerializerMethodField()
 
@@ -73,3 +74,30 @@ class ExtendedUserSerializer(UserWithProfileSerializer):
             'is_staff',
             'is_superuser',
         ]
+
+
+class AbbreviatedUserSerializer(UserSerializer):
+    class Meta:
+        model = UserSerializer.Meta.model
+        fields = [
+            'id',
+            'label',
+        ]
+
+
+class CreatedByModelSerializer(serializers.ModelSerializer):
+    created_by = AbbreviatedUserSerializer(read_only=True)
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        data['user_id'] = self.user.pk
+
+        return data
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()

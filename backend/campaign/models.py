@@ -11,7 +11,7 @@ class Campaign(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="campaigns")
-    business_areas = models.ManyToManyField(BusinessArea)
+    business_areas = models.ManyToManyField(BusinessArea, blank=True)
 
     def __str__(self):
         return self.name
@@ -19,7 +19,7 @@ class Campaign(models.Model):
 
 class CampaignRound(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(default='', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rounds")

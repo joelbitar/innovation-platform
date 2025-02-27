@@ -1,15 +1,10 @@
 from django.contrib.auth.models import User
 from rest_framework.viewsets import ModelViewSet
 
-from drp.permissions.model_permissions import ModelPermissions
-from drp.serializers.user import UserWithProfileSerializer
+from user.serializers import UserWithProfileSerializer
 
 
-class UserView(ModelViewSet):
-    permission_classes = [
-        ModelPermissions,
-    ]
-
+class UserViewSet(ModelViewSet):
     serializer_class = UserWithProfileSerializer
 
     def get_queryset(self):

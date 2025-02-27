@@ -1,3 +1,6 @@
+from typing import Type
+
+from rest_framework.exceptions import NotFound
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 
@@ -10,46 +13,22 @@ class UserMeProfileView(CurrentUserViewBase, ModelViewSet):
     """
     View to work with profile for the currently logged in user
     """
+    http_method_names = ['get']
 
-    def get_profile(self):
-        user = self.current_user()
-        profile = Profile.objects.get(user=user)
+    def get_serializer_class(self) -> Type[UserProfileSerializer]:
+        return UserProfileSerializer
 
-        return profile
-
-    def get(self, request):
-        profile = self.get_profile()
-
-        return Response(
-            UserProfileSerializer(profile).data
+    def get_queryset(self):
+        return Profile.objects.filter(
+            user=self.current_user()
         )
 
-    def put(self, request):
-        data = UserProfileSerializer(data=request.data)
+    def get_for_logged_in_user(self, request):
+        profile = self.get_queryset().first()
 
-        if not data.is_valid():
-            return Response(
-                data.errors,
-                status=400
-            )
-
-        profile = self.get_profile()
-
-        # Update data
-        if data.validated_data.get('start_page', None) is not None:
-            profile.start_page = data.validated_data.get('start_page', profile.start_page)
-
-        for key, value in data.validated_data.items():
-            if key == 'type':
-                continue
-
-            setattr(profile, key, value)
-
-        profile.save()
+        if not profile:
+            raise NotFound('Profile does not exist')
 
         return Response(
-            UserProfileSerializer(
-                profile
-            ).data
+            self.get_serializer_class()(profile).data
         )
-
