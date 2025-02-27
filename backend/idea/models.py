@@ -9,12 +9,11 @@ from lib.models.created_by_model_mixin import CreatedByModel
 
 
 # Create your models here.
-class Idea(models.Model):
+class Idea(CreatedByModel):
     title = models.CharField(max_length=255)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ideas")
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name="ideas")
 
     class Visibility(models.TextChoices):

@@ -62,13 +62,13 @@ class IdeaModelIdeaCreationTests(TestCase):
         with self.subTest('User should have one vote'):
             self.assertEqual(
                 1,
-                self.user.vote_set.count()
+                self.user.vote_created_by.count()
             )
 
         with self.subTest('User should have a relation to idea'):
             self.assertEqual(
                 idea,
-                self.user.vote_set.first().idea
+                self.user.vote_created_by.first().idea
             )
 
     # Test should not be able to vote twice on an idea for the same round

@@ -39,7 +39,22 @@ class MarkDeletedModelViewSetTests(TestCase):
                 model_soft_delete_delete.called
             )
 
+    @patch('django.db.models.Model.save')
+    def test_should_the_save(self, models_save):
+        instance = MarkDeletedDummyModel()
+
+        dummy_instance = DummyMarkDeletedModelViewSet()
+        dummy_instance.get_object = lambda: instance
+        dummy_instance.request = type('Request', (), {'user': 'test_user'})
+        dummy_instance.kwargs = {'pk': '123'}
+        dummy_instance.destroy(request=dummy_instance.request)
+
         with self.subTest('Should have set the is_deleted field'):
             self.assertTrue(
                 instance.is_deleted
+            )
+
+        with self.subTest('Should have called the save method'):
+            self.assertTrue(
+                models_save.called
             )

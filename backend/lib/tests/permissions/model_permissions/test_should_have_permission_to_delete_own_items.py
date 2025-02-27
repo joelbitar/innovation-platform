@@ -3,28 +3,19 @@ from django.db import models
 from django.test import TestCase, RequestFactory
 from rest_framework.viewsets import ModelViewSet
 
+from idea.models import Idea
 from lib.models.created_by_model_mixin import CreatedByModel
 from lib.permissions.model_permissions import ModelPermissions
 
 
-class DummyModel(CreatedByModel):
-    class Meta:
-        managed = False
-
-
 class DummyView(ModelViewSet):
     def get_queryset(self):
-        return DummyModel.objects.all()
-
-
-class NotCreatedByModel(models.Model):
-    class Meta:
-        managed = False
+        return Idea.objects.all()
 
 
 class NotCreatedByView(ModelViewSet):
     def get_queryset(self):
-        return NotCreatedByModel.objects.all()
+        return User.objects.all()
 
 
 class PermissionToDeleteOwnItemsTest(TestCase):
@@ -88,7 +79,7 @@ class PermissionToDeleteOwnItemsTest(TestCase):
                 )
             )
 
-        with self.subTest('Should have permission user does not have the delete own permission'):
+        with self.subTest('Should have permission if user has have the delete own permission'):
             self.assertTrue(
                 p.has_permission(
                     request,
@@ -115,7 +106,7 @@ class PermissionToDeleteOwnItemsTest(TestCase):
 
     # Test should have object permission if we delete on view that has queryset with created by model and model with created by as the same user
     def test_should_have_object_permission_object_has_the_request_user_as_creator(self):
-        obj = DummyModel(created_by=self.user)
+        obj = Idea(created_by=self.user)
 
         p = self.helper_get_model_permission_instance()
 
@@ -136,7 +127,7 @@ class PermissionToDeleteOwnItemsTest(TestCase):
                 p.has_object_permission(
                     request,
                     DummyView(),
-                    DummyModel(created_by=User.objects.create_user(username='foo', password='bar'))
+                    Idea(created_by=User.objects.create_user(username='foo', password='bar'))
                 )
             )
 
