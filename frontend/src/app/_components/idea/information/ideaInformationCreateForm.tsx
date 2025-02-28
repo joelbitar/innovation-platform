@@ -5,7 +5,7 @@ import {IdeaInformation} from "@/lib/api";
 import {getClientAPIClient} from "@/lib/apiClientClient";
 
 
-export function IdeaInformationCreateForm({ideaId}: {ideaId: string}) {
+export function IdeaInformationCreateForm({ideaId}: { ideaId: string }) {
     const apiClient = getClientAPIClient()
 
     const {
@@ -15,9 +15,12 @@ export function IdeaInformationCreateForm({ideaId}: {ideaId: string}) {
         formState: {errors},
     } = useForm<IdeaInformation>()
 
-    const onSubmit: (data: IdeaInformation) => void = (data: IdeaInformation) =>  {
-        apiClient.idea.ideaIdeaInformationCreate(ideaId).then(
-            (data) => {
+    const onSubmit: (data: IdeaInformation) => void = (data: IdeaInformation) => {
+        apiClient.idea.ideaIdeaInformationCreate(
+            ideaId,
+            data
+        ).then(
+            (createdIdeaInformation) => {
                 reset()
             },
             (error) => {
@@ -38,8 +41,6 @@ export function IdeaInformationCreateForm({ideaId}: {ideaId: string}) {
                     <textarea {...register("text")}/>
                 </label>
                 <label>
-                    File:
-                    <input type="file" {...register("file")} />
                 </label>
                 <button type="submit">Submit</button>
             </form>
