@@ -3,6 +3,7 @@ import uuid
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
+from django_softdelete.models import SoftDeleteModel
 
 from campaign.models import CampaignRound, Campaign
 from lib.models.created_by_model_mixin import CreatedByModel
@@ -59,11 +60,10 @@ class IdeaFolder(IdeaData):
 
 
 # Holds all kinds of information about an idea
-class Information(IdeaRoundData):
+class Information(IdeaRoundData, SoftDeleteModel):
     def get_file_path(self, filename):
         return f"idea/{self.idea.pk}/files/{timezone.now().isoformat('-')[:10]}/{uuid.uuid4()}/{filename}"
 
-    deleted = models.BooleanField(default=False)
     folder = models.ForeignKey(IdeaFolder, on_delete=models.CASCADE, related_name="information", null=True, blank=True)
     round = models.ForeignKey(CampaignRound, on_delete=models.CASCADE, related_name="information", null=True, blank=True)
     title = models.CharField(max_length=255, default="", blank=True)
