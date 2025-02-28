@@ -1,4 +1,4 @@
-import {getClientAPIClient} from "@/lib/apiClientServer";
+import {getServerAPIClient} from "@/lib/apiClientServer";
 import React from "react";
 import Link from "next/link";
 import IdeaVote from "@/app/_components/idea/ideaVote";
@@ -6,6 +6,7 @@ import {UserPermissions} from "@/lib/userPermissions";
 import IdeaVoteCount from "@/app/_components/idea/ideaVoteCount";
 import SecuredServer from "@/lib/secureClient";
 import {Idea} from "@/lib/api";
+import IdeaLink from "@/app/_components/idea/ideaLink";
 
 type IdeaListProps = {
     campaignId: string,
@@ -14,7 +15,7 @@ type IdeaListProps = {
 }
 
 export default async function IdeaList({campaignId, roundId, voting}: IdeaListProps) {
-    const apiClient = await getClientAPIClient()
+    const apiClient = await getServerAPIClient()
     const ideas = await apiClient.idea.ideaCampaignIdeaList(campaignId)
 
     return (
@@ -23,9 +24,7 @@ export default async function IdeaList({campaignId, roundId, voting}: IdeaListPr
                 {ideas.map((idea: Idea) => (
                     <div key={idea.id} className={'card'}>
                         <h3>
-                            <Link href={`/campaign/${campaignId}/idea/${idea.id}`}>
-                                {idea.title}
-                            </Link>
+                            <IdeaLink idea={idea}/>
                         </h3>
                         {
                             <>

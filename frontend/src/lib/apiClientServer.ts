@@ -8,7 +8,7 @@ async function getSessionId() {
     return cookieStore.get('sessionid')?.value
 }
 
-export async function getClientAPIClient() {
+export async function getServerAPIClient() {
     const sessionId = await getSessionId()
 
     return new ApiClient(

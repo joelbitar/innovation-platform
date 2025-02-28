@@ -158,6 +158,53 @@ class IdeaInformationTests(IdeaInformationTestsBase):
                 response.content
             )
 
+        with self.subTest('Superusers should be able to delete others information'):
+            user.is_superuser = True
+            user.save()
+
+            response = client.delete(
+                reverse(
+                    'round_idea_information-detail',
+                    kwargs={
+                        'round_id': self.campaign_round.id,
+                        'idea_id': self.idea.id,
+                        'pk': information.id
+                    }
+                )
+            )
+
+            self.assertEqual(
+                204,
+                response.status_code,
+                response.content
+            )
+
+            self.assertFalse(
+                Information.objects.filter(
+                    id=information.id
+                ).exists()
+            )
+
+    # Test should be able to create information without round
+    def test_should_be_able_to_create_information_without_round(self):
+        response = self.client.post(
+            reverse(
+                'idea_information-list',
+                kwargs={
+                    'idea_id': self.idea.id
+                }
+            ),
+            {
+                'title': 'Test Information',
+                'text': 'Test Content'
+            }
+        )
+
+        with self.subTest('Response should be 201'):
+            self.assertEqual(201, response.status_code, response.content)
+            self.assertEqual('Test Information', response.data['title'])
+            self.assertEqual('Test Content', response.data['text'])
+
 
 class IdeaInformationFileTests(IdeaInformationTestsBase):
     # Test should be able to upload file
@@ -191,4 +238,3 @@ class IdeaInformationFileTests(IdeaInformationTestsBase):
 
         with self.subTest('Information should have been created with file'):
             self.assertIsNotNone(information.file)
-

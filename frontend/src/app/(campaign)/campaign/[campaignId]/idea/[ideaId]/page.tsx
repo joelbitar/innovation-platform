@@ -2,6 +2,7 @@ import Container from "@/app/_components/container";
 import Header from "@/app/_components/header";
 import IdeaDetails from "@/app/_components/idea/ideaDetails";
 import IdeaEditLink from "@/app/_components/idea/ideaEditLink";
+import IdeaAddInformationLink from "@/app/_components/idea/information/ideaAddInformationLink";
 
 type Params = {
     params: Promise<{
@@ -23,6 +24,7 @@ export default async function IdeaPage(props: Params) {
                 <IdeaDetails id={ideaId}/>
                 <br/>
                 <br/>
+                <IdeaAddInformationLink ideaId={ideaId}/>
                 <IdeaEditLink ideaId={ideaId} campaignId={campaignId}/>
             </Container>
         </main>

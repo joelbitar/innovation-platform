@@ -1,7 +1,7 @@
-import {getClientAPIClient} from "@/lib/apiClientServer";
+import {getServerAPIClient} from "@/lib/apiClientServer";
 
 export default async function CampaignList() {
-    const apiClient = await getClientAPIClient();
+    const apiClient = await getServerAPIClient();
     const campaigns = await apiClient.campaign.campaignList();
 
     return (

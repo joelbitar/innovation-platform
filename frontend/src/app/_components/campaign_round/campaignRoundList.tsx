@@ -1,13 +1,13 @@
 import React from "react";
 import Link from "next/link";
-import {getClientAPIClient} from "@/lib/apiClientServer";
+import {getServerAPIClient} from "@/lib/apiClientServer";
 
 type Props = {
     campaignId: string
 }
 
 export default async function CampaignRoundList({campaignId}: Props) {
-    const apiClient = await getClientAPIClient()
+    const apiClient = await getServerAPIClient()
     const campaignRounds = await apiClient.campaign.campaignRoundList(campaignId)
 
     return (

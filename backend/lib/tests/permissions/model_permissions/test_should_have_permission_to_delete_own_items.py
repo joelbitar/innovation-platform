@@ -64,6 +64,35 @@ class PermissionToDeleteOwnItemsTest(TestCase, UserPermissionsTestMixin):
                 )
             )
 
+    # Test superusers should have permissions both on has_permission and has_object_permission
+    def test_should_have_permission_if_we_delete_on_view_that_has_queryset_with_created_by_model_user_is_superuser(self):
+        self.user.is_superuser = True
+        self.user.save()
+
+        p = self.helper_get_model_permission_instance()
+
+        request = RequestFactory().delete('/')
+        request.user = self.user
+
+        with self.subTest('Should have permission if user is superuser'):
+            self.assertTrue(
+                p.has_permission(
+                    request,
+                    DummyView(),
+                )
+            )
+
+        with self.subTest('Should have permission if user is superuser'):
+            self.assertTrue(
+                p.has_object_permission(
+                    request,
+                    DummyView(),
+                    Idea(
+                        created_by=User.objects.create_user(username='foo', password='bar')
+                    ),
+                )
+            )
+
     def test_should_have_has_permission_if_we_delete_on_view_that_has_queryset_with_created_by_model_user_has_permission(self):
         self.helper_set_has_permission_to_delete_own_items()
 

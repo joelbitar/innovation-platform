@@ -82,10 +82,11 @@ class RoundIdeaMyVoteViewSet(RoundMyVoteViewSet):
         )
 
 
-class RoundIdeaInformationViewSet(CreatedByModelViewSet):
+class IdeaInformationViewSet(CreatedByModelViewSet):
+    queryset = Information.objects.all()
+
     def get_queryset(self):
-        return Information.objects.filter(
-            round_id=self.kwargs['round_id'],
+        return super().get_queryset().filter(
             idea_id=self.kwargs['idea_id']
         )
 
@@ -97,7 +98,24 @@ class RoundIdeaInformationViewSet(CreatedByModelViewSet):
         context.update(
             {
                 'idea': get_object_or_404(Idea, pk=self.kwargs['idea_id']),
+            }
+        )
+        return context
+
+
+class RoundIdeaInformationViewSet(IdeaInformationViewSet):
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            round_id=self.kwargs['round_id']
+        )
+
+    def get_serializer_context(self):
+        # add round to the context
+        context = super().get_serializer_context()
+        context.update(
+            {
                 'round': get_object_or_404(CampaignRound, pk=self.kwargs['round_id']),
             }
         )
+
         return context

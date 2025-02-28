@@ -38,4 +38,9 @@ class ModelPermissions(DjangoModelPermissions):
         return False
 
     def has_object_permission(self, request, view, obj):
+        # If the user is a superuser, they can do anything
+        if request.user.is_superuser:
+            return True
+
+        # Only allow the creator to interact with the object
         return obj.created_by == request.user
