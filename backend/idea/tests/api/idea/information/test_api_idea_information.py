@@ -94,6 +94,11 @@ class IdeaInformationTests(IdeaInformationTestsBase):
             password='testpassword'
         )
 
+        self.helper_add_permission(
+            user,
+            self.PermissionCodeNames.DELETE_OWN_CREATED_BY_INSTANCES
+        )
+
         information = Information.objects.create(
             title='Test Information',
             text='Test Content',

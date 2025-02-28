@@ -6,6 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 from idea.models import Idea
 from lib.models.created_by_model_mixin import CreatedByModel
 from lib.permissions.model_permissions import ModelPermissions
+from user.tests.helpers.user_permissions_mixin import UserPermissionsTestMixin
 
 
 class DummyView(ModelViewSet):
@@ -18,7 +19,7 @@ class NotCreatedByView(ModelViewSet):
         return User.objects.all()
 
 
-class PermissionToDeleteOwnItemsTest(TestCase):
+class PermissionToDeleteOwnItemsTest(TestCase, UserPermissionsTestMixin):
     def setUp(self):
         self.user = User.objects.create_user(
             username='testuser',
@@ -28,7 +29,7 @@ class PermissionToDeleteOwnItemsTest(TestCase):
     def helper_set_has_permission_to_delete_own_items(self, user=None):
         (user or self.user).user_permissions.add(
             Permission.objects.get(
-                codename='delete_own_created_by_instances'
+                codename=self.PermissionCodeNames.DELETE_OWN_CREATED_BY_INSTANCES
             )
         )
 

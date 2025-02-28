@@ -29,9 +29,11 @@ class ModelPermissions(DjangoModelPermissions):
 
             # If the model inherits from CreatedByModel
             if isinstance(model(), CreatedByModel):
-                return request.user.has_perm(
+                has_delete_own_created_by_instances_permission = request.user.has_perm(
                     'lib.delete_own_created_by_instances'
                 )
+
+                return has_delete_own_created_by_instances_permission
 
         return False
 
