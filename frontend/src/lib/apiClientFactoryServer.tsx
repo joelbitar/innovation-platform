@@ -1,5 +1,5 @@
 import {BaseAPI} from "@/lib/hejsan/base";
-import {Configuration} from "@/lib/hejsan";
+import {Configuration, IdeaApi} from "@/lib/hejsan";
 
 import {useCookies} from "next-client-cookies";
 import {getClientAPI} from "@/lib/apiClient";
@@ -30,7 +30,44 @@ async function getConfiguration() {
     })
 }
 
-export async function apiClientFactoryServer(api: typeof BaseAPI) {
+
+export function getClientConfiguration(extraHeaders = {}): Configuration {
+    const cookies = useCookies()
+    return new Configuration(
+        {
+            'baseOptions': {
+                'headers': {
+                    ...{
+                        'X-CSRFToken': cookies.get('csrftoken'),
+                    },
+                    ...extraHeaders
+                }
+            }
+        }
+    )
+}
+
+export function getMultipartHeaders() {
+    return {
+        'Content-Type': 'multipart/form-data'
+    }
+}
+
+
+export function clientAPIFactory(api, extraHeaders = {}) {
+    let conf = getClientConfiguration(extraHeaders)
+
+    return new api(
+        conf,
+        'http://localhost:4000'
+    )
+}
+
+export function getClientIdeaApi(extraHeaders = {}): IdeaApi {
+    return clientAPIFactory(IdeaApi, extraHeaders)
+}
+
+export async function serverAPIFactory(api: typeof BaseAPI) {
     const basePath = 'http://backend.dkr:8000'
 
     const conf = await getConfiguration()
@@ -39,28 +76,4 @@ export async function apiClientFactoryServer(api: typeof BaseAPI) {
         conf,
         basePath,
     )
-}
-
-export function getClientConfiguration(): Configuration {
-    const cookies = useCookies()
-    return new Configuration({
-        'baseOptions': {
-            'headers': {
-                'X-CSRFToken': cookies.get('csrftoken')
-            }
-        }
-    })
-}
-
-export function getInitializationArguments(): [Configuration, string | undefined] {
-
-    return [
-        getClientConfiguration(),
-        'http://localhost:4000'
-    ]
-}
-
-export function apiClientFactoryClient(api: typeof BaseAPI) {
-
-    return new api(...getInitializationArguments())
 }

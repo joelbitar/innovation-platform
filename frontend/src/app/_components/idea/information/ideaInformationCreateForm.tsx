@@ -1,9 +1,8 @@
 'use client'
 
 import {useForm} from "react-hook-form";
-import {Configuration, IdeaApi, IdeaInformation} from "@/lib/hejsan";
-import {apiClientFactoryClient, getInitializationArguments} from "@/lib/apiClientFactoryServer";
-import {useCookies} from "next-client-cookies";
+import {IdeaInformation} from "@/lib/hejsan";
+import {getClientIdeaApi, getMultipartHeaders} from "@/lib/apiClientFactoryServer";
 
 export function IdeaInformationCreateForm({ideaId}: { ideaId: string }) {
     const {
@@ -13,26 +12,8 @@ export function IdeaInformationCreateForm({ideaId}: { ideaId: string }) {
         formState: {errors},
     } = useForm<IdeaInformation>()
 
-    /*
-    const cookies = useCookies()
-
-    const conf = new Configuration({
-        'baseOptions': {
-            'headers': {
-                'X-CSRFToken': cookies.get('csrftoken')
-            }
-        }
-    })
-
-    const ideaApi = new IdeaApi(
-        conf,
-        'http://localhost:4000',
-    )
-     */
-    const ideaApi = new IdeaApi(...getInitializationArguments())
-
-
-    console.log('ideaID', ideaId)
+    const ideaApi = getClientIdeaApi()
+    const ideaFileApi = getClientIdeaApi(getMultipartHeaders())
 
     const onSubmit: (data: IdeaInformation) => void = (data: IdeaInformation) => {
         const file = data.file[0]
@@ -48,15 +29,12 @@ export function IdeaInformationCreateForm({ideaId}: { ideaId: string }) {
                 const formData = new FormData()
                 formData.append('file', file)
 
-                conf['baseOptions']['headers']['Content-Type'] = 'multipart/form-data'
-
-                ideaApi.ideaInformationPartialUpdate(
+                ideaFileApi.ideaInformationPartialUpdate(
                     data.data.id,
                     ideaId,
                     {
                         'file': file
                     },
-                    conf
                 ).then(
                     (d) => {
                         console.log('success', d)
@@ -66,7 +44,7 @@ export function IdeaInformationCreateForm({ideaId}: { ideaId: string }) {
                     }
                 )
 
-                               //reset()
+                //reset()
             },
             (error) => {
                 console.error('error', error)

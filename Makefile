@@ -115,3 +115,7 @@ generate_api_key:
 
 init: build migrate createsuperuser generate_api_key
 	$(info Done initializing)
+
+prune:
+	docker system prune --all --force
+	$(info Pruned)
