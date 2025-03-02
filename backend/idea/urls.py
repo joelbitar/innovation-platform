@@ -1,6 +1,6 @@
 from rest_framework.routers import SimpleRouter
 
-from idea.views import IdeaViewSet, VoteViewSet, CampaignIdeaViewSet, RoundIdeaMyVoteViewSet, RoundMyVoteViewSet, RoundIdeaInformationViewSet, IdeaInformationViewSet
+from .views import IdeaViewSet, VoteViewSet, CampaignIdeaViewSet, RoundIdeaMyVoteViewSet, RoundMyVoteViewSet, RoundIdeaInformationViewSet, IdeaInformationViewSet
 
 router = SimpleRouter()
 router.register('', IdeaViewSet, basename='idea')
