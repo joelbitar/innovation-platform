@@ -492,324 +492,6 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/idea/:
-    get:
-      operationId: idea_list
-      tags:
-      - idea
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Idea'
-          description: ''
-    post:
-      operationId: idea_create
-      tags:
-      - idea
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Idea'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Idea'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Idea'
-        required: true
-      security:
-      - cookieAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Idea'
-          description: ''
-  /api/idea/{idea_id}/information/:
-    get:
-      operationId: idea_information_list
-      parameters:
-      - in: path
-        name: idea_id
-        schema:
-          type: string
-          pattern: ^\d+$
-        required: true
-      tags:
-      - idea
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/IdeaInformation'
-          description: ''
-    post:
-      operationId: idea_information_create
-      parameters:
-      - in: path
-        name: idea_id
-        schema:
-          type: string
-          pattern: ^\d+$
-        required: true
-      tags:
-      - idea
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/IdeaInformation'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/IdeaInformation'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/IdeaInformation'
-      security:
-      - cookieAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IdeaInformation'
-          description: ''
-  /api/idea/{idea_id}/information/{id}/:
-    get:
-      operationId: idea_information_retrieve
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this information.
-        required: true
-      - in: path
-        name: idea_id
-        schema:
-          type: string
-          pattern: ^\d+$
-        required: true
-      tags:
-      - idea
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IdeaInformation'
-          description: ''
-    put:
-      operationId: idea_information_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this information.
-        required: true
-      - in: path
-        name: idea_id
-        schema:
-          type: string
-          pattern: ^\d+$
-        required: true
-      tags:
-      - idea
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/IdeaInformation'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/IdeaInformation'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/IdeaInformation'
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IdeaInformation'
-          description: ''
-    patch:
-      operationId: idea_information_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this information.
-        required: true
-      - in: path
-        name: idea_id
-        schema:
-          type: string
-          pattern: ^\d+$
-        required: true
-      tags:
-      - idea
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedIdeaInformation'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedIdeaInformation'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedIdeaInformation'
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IdeaInformation'
-          description: ''
-    delete:
-      operationId: idea_information_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this information.
-        required: true
-      - in: path
-        name: idea_id
-        schema:
-          type: string
-          pattern: ^\d+$
-        required: true
-      tags:
-      - idea
-      security:
-      - cookieAuth: []
-      responses:
-        '204':
-          description: No response body
-  /api/idea/{id}/:
-    get:
-      operationId: idea_retrieve
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this idea.
-        required: true
-      tags:
-      - idea
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IdeaDetail'
-          description: ''
-    put:
-      operationId: idea_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this idea.
-        required: true
-      tags:
-      - idea
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Idea'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Idea'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Idea'
-        required: true
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Idea'
-          description: ''
-    patch:
-      operationId: idea_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this idea.
-        required: true
-      tags:
-      - idea
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedIdea'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedIdea'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedIdea'
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Idea'
-          description: ''
-    delete:
-      operationId: idea_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this idea.
-        required: true
-      tags:
-      - idea
-      security:
-      - cookieAuth: []
-      responses:
-        '204':
-          description: No response body
   /api/idea/campaign/{campaign_id}/idea/:
     get:
       operationId: idea_campaign_idea_list
@@ -833,6 +515,324 @@ paths:
                 items:
                   $ref: '#/components/schemas/IdeaDetail'
           description: ''
+  /api/idea/idea/:
+    get:
+      operationId: idea_idea_list
+      tags:
+      - idea
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Idea'
+          description: ''
+    post:
+      operationId: idea_idea_create
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Idea'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idea'
+          description: ''
+  /api/idea/idea/{idea_id}/information/:
+    get:
+      operationId: idea_idea_information_list
+      parameters:
+      - in: path
+        name: idea_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - idea
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdeaInformation'
+          description: ''
+    post:
+      operationId: idea_idea_information_create
+      parameters:
+      - in: path
+        name: idea_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdeaInformation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IdeaInformation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IdeaInformation'
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdeaInformation'
+          description: ''
+  /api/idea/idea/{idea_id}/information/{id}/:
+    get:
+      operationId: idea_idea_information_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this information.
+        required: true
+      - in: path
+        name: idea_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - idea
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdeaInformation'
+          description: ''
+    put:
+      operationId: idea_idea_information_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this information.
+        required: true
+      - in: path
+        name: idea_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdeaInformation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IdeaInformation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IdeaInformation'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdeaInformation'
+          description: ''
+    patch:
+      operationId: idea_idea_information_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this information.
+        required: true
+      - in: path
+        name: idea_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedIdeaInformation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedIdeaInformation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedIdeaInformation'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdeaInformation'
+          description: ''
+    delete:
+      operationId: idea_idea_information_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this information.
+        required: true
+      - in: path
+        name: idea_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - idea
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/idea/idea/{id}/:
+    get:
+      operationId: idea_idea_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this idea.
+        required: true
+      tags:
+      - idea
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdeaDetail'
+          description: ''
+    put:
+      operationId: idea_idea_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this idea.
+        required: true
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Idea'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Idea'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idea'
+          description: ''
+    patch:
+      operationId: idea_idea_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this idea.
+        required: true
+      tags:
+      - idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedIdea'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedIdea'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedIdea'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idea'
+          description: ''
+    delete:
+      operationId: idea_idea_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this idea.
+        required: true
+      tags:
+      - idea
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/idea/round/{round_id}/idea/{idea_id}/information/:
     get:
       operationId: idea_round_idea_information_list
