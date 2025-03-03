@@ -1,1 +1,1 @@
-from .delete_created_by_permission import DeleteCreatedByPermission
+from .created_by_permission import DeleteCreatedByPermission
