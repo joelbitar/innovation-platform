@@ -3,4 +3,5 @@ drf-spectacular==0.28.0
 inflection==0.5.1
 uritemplate==4.1.1
 pyyaml==6.0.2
+pip-tools==7.4.1
 mock==5.1.0
