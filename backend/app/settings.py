@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'business',
     'campaign',
     'idea',
+    'file',
 ]
 
 MIDDLEWARE = [
