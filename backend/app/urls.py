@@ -22,6 +22,7 @@ api_urls = [
     path('idea/', include('idea.urls')),
     path('campaign/', include('campaign.urls')),
     path('', include('user.urls')),
+    path('file/', include('file.urls')),
 ]
 
 urlpatterns = [

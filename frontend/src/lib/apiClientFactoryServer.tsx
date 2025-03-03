@@ -1,5 +1,5 @@
 import {BaseAPI} from "@/lib/hejsan/base";
-import {Configuration, IdeaApi} from "@/lib/hejsan";
+import {Configuration, FileApi, IdeaApi} from "@/lib/hejsan";
 
 import {useCookies} from "next-client-cookies";
 import {getClientAPI} from "@/lib/apiClient";
@@ -63,8 +63,12 @@ export function clientAPIFactory(api, extraHeaders = {}) {
     )
 }
 
-export function getClientIdeaApi(extraHeaders = {}): IdeaApi {
-    return clientAPIFactory(IdeaApi, extraHeaders)
+export function getClientIdeaApi(): IdeaApi {
+    return clientAPIFactory(IdeaApi)
+}
+
+export function getClientFileApi() : FileApi {
+    return clientAPIFactory(FileApi, getMultipartHeaders())
 }
 
 export async function serverAPIFactory(api: typeof BaseAPI) {

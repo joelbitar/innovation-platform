@@ -7,6 +7,8 @@ from django.conf import settings
 from django.utils import timezone
 from django_softdelete.models import SoftDeleteModel
 
+from lib.models.created_by_model_mixin import CreatedByModel
+
 
 class Folder(SoftDeleteModel):
     name = models.CharField(max_length=255)
@@ -17,7 +19,7 @@ class Folder(SoftDeleteModel):
 
 
 class FileManager(models.Manager):
-    def create_file(self, namespace, file, **kwargs):
+    def create_file(self, namespace: str, file, **kwargs):
         return self.create(
             namespace=namespace,
             filename=file.name,
@@ -25,8 +27,9 @@ class FileManager(models.Manager):
             **kwargs,
         )
 
+
 # Holds all kinds of information about an idea
-class File(SoftDeleteModel):
+class File(SoftDeleteModel, CreatedByModel):
     def get_file_path(self, filename):
         return os.path.join(
             self.namespace,
@@ -37,10 +40,12 @@ class File(SoftDeleteModel):
 
     objects = FileManager()
 
+    created_at = models.DateTimeField(auto_now_add=True)
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name="information", null=True, blank=True)
     namespace = models.CharField(max_length=255)
     filename = models.CharField(max_length=255, default="", blank=True)
     file = models.FileField(upload_to=get_file_path, null=True, blank=True)
+
 
 class Thingy(models.Model):
     name = models.CharField(max_length=255)

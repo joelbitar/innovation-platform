@@ -492,6 +492,68 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/file/:
+    get:
+      operationId: file_list
+      tags:
+      - file
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileModel'
+          description: ''
+    post:
+      operationId: file_create
+      tags:
+      - file
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileModel'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FileModel'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileModel'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileModel'
+          description: ''
+  /api/file/{id}/:
+    get:
+      operationId: file_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this file.
+        required: true
+      tags:
+      - file
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileModel'
+          description: ''
   /api/idea/:
     get:
       operationId: idea_list
@@ -1427,6 +1489,50 @@ components:
       - id
       - name
       - updated_at
+    FileModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/AbbreviatedUser'
+          readOnly: true
+        deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+        restored_at:
+          type: string
+          format: date-time
+          nullable: true
+        transaction_id:
+          type: string
+          format: uuid
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        namespace:
+          type: string
+          maxLength: 255
+        filename:
+          type: string
+          maxLength: 255
+        file:
+          type: string
+          format: uri
+          nullable: true
+        folder:
+          type: integer
+          nullable: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - namespace
     Idea:
       type: object
       properties:

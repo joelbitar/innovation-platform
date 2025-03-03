@@ -180,6 +180,73 @@ export interface CampaignRound {
 /**
  * 
  * @export
+ * @interface FileModel
+ */
+export interface FileModel {
+    /**
+     * 
+     * @type {number}
+     * @memberof FileModel
+     */
+    'id': number;
+    /**
+     * 
+     * @type {AbbreviatedUser}
+     * @memberof FileModel
+     */
+    'created_by': AbbreviatedUser;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileModel
+     */
+    'deleted_at'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileModel
+     */
+    'restored_at'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileModel
+     */
+    'transaction_id'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileModel
+     */
+    'created_at': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileModel
+     */
+    'namespace': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileModel
+     */
+    'filename'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileModel
+     */
+    'file'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof FileModel
+     */
+    'folder'?: number | null;
+}
+/**
+ * 
+ * @export
  * @interface Idea
  */
 export interface Idea {
@@ -2432,6 +2499,241 @@ export class CampaignApi extends BaseAPI {
      */
     public campaignUpdate(id: number, campaign: Campaign, options?: RawAxiosRequestConfig) {
         return CampaignApiFp(this.configuration).campaignUpdate(id, campaign, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * FileApi - axios parameter creator
+ * @export
+ */
+export const FileApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {FileModel} fileModel 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fileCreate: async (fileModel: FileModel, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'fileModel' is not null or undefined
+            assertParamExists('fileCreate', 'fileModel', fileModel)
+            const localVarPath = `/api/file/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication cookieAuth required
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(fileModel, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fileList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/file/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication cookieAuth required
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id A unique integer value identifying this file.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fileRetrieve: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('fileRetrieve', 'id', id)
+            const localVarPath = `/api/file/{id}/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication cookieAuth required
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * FileApi - functional programming interface
+ * @export
+ */
+export const FileApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = FileApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {FileModel} fileModel 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async fileCreate(fileModel: FileModel, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileModel>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.fileCreate(fileModel, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FileApi.fileCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async fileList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<FileModel>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.fileList(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FileApi.fileList']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id A unique integer value identifying this file.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async fileRetrieve(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileModel>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.fileRetrieve(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FileApi.fileRetrieve']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * FileApi - factory interface
+ * @export
+ */
+export const FileApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = FileApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {FileModel} fileModel 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fileCreate(fileModel: FileModel, options?: RawAxiosRequestConfig): AxiosPromise<FileModel> {
+            return localVarFp.fileCreate(fileModel, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fileList(options?: RawAxiosRequestConfig): AxiosPromise<Array<FileModel>> {
+            return localVarFp.fileList(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id A unique integer value identifying this file.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fileRetrieve(id: number, options?: RawAxiosRequestConfig): AxiosPromise<FileModel> {
+            return localVarFp.fileRetrieve(id, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * FileApi - object-oriented interface
+ * @export
+ * @class FileApi
+ * @extends {BaseAPI}
+ */
+export class FileApi extends BaseAPI {
+    /**
+     * 
+     * @param {FileModel} fileModel 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public fileCreate(fileModel: FileModel, options?: RawAxiosRequestConfig) {
+        return FileApiFp(this.configuration).fileCreate(fileModel, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public fileList(options?: RawAxiosRequestConfig) {
+        return FileApiFp(this.configuration).fileList(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id A unique integer value identifying this file.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public fileRetrieve(id: number, options?: RawAxiosRequestConfig) {
+        return FileApiFp(this.configuration).fileRetrieve(id, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -82,9 +82,8 @@ makemigrations:
 generate-openapischema:
 	docker compose run backend-dev sh -c "python manage.py spectacular --file openapischema.yml"
 	docker compose run backend-dev sh -c "python manage.py spectacular --format openapi-json --file openapischema.json"
-	docker compose exec backend-dev sh -c "chmod -R 664 openapischema.yml && chown -R $(shell id -u):$(shell id -g) openapischema.yml"
-	mv backend/openapischema.yml openapischema.yml
-	mv backend/openapischema.json openapischema.json
+	docker compose exec backend-dev sh -c "chmod -R 664 openapischema.* && chown -R $(shell id -u):$(shell id -g) openapischema.*"
+	mv backend/openapischema.* .
 
 generate-frontend-api-service: generate-openapischema
 	docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate -i /local/openapischema.yml -g typescript-axios -o /local/frontend/src/lib/api
@@ -95,7 +94,8 @@ generate-frontend-api-service: generate-openapischema
 	rm frontend/openapischema.yml
 
 generate-api-client: generate-openapischema
-	docker compose run frontend-dev sh -c "./node_modules/openapi-typescript/bin/cli.js openapischema.yml -o src/lib/api/schema.d.ts"
+	#docker compose run frontend-dev sh -c "./node_modules/openapi-typescript/bin/cli.js openapischema.yml -o src/lib/api/schema.d.ts"
+	docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate -i /local/openapischema.yml -g typescript-axios -o /local/frontend/src/lib/hejsan
 
 generate-frontend-permissions:
 	docker compose run backend-dev sh -c "python manage.py generate_permissions_jsx temp_generated_permissions.jsx; chmod -R 664 temp_generated_permissions.jsx && chown -R $(shell id -u):$(shell id -g) temp_generated_permissions.jsx"

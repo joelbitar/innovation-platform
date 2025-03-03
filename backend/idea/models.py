@@ -6,6 +6,7 @@ from django.utils import timezone
 from django_softdelete.models import SoftDeleteModel
 
 from campaign.models import CampaignRound, Campaign
+from file.models import File
 from lib.models.created_by_model_mixin import CreatedByModel
 
 
@@ -61,14 +62,17 @@ class IdeaFolder(IdeaData):
 
 # Holds all kinds of information about an idea
 class Information(IdeaRoundData, SoftDeleteModel):
-    def get_file_path(self, filename):
-        return f"idea/{self.idea.pk}/files/{timezone.now().isoformat('-')[:10]}/{uuid.uuid4()}/{filename}"
+    def get_file_path(self, *args):
+        """
+        Legace
+        """
+        return f""
 
     folder = models.ForeignKey(IdeaFolder, on_delete=models.CASCADE, related_name="information", null=True, blank=True)
     round = models.ForeignKey(CampaignRound, on_delete=models.CASCADE, related_name="information", null=True, blank=True)
     title = models.CharField(max_length=255, default="", blank=True)
     text = models.TextField(default="", blank=True)
-    file = models.FileField(upload_to=get_file_path, null=True, blank=True)
+    file = models.OneToOneField(File, null=True, blank=True, on_delete=models.CASCADE)
 
 
 class Comment(IdeaRoundData):
