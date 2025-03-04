@@ -39,37 +39,6 @@ class IdeaAPIVoteTests(AuthenticatedClientTestCase):
             created_by=self.user
         )
 
-    # Test should be able to create an idea on a campaign
-    def test_should_be_able_to_create_an_idea_on_a_campaign(self):
-        response = self.client.post(
-            reverse(
-                'vote-list',
-            ),
-            {
-                'idea': self.idea.pk,
-                'round': self.round.pk,
-            }
-        )
-
-        with self.subTest('Should return created response'):
-            self.assertEqual(
-                201,
-                response.status_code,
-                response.content,
-            )
-
-        with self.subTest('Should create a vote'):
-            self.assertEqual(
-                1,
-                self.idea.vote_set.count()
-            )
-
-        with self.subTest('Should create a vote on the round'):
-            self.assertEqual(
-                self.round,
-                self.idea.vote_set.first().round
-            )
-
     # Test should be able to get a detailed view of an idea that has votes on it
     def test_should_be_able_to_get_a_detailed_view_of_an_idea_that_has_votes_on_it(self):
         self.idea.add_vote(
@@ -264,6 +233,13 @@ class IdeaAPIVoteTests(AuthenticatedClientTestCase):
 
     # Test should be able to remove vote for myself
     def test_should_be_able_to_remove_vote_for_myself(self):
+        self.user.is_superuser = False
+        self.helper_add_permission(
+            self.user,
+            self.PermissionCodeNames.DELETE_OWN_CREATED_BY_INSTANCES,
+        )
+        self.user.save()
+
         vote = self.idea.add_vote(
             campaign_round=self.round,
             user=self.user
@@ -287,6 +263,25 @@ class IdeaAPIVoteTests(AuthenticatedClientTestCase):
             self.assertEqual(
                 0,
                 self.idea.vote_set.count()
+            )
+
+        vote = self.idea.add_vote(
+            campaign_round=self.round,
+            user=User.objects.create_user('testusere', 'testpassword')
+        )
+
+        with self.subTest('Should not be able to remove others votes'):
+            response = self.client.delete(
+                reverse(
+                    'vote-detail',
+                    kwargs={'pk': vote.pk}
+                )
+            )
+
+            self.assertEqual(
+                403,
+                response.status_code,
+                response.content
             )
 
 

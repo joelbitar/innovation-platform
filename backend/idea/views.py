@@ -25,6 +25,8 @@ class VoteViewSet(CreatedByModelViewSet):
     queryset = Vote.objects.all()
     serializer_class = VoteSerializer
 
+    http_method_names = ['delete']
+
 
 class CampaignIdeaViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = IdeaDetailSerializer

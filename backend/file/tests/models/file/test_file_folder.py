@@ -4,6 +4,7 @@ from datetime import datetime
 import random
 from unittest.mock import patch
 
+from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
@@ -18,6 +19,7 @@ class OneToOneFieldTest(TestCase):
         random_file_name = "".join(random.choices(string.ascii_letters, k=17))
 
         file = File.objects.create_file(
+            created_by=User.objects.create_user(username='test_user'),
             namespace='test_namespace',
             file=SimpleUploadedFile(f'file_{random_file_name}.txt', b'file content')
         )
