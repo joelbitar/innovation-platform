@@ -95,7 +95,7 @@ generate-frontend-api-service: generate-openapischema
 
 generate-api-client: generate-openapischema
 	#docker compose run frontend-dev sh -c "./node_modules/openapi-typescript/bin/cli.js openapischema.yml -o src/lib/api/schema.d.ts"
-	docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate -i /local/openapischema.yml -g typescript-axios -o /local/frontend/src/lib/hejsan
+	docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate -i /local/openapischema.yml -g typescript-axios -o /local/frontend/src/lib/api
 
 generate-frontend-permissions:
 	docker compose run backend-dev sh -c "python manage.py generate_permissions_jsx temp_generated_permissions.jsx; chmod -R 664 temp_generated_permissions.jsx && chown -R $(shell id -u):$(shell id -g) temp_generated_permissions.jsx"
