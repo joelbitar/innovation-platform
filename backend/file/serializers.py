@@ -1,19 +1,19 @@
-from django.contrib.auth.models import User
-from django.core.exceptions import SuspiciousOperation
-from rest_framework import serializers
+import importlib
 
-from file.models import File
-from idea.models import Information
+from django.contrib.auth.models import User
+from rest_framework import serializers
+from rest_framework.exceptions import PermissionDenied
+
+from file.models import RelatedFile
 from lib.exceptions.conflict import Conflict
 from lib.permissions.model_permissions import ModelPermissions
 from user.serializers import CreatedByModelSerializer
-from rest_framework.exceptions import PermissionDenied
-import importlib
 
 
-class FileModelSerializer(CreatedByModelSerializer):
+class RelatedFileSerializer(CreatedByModelSerializer):
     related_model = serializers.CharField(required=True, write_only=True)
     related_pk = serializers.IntegerField(required=True, write_only=True)
+    file = serializers.FileField(required=True)
 
     def get_related_to_model_instance(self, validated_data):
         related_app, related_model = validated_data.pop('related_model').split('.')
@@ -31,7 +31,7 @@ class FileModelSerializer(CreatedByModelSerializer):
     def current_user(self) -> User:
         return self.context['request'].user
 
-    def update(self, instance: File, validated_data):
+    def update(self, instance: RelatedFile, validated_data):
         related_to_instance = self.get_related_to_model_instance(validated_data)
 
         if not ModelPermissions.user_has_permission_for_model(
@@ -60,6 +60,9 @@ class FileModelSerializer(CreatedByModelSerializer):
         if not ModelPermissions.user_has_permission_for_instance(self.current_user, related_to_instance):
             raise PermissionDenied('You do not have permission to create a file for this object')
 
+        namespace = related_to_instance.__class__.file.field.get_namespace()
+        validated_data['namespace'] = namespace
+
         file = super().create(validated_data)
 
         related_to_instance.file = file
@@ -68,5 +71,9 @@ class FileModelSerializer(CreatedByModelSerializer):
         return file
 
     class Meta:
-        model = File
-        fields = '__all__'
+        model = RelatedFile
+        fields = (
+            'related_model',
+            'related_pk',
+            'file',
+        )

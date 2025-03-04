@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
-from file.models import File, Thingy
+from file.models import RelatedFile, Thingy
 
 
 class OneToOneFieldTest(TestCase):
@@ -18,7 +18,7 @@ class OneToOneFieldTest(TestCase):
     def test_create_file_should_create_and_save_new_file(self, *args, **kwargs):
         random_file_name = "".join(random.choices(string.ascii_letters, k=17))
 
-        file = File.objects.create_file(
+        file = RelatedFile.objects.create_file(
             created_by=User.objects.create_user(username='test_user'),
             namespace='test_namespace',
             file=SimpleUploadedFile(f'file_{random_file_name}.txt', b'file content')

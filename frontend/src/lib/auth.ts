@@ -1,9 +1,9 @@
 'use client';
 
-import {ApiClient} from "@/lib/api/ApiClient";
-import {UserWithPermissions} from "@/lib/api/models/UserWithPermissions";
 
-const apiClient = new ApiClient()
+import {getClientAuthApi} from "@/lib/apiClientFactory";
+import {UserWithPermissions} from "@/lib/hejsan";
+
 
 export function setLocalStorageUserData(data: any) {
     localStorage.setItem('user', JSON.stringify(data))
@@ -20,8 +20,10 @@ export function getLocalStorageUserData() {
 
 
 export function login(username: string, password: string): Promise<UserWithPermissions> {
+    const authApiClient = getClientAuthApi()
+
     return new Promise((resolve, reject) => {
-        apiClient.auth.authLoginCreate({
+        authApiClient.authLoginCreate({
             username,
             password
         }).then(
@@ -37,8 +39,10 @@ export function login(username: string, password: string): Promise<UserWithPermi
 }
 
 export function logout(): Promise<null> {
+    const authApiClient = getClientAuthApi()
+
     return new Promise((resolve, reject) => {
-        apiClient.auth.authLogoutCreate().then(
+        authApiClient.authLogoutCreate().then(
             (data) => {
                 resolve(null)
             },

@@ -4,7 +4,7 @@ import {getServerAPIClient} from "@/lib/apiClientServer";
 import {IdeaInformationCreateForm} from "@/app/_components/idea/information/ideaInformationCreateForm";
 import IdeaLink from "@/app/_components/idea/ideaLink";
 import {getServerAPI} from "@/lib/apiClient";
-import {serverAPIFactory} from "@/lib/apiClientFactoryServer";
+import {getServerIdeaApi, serverAPIFactory} from "@/lib/apiClientFactory";
 import {IdeaApi} from "@/lib/hejsan";
 
 type Params = {
@@ -20,7 +20,7 @@ export default async function IdeaInformationAddPage(props: Params) {
     //const idea = await apiClient.idea.ideaIdeaRetrieve(params.ideaId)
     //const apiClient = await getServerAPI()
     //const idea = await apiClient.idea
-    const ideaService = await serverAPIFactory(IdeaApi)
+    const ideaService = await getServerIdeaApi()
     const idea = (await ideaService.ideaRetrieve(params.ideaId)).data
 
     return (

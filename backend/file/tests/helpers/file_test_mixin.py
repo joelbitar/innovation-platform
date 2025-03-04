@@ -3,7 +3,7 @@ import string
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from file.models import File
+from file.models import RelatedFile
 import random
 
 
@@ -26,7 +26,7 @@ class FileTestsMixin:
             )
         )
 
-        return File.objects.create_file(
+        return RelatedFile.objects.create_file(
             namespace=namespace,
             created_by=created_by,
             file=file,

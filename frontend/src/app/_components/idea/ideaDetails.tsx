@@ -1,8 +1,8 @@
-import {getServerAPIClient} from "@/lib/apiClientServer";
+import {getServerIdeaApi} from "@/lib/apiClientFactory";
 
-export default async function IdeaDetails({id}: { id: string }) {
-    const apiClient = await getServerAPIClient()
-    const idea = await apiClient.idea.ideaIdeaRetrieve(id)
+export default async function IdeaDetails({id}: { id: number }) {
+    const ideaApi = await getServerIdeaApi()
+    const idea = await ideaApi.ideaRetrieve(id)
 
     return (
         <div>

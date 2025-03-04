@@ -180,73 +180,6 @@ export interface CampaignRound {
 /**
  * 
  * @export
- * @interface FileModel
- */
-export interface FileModel {
-    /**
-     * 
-     * @type {number}
-     * @memberof FileModel
-     */
-    'id': number;
-    /**
-     * 
-     * @type {AbbreviatedUser}
-     * @memberof FileModel
-     */
-    'created_by': AbbreviatedUser;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileModel
-     */
-    'deleted_at'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileModel
-     */
-    'restored_at'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileModel
-     */
-    'transaction_id'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileModel
-     */
-    'created_at': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileModel
-     */
-    'namespace': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileModel
-     */
-    'filename'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileModel
-     */
-    'file'?: string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof FileModel
-     */
-    'folder'?: number | null;
-}
-/**
- * 
- * @export
  * @interface Idea
  */
 export interface Idea {
@@ -426,12 +359,6 @@ export interface IdeaInformation {
     'text'?: string;
     /**
      * 
-     * @type {string}
-     * @memberof IdeaInformation
-     */
-    'file'?: string | null;
-    /**
-     * 
      * @type {number}
      * @memberof IdeaInformation
      */
@@ -448,6 +375,12 @@ export interface IdeaInformation {
      * @memberof IdeaInformation
      */
     'round'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof IdeaInformation
+     */
+    'file'?: number | null;
 }
 /**
  * 
@@ -722,12 +655,6 @@ export interface PatchedIdeaInformation {
     'text'?: string;
     /**
      * 
-     * @type {string}
-     * @memberof PatchedIdeaInformation
-     */
-    'file'?: string | null;
-    /**
-     * 
      * @type {number}
      * @memberof PatchedIdeaInformation
      */
@@ -744,49 +671,62 @@ export interface PatchedIdeaInformation {
      * @memberof PatchedIdeaInformation
      */
     'round'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedIdeaInformation
+     */
+    'file'?: number | null;
 }
 /**
  * 
  * @export
- * @interface PatchedVote
+ * @interface PatchedRelatedFile
  */
-export interface PatchedVote {
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedVote
-     */
-    'id'?: number;
-    /**
-     * 
-     * @type {AbbreviatedUser}
-     * @memberof PatchedVote
-     */
-    'created_by'?: AbbreviatedUser;
+export interface PatchedRelatedFile {
     /**
      * 
      * @type {string}
-     * @memberof PatchedVote
+     * @memberof PatchedRelatedFile
      */
-    'created_at'?: string;
+    'related_model'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedRelatedFile
+     */
+    'related_pk'?: number;
     /**
      * 
      * @type {string}
-     * @memberof PatchedVote
+     * @memberof PatchedRelatedFile
      */
-    'updated_at'?: string;
+    'file'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface RelatedFile
+ */
+export interface RelatedFile {
+    /**
+     * 
+     * @type {string}
+     * @memberof RelatedFile
+     */
+    'related_model': string;
     /**
      * 
      * @type {number}
-     * @memberof PatchedVote
+     * @memberof RelatedFile
      */
-    'idea'?: number;
+    'related_pk': number;
     /**
      * 
-     * @type {number}
-     * @memberof PatchedVote
+     * @type {string}
+     * @memberof RelatedFile
      */
-    'round'?: number;
+    'file': string;
 }
 /**
  * 
@@ -2512,13 +2452,13 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
-         * @param {FileModel} fileModel 
+         * @param {RelatedFile} relatedFile 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        fileCreate: async (fileModel: FileModel, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'fileModel' is not null or undefined
-            assertParamExists('fileCreate', 'fileModel', fileModel)
+        fileCreate: async (relatedFile: RelatedFile, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'relatedFile' is not null or undefined
+            assertParamExists('fileCreate', 'relatedFile', relatedFile)
             const localVarPath = `/api/file/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2540,7 +2480,42 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(fileModel, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(relatedFile, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id A unique integer value identifying this related file.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fileDestroy: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('fileDestroy', 'id', id)
+            const localVarPath = `/api/file/{id}/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication cookieAuth required
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2580,7 +2555,46 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {number} id A unique integer value identifying this file.
+         * @param {number} id A unique integer value identifying this related file.
+         * @param {PatchedRelatedFile} [patchedRelatedFile] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        filePartialUpdate: async (id: number, patchedRelatedFile?: PatchedRelatedFile, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('filePartialUpdate', 'id', id)
+            const localVarPath = `/api/file/{id}/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication cookieAuth required
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patchedRelatedFile, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id A unique integer value identifying this related file.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2625,14 +2639,26 @@ export const FileApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {FileModel} fileModel 
+         * @param {RelatedFile} relatedFile 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async fileCreate(fileModel: FileModel, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileModel>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.fileCreate(fileModel, options);
+        async fileCreate(relatedFile: RelatedFile, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RelatedFile>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.fileCreate(relatedFile, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FileApi.fileCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id A unique integer value identifying this related file.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async fileDestroy(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.fileDestroy(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FileApi.fileDestroy']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2640,7 +2666,7 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async fileList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<FileModel>>> {
+        async fileList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<RelatedFile>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.fileList(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FileApi.fileList']?.[localVarOperationServerIndex]?.url;
@@ -2648,11 +2674,24 @@ export const FileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} id A unique integer value identifying this file.
+         * @param {number} id A unique integer value identifying this related file.
+         * @param {PatchedRelatedFile} [patchedRelatedFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async fileRetrieve(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileModel>> {
+        async filePartialUpdate(id: number, patchedRelatedFile?: PatchedRelatedFile, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RelatedFile>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.filePartialUpdate(id, patchedRelatedFile, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FileApi.filePartialUpdate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id A unique integer value identifying this related file.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async fileRetrieve(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RelatedFile>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.fileRetrieve(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['FileApi.fileRetrieve']?.[localVarOperationServerIndex]?.url;
@@ -2670,28 +2709,47 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
-         * @param {FileModel} fileModel 
+         * @param {RelatedFile} relatedFile 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        fileCreate(fileModel: FileModel, options?: RawAxiosRequestConfig): AxiosPromise<FileModel> {
-            return localVarFp.fileCreate(fileModel, options).then((request) => request(axios, basePath));
+        fileCreate(relatedFile: RelatedFile, options?: RawAxiosRequestConfig): AxiosPromise<RelatedFile> {
+            return localVarFp.fileCreate(relatedFile, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id A unique integer value identifying this related file.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fileDestroy(id: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.fileDestroy(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        fileList(options?: RawAxiosRequestConfig): AxiosPromise<Array<FileModel>> {
+        fileList(options?: RawAxiosRequestConfig): AxiosPromise<Array<RelatedFile>> {
             return localVarFp.fileList(options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {number} id A unique integer value identifying this file.
+         * @param {number} id A unique integer value identifying this related file.
+         * @param {PatchedRelatedFile} [patchedRelatedFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        fileRetrieve(id: number, options?: RawAxiosRequestConfig): AxiosPromise<FileModel> {
+        filePartialUpdate(id: number, patchedRelatedFile?: PatchedRelatedFile, options?: RawAxiosRequestConfig): AxiosPromise<RelatedFile> {
+            return localVarFp.filePartialUpdate(id, patchedRelatedFile, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id A unique integer value identifying this related file.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        fileRetrieve(id: number, options?: RawAxiosRequestConfig): AxiosPromise<RelatedFile> {
             return localVarFp.fileRetrieve(id, options).then((request) => request(axios, basePath));
         },
     };
@@ -2706,13 +2764,24 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
 export class FileApi extends BaseAPI {
     /**
      * 
-     * @param {FileModel} fileModel 
+     * @param {RelatedFile} relatedFile 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public fileCreate(fileModel: FileModel, options?: RawAxiosRequestConfig) {
-        return FileApiFp(this.configuration).fileCreate(fileModel, options).then((request) => request(this.axios, this.basePath));
+    public fileCreate(relatedFile: RelatedFile, options?: RawAxiosRequestConfig) {
+        return FileApiFp(this.configuration).fileCreate(relatedFile, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id A unique integer value identifying this related file.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public fileDestroy(id: number, options?: RawAxiosRequestConfig) {
+        return FileApiFp(this.configuration).fileDestroy(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2727,7 +2796,19 @@ export class FileApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} id A unique integer value identifying this file.
+     * @param {number} id A unique integer value identifying this related file.
+     * @param {PatchedRelatedFile} [patchedRelatedFile] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public filePartialUpdate(id: number, patchedRelatedFile?: PatchedRelatedFile, options?: RawAxiosRequestConfig) {
+        return FileApiFp(this.configuration).filePartialUpdate(id, patchedRelatedFile, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id A unique integer value identifying this related file.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
@@ -3619,43 +3700,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {Vote} vote 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ideaVoteCreate: async (vote: Vote, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'vote' is not null or undefined
-            assertParamExists('ideaVoteCreate', 'vote', vote)
-            const localVarPath = `/api/idea/vote/`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(vote, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {number} id A unique integer value identifying this vote.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3683,152 +3727,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ideaVoteList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/idea/vote/`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {number} id A unique integer value identifying this vote.
-         * @param {PatchedVote} [patchedVote] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ideaVotePartialUpdate: async (id: number, patchedVote?: PatchedVote, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('ideaVotePartialUpdate', 'id', id)
-            const localVarPath = `/api/idea/vote/{id}/`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(patchedVote, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {number} id A unique integer value identifying this vote.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ideaVoteRetrieve: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('ideaVoteRetrieve', 'id', id)
-            const localVarPath = `/api/idea/vote/{id}/`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {number} id A unique integer value identifying this vote.
-         * @param {Vote} vote 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ideaVoteUpdate: async (id: number, vote: Vote, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('ideaVoteUpdate', 'id', id)
-            // verify required parameter 'vote' is not null or undefined
-            assertParamExists('ideaVoteUpdate', 'vote', vote)
-            const localVarPath = `/api/idea/vote/{id}/`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(vote, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4135,18 +4033,6 @@ export const IdeaApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {Vote} vote 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async ideaVoteCreate(vote: Vote, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Vote>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.ideaVoteCreate(vote, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['IdeaApi.ideaVoteCreate']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
          * @param {number} id A unique integer value identifying this vote.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4155,55 +4041,6 @@ export const IdeaApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.ideaVoteDestroy(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['IdeaApi.ideaVoteDestroy']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async ideaVoteList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Vote>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.ideaVoteList(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['IdeaApi.ideaVoteList']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {number} id A unique integer value identifying this vote.
-         * @param {PatchedVote} [patchedVote] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async ideaVotePartialUpdate(id: number, patchedVote?: PatchedVote, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Vote>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.ideaVotePartialUpdate(id, patchedVote, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['IdeaApi.ideaVotePartialUpdate']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {number} id A unique integer value identifying this vote.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async ideaVoteRetrieve(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Vote>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.ideaVoteRetrieve(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['IdeaApi.ideaVoteRetrieve']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {number} id A unique integer value identifying this vote.
-         * @param {Vote} vote 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async ideaVoteUpdate(id: number, vote: Vote, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Vote>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.ideaVoteUpdate(id, vote, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['IdeaApi.ideaVoteUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -4440,58 +4277,12 @@ export const IdeaApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @param {Vote} vote 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ideaVoteCreate(vote: Vote, options?: RawAxiosRequestConfig): AxiosPromise<Vote> {
-            return localVarFp.ideaVoteCreate(vote, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @param {number} id A unique integer value identifying this vote.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         ideaVoteDestroy(id: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.ideaVoteDestroy(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ideaVoteList(options?: RawAxiosRequestConfig): AxiosPromise<Array<Vote>> {
-            return localVarFp.ideaVoteList(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {number} id A unique integer value identifying this vote.
-         * @param {PatchedVote} [patchedVote] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ideaVotePartialUpdate(id: number, patchedVote?: PatchedVote, options?: RawAxiosRequestConfig): AxiosPromise<Vote> {
-            return localVarFp.ideaVotePartialUpdate(id, patchedVote, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {number} id A unique integer value identifying this vote.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ideaVoteRetrieve(id: number, options?: RawAxiosRequestConfig): AxiosPromise<Vote> {
-            return localVarFp.ideaVoteRetrieve(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {number} id A unique integer value identifying this vote.
-         * @param {Vote} vote 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ideaVoteUpdate(id: number, vote: Vote, options?: RawAxiosRequestConfig): AxiosPromise<Vote> {
-            return localVarFp.ideaVoteUpdate(id, vote, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4771,17 +4562,6 @@ export class IdeaApi extends BaseAPI {
 
     /**
      * 
-     * @param {Vote} vote 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IdeaApi
-     */
-    public ideaVoteCreate(vote: Vote, options?: RawAxiosRequestConfig) {
-        return IdeaApiFp(this.configuration).ideaVoteCreate(vote, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
      * @param {number} id A unique integer value identifying this vote.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -4789,51 +4569,6 @@ export class IdeaApi extends BaseAPI {
      */
     public ideaVoteDestroy(id: number, options?: RawAxiosRequestConfig) {
         return IdeaApiFp(this.configuration).ideaVoteDestroy(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IdeaApi
-     */
-    public ideaVoteList(options?: RawAxiosRequestConfig) {
-        return IdeaApiFp(this.configuration).ideaVoteList(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {number} id A unique integer value identifying this vote.
-     * @param {PatchedVote} [patchedVote] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IdeaApi
-     */
-    public ideaVotePartialUpdate(id: number, patchedVote?: PatchedVote, options?: RawAxiosRequestConfig) {
-        return IdeaApiFp(this.configuration).ideaVotePartialUpdate(id, patchedVote, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {number} id A unique integer value identifying this vote.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IdeaApi
-     */
-    public ideaVoteRetrieve(id: number, options?: RawAxiosRequestConfig) {
-        return IdeaApiFp(this.configuration).ideaVoteRetrieve(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {number} id A unique integer value identifying this vote.
-     * @param {Vote} vote 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IdeaApi
-     */
-    public ideaVoteUpdate(id: number, vote: Vote, options?: RawAxiosRequestConfig) {
-        return IdeaApiFp(this.configuration).ideaVoteUpdate(id, vote, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -29,7 +29,7 @@ class FileManager(models.Manager):
 
 
 # Holds all kinds of information about an idea
-class File(SoftDeleteModel, CreatedByModel):
+class RelatedFile(SoftDeleteModel, CreatedByModel):
     def get_file_path(self, filename):
         return os.path.join(
             self.namespace,
@@ -41,12 +41,8 @@ class File(SoftDeleteModel, CreatedByModel):
     objects = FileManager()
 
     created_at = models.DateTimeField(auto_now_add=True)
-    folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name="information", null=True, blank=True)
-    namespace = models.CharField(max_length=255)
+    folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name="information", null=True, blank=True, default=None)
+    namespace = models.CharField(max_length=255, editable=False)
     filename = models.CharField(max_length=255, default="", blank=True)
     file = models.FileField(upload_to=get_file_path, null=True, blank=True)
 
-
-class Thingy(models.Model):
-    name = models.CharField(max_length=255)
-    media_thing = models.OneToOneField(File, on_delete=models.CASCADE, related_name='thingy', null=True)

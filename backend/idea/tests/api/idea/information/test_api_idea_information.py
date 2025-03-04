@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 
 from campaign.models import Campaign, CampaignRound
-from file.models import File
+from file.models import RelatedFile
 from idea.models import Idea, Information
 from user.tests.helpers.authenticated_test_case import AuthenticatedClientTestCase
 
@@ -211,7 +211,7 @@ class IdeaInformationFileTests(IdeaInformationTestsBase):
     # Test should be able to upload file
 
     def tearDown(self):
-        for file in File.objects.all():
+        for file in RelatedFile.objects.all():
             file.file.delete()
         super().tearDown()
 

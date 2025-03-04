@@ -5,7 +5,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 
 from campaign.models import Campaign
-from file.models import File
+from file.models import RelatedFile
 from idea.models import Information, Idea
 from lib.permissions.model_permissions import ModelPermissions
 from user.tests.helpers.authenticated_test_case import AuthenticatedClientTestCase
@@ -34,10 +34,11 @@ class FileAPICreateTests(AuthenticatedClientTestCase):
         )
 
     # Test should be able to post a file
-    def test_should_be_able_to_post_a_file(self):
+    @patch('file.fields.RelatedFileField.get_namespace', return_value='test_namespace')
+    def test_should_be_able_to_post_a_file(self, mock_get_namespace):
         self.helper_add_permission(
             self.user,
-            'add_file'
+            'add_relatedfile'
         )
         information = self.helper_create_information()
         response = self.client.post(
@@ -45,13 +46,15 @@ class FileAPICreateTests(AuthenticatedClientTestCase):
                 'file-list'
             ),
             {
-                'namespace': 'test_namespace',
                 'related_model': 'idea.Information',
                 'related_pk': information.pk,
                 'file': SimpleUploadedFile('image.png', b'content', content_type='text/plain'),
             },
             format='multipart'
         )
+
+        with self.subTest('Should query get_namespace function'):
+            mock_get_namespace.assert_called_once()
 
         with self.subTest('Should work for informations we have access to'):
             self.assertEqual(
@@ -62,11 +65,11 @@ class FileAPICreateTests(AuthenticatedClientTestCase):
 
             self.assertEqual(
                 1,
-                File.objects.all().count(),
+                RelatedFile.objects.all().count(),
             )
 
             self.assertIsNotNone(
-                file := File.objects.first()
+                file := RelatedFile.objects.first()
             )
 
             self.assertEqual(
@@ -83,7 +86,6 @@ class FileAPICreateTests(AuthenticatedClientTestCase):
                     'file-list'
                 ),
                 {
-                    'namespace': 'test_namespace',
                     'related_model': 'idea.Information',
                     'related_pk': information.pk,
                     'file': SimpleUploadedFile('image.png', b'content', content_type='text/plain'),
@@ -109,7 +111,6 @@ class FileAPICreateTests(AuthenticatedClientTestCase):
                 'file-list'
             ),
             {
-                'namespace': 'test_namespace',
                 'related_model': 'idea.Information',
                 'related_pk': information.pk,
                 'file': SimpleUploadedFile('image.png', b'content', content_type='text/plain'),
@@ -126,11 +127,11 @@ class FileAPICreateTests(AuthenticatedClientTestCase):
 
             self.assertEqual(
                 1,
-                File.objects.all().count(),
+                RelatedFile.objects.all().count(),
             )
 
             self.assertIsNotNone(
-                file := File.objects.first()
+                file := RelatedFile.objects.first()
             )
 
             self.assertEqual(
@@ -146,7 +147,7 @@ class FileAPICreateTests(AuthenticatedClientTestCase):
         )
 
         information = self.helper_create_information()
-        file = File.objects.create(
+        file = RelatedFile.objects.create(
             namespace='test_namespace',
             file=SimpleUploadedFile('first_file.txt', b'content', content_type='text/plain'),
             created_by=self.user
@@ -162,7 +163,6 @@ class FileAPICreateTests(AuthenticatedClientTestCase):
                 }
             ),
             {
-                'namespace': 'test_namespace',
                 'related_model': 'idea.Information',
                 'related_pk': information.pk,
                 'file': SimpleUploadedFile('second_file.txt', b'new content', content_type='text/plain'),
@@ -203,7 +203,7 @@ class FileAPICreateTests(AuthenticatedClientTestCase):
         )
         information.save()
 
-        file = File.objects.create(
+        file = RelatedFile.objects.create(
             namespace='test_namespace',
             file=SimpleUploadedFile('first_file.txt', b'content', content_type='text/plain'),
             created_by=self.user
@@ -219,7 +219,6 @@ class FileAPICreateTests(AuthenticatedClientTestCase):
                 }
             ),
             {
-                'namespace': 'test_namespace',
                 'related_model': 'idea.Information',
                 'related_pk': information.pk,
                 'file': SimpleUploadedFile('second_file.txt', b'new content', content_type='text/plain'),

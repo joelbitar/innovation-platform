@@ -506,7 +506,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/FileModel'
+                  $ref: '#/components/schemas/RelatedFile'
           description: ''
     post:
       operationId: file_create
@@ -516,13 +516,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FileModel'
+              $ref: '#/components/schemas/RelatedFile'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/FileModel'
+              $ref: '#/components/schemas/RelatedFile'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/FileModel'
+              $ref: '#/components/schemas/RelatedFile'
         required: true
       security:
       - cookieAuth: []
@@ -531,7 +531,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FileModel'
+                $ref: '#/components/schemas/RelatedFile'
           description: ''
   /api/file/{id}/:
     get:
@@ -541,7 +541,7 @@ paths:
         name: id
         schema:
           type: integer
-        description: A unique integer value identifying this file.
+        description: A unique integer value identifying this related file.
         required: true
       tags:
       - file
@@ -552,8 +552,55 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FileModel'
+                $ref: '#/components/schemas/RelatedFile'
           description: ''
+    patch:
+      operationId: file_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this related file.
+        required: true
+      tags:
+      - file
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRelatedFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRelatedFile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRelatedFile'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatedFile'
+          description: ''
+    delete:
+      operationId: file_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this related file.
+        required: true
+      tags:
+      - file
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/idea/:
     get:
       operationId: idea_list
@@ -1198,131 +1245,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Vote'
           description: ''
-  /api/idea/vote/:
-    get:
-      operationId: idea_vote_list
-      tags:
-      - idea
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Vote'
-          description: ''
-    post:
-      operationId: idea_vote_create
-      tags:
-      - idea
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Vote'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Vote'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Vote'
-        required: true
-      security:
-      - cookieAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vote'
-          description: ''
   /api/idea/vote/{id}/:
-    get:
-      operationId: idea_vote_retrieve
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this vote.
-        required: true
-      tags:
-      - idea
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vote'
-          description: ''
-    put:
-      operationId: idea_vote_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this vote.
-        required: true
-      tags:
-      - idea
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Vote'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Vote'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Vote'
-        required: true
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vote'
-          description: ''
-    patch:
-      operationId: idea_vote_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this vote.
-        required: true
-      tags:
-      - idea
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedVote'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedVote'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedVote'
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vote'
-          description: ''
     delete:
       operationId: idea_vote_destroy
       parameters:
@@ -1489,50 +1412,6 @@ components:
       - id
       - name
       - updated_at
-    FileModel:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        created_by:
-          allOf:
-          - $ref: '#/components/schemas/AbbreviatedUser'
-          readOnly: true
-        deleted_at:
-          type: string
-          format: date-time
-          nullable: true
-        restored_at:
-          type: string
-          format: date-time
-          nullable: true
-        transaction_id:
-          type: string
-          format: uuid
-          nullable: true
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        namespace:
-          type: string
-          maxLength: 255
-        filename:
-          type: string
-          maxLength: 255
-        file:
-          type: string
-          format: uri
-          nullable: true
-        folder:
-          type: integer
-          nullable: true
-      required:
-      - created_at
-      - created_by
-      - id
-      - namespace
     Idea:
       type: object
       properties:
@@ -1643,16 +1522,15 @@ components:
           maxLength: 255
         text:
           type: string
-        file:
-          type: string
-          format: uri
-          nullable: true
         idea:
           type: integer
         folder:
           type: integer
           nullable: true
         round:
+          type: integer
+          nullable: true
+        file:
           type: integer
           nullable: true
       required:
@@ -1803,10 +1681,6 @@ components:
           maxLength: 255
         text:
           type: string
-        file:
-          type: string
-          format: uri
-          nullable: true
         idea:
           type: integer
         folder:
@@ -1815,28 +1689,37 @@ components:
         round:
           type: integer
           nullable: true
-    PatchedVote:
+        file:
+          type: integer
+          nullable: true
+    PatchedRelatedFile:
       type: object
       properties:
-        id:
-          type: integer
-          readOnly: true
-        created_by:
-          allOf:
-          - $ref: '#/components/schemas/AbbreviatedUser'
-          readOnly: true
-        created_at:
+        related_model:
           type: string
-          format: date-time
-          readOnly: true
-        updated_at:
+          writeOnly: true
+        related_pk:
+          type: integer
+          writeOnly: true
+        file:
           type: string
-          format: date-time
-          readOnly: true
-        idea:
+          format: uri
+    RelatedFile:
+      type: object
+      properties:
+        related_model:
+          type: string
+          writeOnly: true
+        related_pk:
           type: integer
-        round:
-          type: integer
+          writeOnly: true
+        file:
+          type: string
+          format: uri
+      required:
+      - file
+      - related_model
+      - related_pk
     RoundVotes:
       type: object
       properties:

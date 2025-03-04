@@ -2,7 +2,7 @@
 
 import {useForm} from "react-hook-form";
 import {IdeaInformation} from "@/lib/hejsan";
-import {getClientIdeaApi, getMultipartHeaders} from "@/lib/apiClientFactoryServer";
+import {getClientFileApi, getClientIdeaApi, getMultipartHeaders} from "@/lib/apiClientFactory";
 
 export function IdeaInformationCreateForm({ideaId}: { ideaId: string }) {
     const {
@@ -13,7 +13,7 @@ export function IdeaInformationCreateForm({ideaId}: { ideaId: string }) {
     } = useForm<IdeaInformation>()
 
     const ideaApi = getClientIdeaApi()
-    const ideaFileApi = getClientIdeaApi(getMultipartHeaders())
+    const ideaFileApi = getClientFileApi()
 
     const onSubmit: (data: IdeaInformation) => void = (data: IdeaInformation) => {
         const file = data.file[0]
@@ -29,10 +29,10 @@ export function IdeaInformationCreateForm({ideaId}: { ideaId: string }) {
                 const formData = new FormData()
                 formData.append('file', file)
 
-                ideaFileApi.ideaInformationPartialUpdate(
-                    data.data.id,
-                    ideaId,
+                ideaFileApi.fileCreate(
                     {
+                        'related_model': 'idea.Information',
+                        'related_pk': data.data.id,
                         'file': file
                     },
                 ).then(
