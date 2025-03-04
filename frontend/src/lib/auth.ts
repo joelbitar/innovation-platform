@@ -2,7 +2,7 @@
 
 
 import {getClientAuthApi} from "@/lib/apiClientFactory";
-import {UserWithPermissions} from "@/lib/hejsan";
+import {UserWithPermissions} from "api";
 
 
 export function setLocalStorageUserData(data: any) {

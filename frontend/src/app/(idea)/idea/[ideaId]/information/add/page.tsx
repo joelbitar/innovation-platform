@@ -5,7 +5,7 @@ import {IdeaInformationCreateForm} from "@/app/_components/idea/information/idea
 import IdeaLink from "@/app/_components/idea/ideaLink";
 import {getServerAPI} from "@/lib/apiClient";
 import {getServerIdeaApi, serverAPIFactory} from "@/lib/apiClientFactory";
-import {IdeaApi} from "@/lib/hejsan";
+import {IdeaApi} from "../../../../../../lib/api";
 
 type Params = {
     params: Promise<{

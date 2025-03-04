@@ -1,4 +1,4 @@
-import {AuthApi, CampaignApi, Configuration, FileApi, IdeaApi} from "@/lib/hejsan";
+import {AuthApi, CampaignApi, Configuration, FileApi, IdeaApi} from "@/lib/api";
 
 async function getConfiguration() {
     // Import cookies from next/headers

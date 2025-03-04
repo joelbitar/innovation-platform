@@ -1,7 +1,7 @@
 'use client'
 
 import {useForm} from "react-hook-form";
-import {IdeaInformation} from "@/lib/hejsan";
+import {IdeaInformation} from "../../../../lib/api";
 import {getClientFileApi, getClientIdeaApi, getMultipartHeaders} from "@/lib/apiClientFactory";
 
 export function IdeaInformationCreateForm({ideaId}: { ideaId: string }) {

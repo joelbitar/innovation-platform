@@ -15,7 +15,7 @@ export default async function CampaignRoundList({campaignId}: Props) {
         <>
             {
                 campaignRounds &&
-                campaignRounds.map((campaignRound) => (
+                campaignRounds.data.map((campaignRound) => (
                         <div key={campaignRound.id} className={'card'}>
                             <h3>
                                 <Link

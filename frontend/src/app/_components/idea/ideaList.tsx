@@ -5,7 +5,7 @@ import {UserPermissions} from "@/lib/userPermissions";
 import IdeaVoteCount from "@/app/_components/idea/ideaVoteCount";
 import SecuredServer from "@/lib/secureClient";
 import IdeaLink from "@/app/_components/idea/ideaLink";
-import {Idea} from "@/lib/hejsan";
+import {Idea} from "../../../lib/api";
 import {getServerIdeaApi} from "@/lib/apiClientFactory";
 
 type IdeaListProps = {
@@ -18,10 +18,12 @@ export default async function IdeaList({campaignId, roundId, voting}: IdeaListPr
     const apiClient = await getServerIdeaApi()
     const ideas = await apiClient.ideaCampaignIdeaList(campaignId)
 
+    console.log('ideas', ideas)
+
     return (
         <>
             <ul>
-                {ideas.map((idea: Idea) => (
+                {ideas.data.map((idea: Idea) => (
                     <div key={idea.id} className={'card'}>
                         <h3>
                             <IdeaLink idea={idea}/>
