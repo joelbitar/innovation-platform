@@ -1,9 +1,10 @@
 'use client'
 import React from 'react';
-import {CampaignRound, CampaignService} from "@/lib/apiClientServer";
 import {useForm} from "react-hook-form";
 
 import {useEffect, useState} from "react";
+import {CampaignRound} from "@/lib/api";
+import {getClientCampaignApi} from "@/lib/apiClientFactory";
 
 type Props = {
     campaignId: string;
@@ -11,6 +12,7 @@ type Props = {
 }
 export default function RoundEditForm({campaignId, roundId}: Props) {
     const [round, setRound] = useState(undefined);
+    const campaignApi = getClientCampaignApi()
     const {
         register,
         handleSubmit,
@@ -19,7 +21,7 @@ export default function RoundEditForm({campaignId, roundId}: Props) {
     } = useForm<CampaignRound>()
 
     const onSubmit = (data: CampaignRound) => {
-        CampaignService.campaignRoundUpdate(round.campaign, round.id, data).then(
+        campaignApi.campaignRoundUpdate(round.campaign, round.id, data).then(
             (data) => {
                 reset()
             },
@@ -30,8 +32,10 @@ export default function RoundEditForm({campaignId, roundId}: Props) {
     }
 
     useEffect(() => {
-        CampaignService.campaignRoundRetrieve(campaignId, roundId).then(
-            setRound
+        campaignApi.campaignRoundRetrieve(campaignId, roundId).then(
+            (data) => {
+                setRound(data.data)
+            }
         )
     }, [roundId]);
 

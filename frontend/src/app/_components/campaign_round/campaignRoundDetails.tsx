@@ -1,5 +1,5 @@
 import CampaignIdeaList from "@/app/_components/idea/campaignIdeaList";
-import {getServerAPIClient} from "@/lib/apiClientServer";
+import {getServerCampaignApi} from "@/lib/apiClientFactory";
 
 type Props = {
     campaignId: string,
@@ -7,8 +7,8 @@ type Props = {
 }
 
 export default async function CampaignRoundDetails({campaignId, roundId}: Props) {
-    const apiClient = await getServerAPIClient()
-    const campaignRound = await apiClient.campaign.campaignRoundRetrieve(campaignId, roundId)
+    const campaignApi = await getServerCampaignApi()
+    const {data: campaignRound} = await campaignApi.campaignRoundRetrieve(campaignId, roundId)
 
     return (
         <>

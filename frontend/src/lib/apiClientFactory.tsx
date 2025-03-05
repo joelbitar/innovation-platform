@@ -1,6 +1,6 @@
 import {AuthApi, CampaignApi, Configuration, FileApi, IdeaApi} from "@/lib/api";
 
-async function getConfiguration() {
+async function getServerConfiguration() {
     // Import cookies from next/headers
     const headersModule = import('next/headers')
     const {cookies} = await headersModule
@@ -61,7 +61,7 @@ function clientAPIFactory(api, extraHeaders = {}) {
 export async function serverAPIFactory(api) {
     const basePath = 'http://backend.dkr:8000'
 
-    const conf = await getConfiguration()
+    const conf = await getServerConfiguration()
 
     return new api(
         conf,
