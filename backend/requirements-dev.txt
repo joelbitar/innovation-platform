@@ -1,3 +1,5 @@
+coverage==7.6.10
+coverage-threshold==0.5.0
 django-extensions==3.2.3
 drf-spectacular==0.28.0
 inflection==0.5.1

@@ -13,7 +13,13 @@ from user.serializers import CreatedByModelSerializer
 class RelatedFileSerializer(CreatedByModelSerializer):
     related_model = serializers.CharField(required=True, write_only=True)
     related_pk = serializers.IntegerField(required=True, write_only=True)
-    file = serializers.FileField(required=True)
+    file = serializers.FileField(required=True, write_only=True)
+    filename = serializers.CharField(read_only=True)
+    url = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_url(obj: RelatedFile) -> str:
+        return obj.file.url
 
     def get_related_to_model_instance(self, validated_data):
         related_app, related_model = validated_data.pop('related_model').split('.')
@@ -34,12 +40,12 @@ class RelatedFileSerializer(CreatedByModelSerializer):
     def update(self, instance: RelatedFile, validated_data):
         related_to_instance = self.get_related_to_model_instance(validated_data)
 
-        if not ModelPermissions.user_has_permission_for_model(
+        if ModelPermissions.user_has_permission_for_model(
                 related_to_instance,
                 self.current_user,
                 ModelPermissions.CHANGE_OWN_CREATED_BY_INSTANCES
-        ):
-            raise PermissionDenied('You do not have permission to update your own objects at all')
+        ) is False:
+            raise PermissionDenied('You do not have permission to update your own objects for the related model')
 
         if not ModelPermissions.user_has_permission_for_instance(self.current_user, related_to_instance):
             raise PermissionDenied('You do not have permission to update the underlying object instance')
@@ -75,5 +81,7 @@ class RelatedFileSerializer(CreatedByModelSerializer):
         fields = (
             'related_model',
             'related_pk',
+            'filename',
             'file',
+            'url',
         )

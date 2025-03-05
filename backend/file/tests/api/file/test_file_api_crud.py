@@ -240,3 +240,54 @@ class FileAPICreateTests(AuthenticatedClientTestCase):
                     'first_file.txt'
                 ),
             )
+
+    # Test should not be able to upload file to a model if I do not have the change own created by instances permission
+    def test_should_not_be_able_to_upload_file_to_a_model_if_i_do_not_have_the_change_own_created_by_instances_permission(self):
+        self.assertFalse(
+            self.user.has_perm(
+                ModelPermissions.CHANGE_OWN_CREATED_BY_INSTANCES
+            )
+        )
+
+        information = self.helper_create_information()
+        information.created_by = self.user
+        information.save()
+
+        file = RelatedFile.objects.create(
+            namespace='test_namespace',
+            file=SimpleUploadedFile('first_file.txt', b'content', content_type='text/plain'),
+            created_by=self.user
+        )
+        information.file = file
+        information.save()
+
+        response = self.client.patch(
+            reverse(
+                'file-detail',
+                kwargs={
+                    'pk': file.pk
+                }
+            ),
+            {
+                'related_model': 'idea.Information',
+                'related_pk': information.pk,
+                'file': SimpleUploadedFile('second_file.txt', b'new content', content_type='text/plain'),
+            },
+            format='multipart'
+        )
+
+        with self.subTest('Should not work if we did not created the information'):
+            self.assertEqual(
+                403,
+                response.status_code,
+                response.data
+            )
+
+            information.refresh_from_db()
+
+            self.assertTrue(
+                information.file.file.name.endswith(
+                    'first_file.txt'
+                ),
+            )
+

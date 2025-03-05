@@ -89,15 +89,6 @@ class CreatedByModelSerializer(serializers.ModelSerializer):
     created_by = AbbreviatedUserSerializer(read_only=True)
 
 
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        data = super().validate(attrs)
-
-        data['user_id'] = self.user.pk
-
-        return data
-
-
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()

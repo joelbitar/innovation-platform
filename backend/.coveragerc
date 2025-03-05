@@ -1,0 +1,18 @@
+[run]
+omit =
+    app/asgi.py
+    app/wsgi.py
+    app/settings_development.py
+    app/settings_testing.py
+    app/settings.py
+    manage.py
+    */migrations/*
+[report]
+omit =
+    app/asgi.py
+    app/wsgi.py
+    app/settings_development.py
+    app/settings_testing.py
+    app/settings.py
+    manage.py
+    */migrations/*

@@ -2763,9 +2763,18 @@
                         "type": "integer",
                         "writeOnly": true
                     },
+                    "filename": {
+                        "type": "string",
+                        "readOnly": true
+                    },
                     "file": {
                         "type": "string",
-                        "format": "uri"
+                        "format": "uri",
+                        "writeOnly": true
+                    },
+                    "url": {
+                        "type": "string",
+                        "readOnly": true
                     }
                 }
             },
@@ -2780,15 +2789,26 @@
                         "type": "integer",
                         "writeOnly": true
                     },
+                    "filename": {
+                        "type": "string",
+                        "readOnly": true
+                    },
                     "file": {
                         "type": "string",
-                        "format": "uri"
+                        "format": "uri",
+                        "writeOnly": true
+                    },
+                    "url": {
+                        "type": "string",
+                        "readOnly": true
                     }
                 },
                 "required": [
                     "file",
+                    "filename",
                     "related_model",
-                    "related_pk"
+                    "related_pk",
+                    "url"
                 ]
             },
             "RoundVotes": {

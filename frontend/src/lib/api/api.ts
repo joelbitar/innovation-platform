@@ -701,7 +701,19 @@ export interface PatchedRelatedFile {
      * @type {string}
      * @memberof PatchedRelatedFile
      */
+    'filename'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchedRelatedFile
+     */
     'file'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchedRelatedFile
+     */
+    'url'?: string;
 }
 /**
  * 
@@ -726,7 +738,19 @@ export interface RelatedFile {
      * @type {string}
      * @memberof RelatedFile
      */
+    'filename': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RelatedFile
+     */
     'file': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RelatedFile
+     */
+    'url': string;
 }
 /**
  * 
