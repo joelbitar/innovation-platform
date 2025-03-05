@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
-from file.models import RelatedFile, Thingy
+from file.models import RelatedFile
 
 
 class OneToOneFieldTest(TestCase):
