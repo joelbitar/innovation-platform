@@ -10,4 +10,4 @@ backend/.coverage
 backend/coverage.json
 .run
 backend/media
-htmlcov/index.html
+htmlcov/*
