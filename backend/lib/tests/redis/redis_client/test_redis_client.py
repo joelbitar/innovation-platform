@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.test import SimpleTestCase, override_settings
 from environ import environ
 
@@ -60,3 +61,19 @@ class RedisClientTests(SimpleTestCase):
                 'ERROR:root:Error while write to connect to redis',
                 cm.output,
             )
+
+    @override_settings(REDIS_URL='')
+    def test_should_log_error_if_redis_client_is_not_set(self):
+        redis_client = RedisClient()
+
+        with self.subTest('Should log error if redis client is not set'):
+            with self.assertLogs(logger='root', level='ERROR') as cm:
+                try:
+                    redis_client.get_redis_client()
+                except ImproperlyConfigured:
+                    pass
+
+                self.assertIn(
+                    'ERROR:root:Could not set value in Redis, missing redis client',
+                    cm.output,
+                )

@@ -8,7 +8,18 @@ from django.conf import settings
 
 class RedisClient:
     def __init__(self):
-        self.redis = self.__get_client()
+        self.__redis_client = self.__create_redis_client()
+
+    def get_redis_client(self):
+        if self.__redis_client is None:
+            logging.error('Could not set value in Redis, missing redis client')
+            raise ImproperlyConfigured('Could not set value in Redis, missing redis client')
+
+        return self.__redis_client
+
+    @property
+    def redis_client(self) -> Redis:
+        return self.get_redis_client()
 
     @classmethod
     def __get_redis_configuration(cls):
@@ -18,7 +29,7 @@ class RedisClient:
         }
 
     @classmethod
-    def __get_client(cls) -> Redis:
+    def __create_redis_client(cls) -> Redis:
         try:
             return Redis(**cls.__get_redis_configuration())
         except AttributeError as e:
@@ -29,7 +40,7 @@ class RedisClient:
 
     def set(self, key, value):
         try:
-            self.redis.set(key, value)
+            self.redis_client.set(key, value)
         except RedisError as e:
             logging.error(
                 'Error while write to connect to redis'
@@ -37,24 +48,14 @@ class RedisClient:
             logging.error(
                 str(e)
             )
-        except AttributeError as e:
-            logging.error('Could not set value in Redis, possibly missing redis client')
-            logging.info(
-                str(e)
-            )
 
     def delete(self, param):
         try:
-            self.redis.delete(param)
+            self.redis_client.delete(param)
         except RedisError as e:
             logging.error(
                 'Error while delete on redis'
             )
             logging.error(
-                str(e)
-            )
-        except AttributeError as e:
-            logging.error('Could not delete value in Redis, possibly missing redis client')
-            logging.info(
                 str(e)
             )
