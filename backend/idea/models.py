@@ -1,8 +1,5 @@
-import uuid
-
 from django.contrib.auth.models import User
 from django.db import models
-from django.utils import timezone
 from django_softdelete.models import SoftDeleteModel
 
 from campaign.models import CampaignRound, Campaign
@@ -75,6 +72,9 @@ class Comment(IdeaRoundData):
     public = models.BooleanField(default=False)
 
     def __str__(self):
+        #If longer than 50 characters, abbreviate
+        if len(self.text) > 50:
+            return f"{self.text[:50]}..."
         return self.text
 
 

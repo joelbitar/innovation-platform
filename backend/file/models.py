@@ -15,7 +15,7 @@ class Folder(SoftDeleteModel):
     parent = models.ForeignKey("self", on_delete=models.CASCADE, related_name="children", null=True, blank=True)
 
     def __str__(self):
-        return self.title
+        return self.name
 
 
 class FileManager(models.Manager):

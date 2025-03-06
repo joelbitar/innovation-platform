@@ -36,9 +36,6 @@ class CampaignIdeaViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             campaign_id=self.kwargs['campaign_id']
         )
 
-    def fetch_campaign_ideas(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
 
 class RoundMyVoteViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = VoteSerializer

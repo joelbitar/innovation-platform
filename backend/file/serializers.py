@@ -40,13 +40,6 @@ class RelatedFileSerializer(CreatedByModelSerializer):
     def update(self, instance: RelatedFile, validated_data):
         related_to_instance = self.get_related_to_model_instance(validated_data)
 
-        if ModelPermissions.user_has_permission_for_model(
-                related_to_instance,
-                self.current_user,
-                ModelPermissions.CHANGE_OWN_CREATED_BY_INSTANCES
-        ) is False:
-            raise PermissionDenied('You do not have permission to update your own objects for the related model')
-
         if not ModelPermissions.user_has_permission_for_instance(self.current_user, related_to_instance):
             raise PermissionDenied('You do not have permission to update the underlying object instance')
 
@@ -64,7 +57,7 @@ class RelatedFileSerializer(CreatedByModelSerializer):
             raise Conflict('This object already has a file associated with it')
 
         if not ModelPermissions.user_has_permission_for_instance(self.current_user, related_to_instance):
-            raise PermissionDenied('You do not have permission to create a file for this object')
+            raise PermissionDenied('You do not have permission to create a file for the underlying instance')
 
         namespace = related_to_instance.__class__.file.field.get_namespace()
         validated_data['namespace'] = namespace

@@ -15,15 +15,42 @@ class UserAPIUserAPIKeysTests(TestCase):
             password='testpassword',
         )
 
+        other_user = User.objects.create_user(
+            username='otheruser',
+            password='testpassword',
+        )
+
         api_client.force_authenticate(
             user=user
         )
 
-        response = api_client.get(
-            reverse('user-detail') + f'?id={user.pk}'
-        )
+        with self.subTest('Superuser can get user'):
+            response = api_client.get(
+                reverse(
+                    'user-detail',
+                    kwargs={
+                        'user_id': other_user.pk
+                    }
+                )
+            )
 
-        with self.subTest('Should NOT return OK since we only can access this api with api keys'):
+            self.assertEqual(
+                200,
+                response.status_code,
+                response.content
+            )
+
+        user.is_superuser = False
+        user.save()
+        with self.subTest('Should NOT return OK since we should be only able to do it if we are superuser'):
+            response = api_client.get(
+                reverse(
+                    'user-detail',
+                    kwargs={
+                        'user_id': other_user.pk
+                    }
+                )
+            )
             self.assertEqual(
                 403,
                 response.status_code,
@@ -44,52 +71,12 @@ class UserAPIUserAPIKeysTests(TestCase):
         )
 
         response = client.get(
-            reverse('user-detail') + f'?id={user.pk}',
-            headers={
-                'Authorization': f'Api-Key {key}'
-            },
-        )
-
-        with self.subTest('Should return 200 ok'):
-            self.assertEqual(
-                200,
-                response.status_code,
-                response.content
-            )
-
-        with self.subTest('Should return the user'):
-            self.assertEqual(
-                user.username,
-                response.data['username'],
-                response.content
-            )
-
-    def test_should_be_able_to_get_user_with_api_keys_by_accessing_through_current_session(self):
-        api_key, key = APIKey.objects.create_key(
-            name='Test API Key',
-        )
-
-        client = Client()
-
-        User.objects.create_user(
-            username='foo',
-            password='testpassword',
-        )
-
-        user = User.objects.create_superuser(
-            username='testuser',
-            password='testpassword',
-        )
-
-        User.objects.create_user(
-            username='bar',
-            password='testpassword',
-        )
-
-        client.force_login(user)
-
-        response = client.get(
-            reverse('user_me'),
+            reverse(
+                'user-detail',
+                kwargs={
+                    'user_id': user.pk
+                }
+            ),
             headers={
                 'Authorization': f'Api-Key {key}'
             },
@@ -119,7 +106,12 @@ class UserAPIUserAPIKeysTests(TestCase):
 
         with self.subTest('Should return 404 if no user could be found'):
             response = client.get(
-                reverse('user-detail') + f'?id=12345',
+                reverse(
+                    'user-detail',
+                    kwargs={
+                        'user_id': 1
+                    }
+                ),
                 headers={
                     'Authorization': f'Api-Key {key}'
                 },
@@ -130,22 +122,3 @@ class UserAPIUserAPIKeysTests(TestCase):
                 response.status_code,
                 response.content
             )
-
-    # Test should return 400 error if no id or token is provided
-    def test_should_return_400_error_if_no_id_or_token_is_provided(self):
-        api_key, key = APIKey.objects.create_key(
-            name='Test API Key',
-        )
-
-        response = self.client.get(
-            reverse('user-detail'),
-            headers={
-                'Authorization': f'Api-Key {key}'
-            },
-        )
-
-        self.assertEqual(
-            400,
-            response.status_code,
-            response.content
-        )

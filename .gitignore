@@ -6,5 +6,7 @@ frontend/.next
 frontend/.env
 .idea
 backend/db.sqlite3
+backend/.coverage
+backend/coverage.json
 .run
 backend/media

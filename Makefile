@@ -74,7 +74,7 @@ test:
 	docker compose run backend-dev sh -c "python manage.py test"
 
 test-coverage:
-	docker compose run backend-dev sh -c "coverage run --source='.' --rcfile='/src/.coveragerc' manage.py test && coverage report && coverage json && coverage-threshold"
+	docker compose run backend-dev sh -c "coverage run --source='.' --rcfile='/src/.coveragerc' manage.py test && coverage report && coverage json && coverage html && coverage-threshold"
 
 migrate:
 	docker compose run backend-dev sh -c "python manage.py migrate; chmod -R 664 db.sqlite3 && chown -R $(shell id -u):$(shell id -g) db.sqlite3"

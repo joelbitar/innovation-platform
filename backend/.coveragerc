@@ -2,8 +2,8 @@
 omit =
     app/asgi.py
     app/wsgi.py
-    app/settings_development.py
-    app/settings_testing.py
+    app/settings-development.py
+    app/settings-testing.py
     app/settings.py
     manage.py
     */migrations/*

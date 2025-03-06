@@ -11,16 +11,18 @@ class RedisClient:
         self.redis = self.__get_client()
 
     @classmethod
+    def __get_redis_configuration(cls):
+        return {
+            'host': settings.REDIS_URL.hostname,
+            'port': settings.REDIS_URL.port,
+        }
+
+    @classmethod
     def __get_client(cls) -> Redis:
         try:
-            return Redis(host=settings.REDIS_URL.hostname, port=settings.REDIS_URL.port)
-        except ImproperlyConfigured as e:
-            logging.error('Configuration error while instantiating Redis client')
-            logging.info(
-                str(e)
-            )
+            return Redis(**cls.__get_redis_configuration())
         except AttributeError as e:
-            logging.error('Attribute error while instantiating Redis client, possibly missing redis configuration')
+            logging.error('AttributeError while instantiating Redis client, possibly setting for redis url is wrong (missing port or not valid hostname)')
             logging.info(
                 str(e)
             )
@@ -29,6 +31,9 @@ class RedisClient:
         try:
             self.redis.set(key, value)
         except RedisError as e:
+            logging.error(
+                'Error while write to connect to redis'
+            )
             logging.error(
                 str(e)
             )
@@ -42,6 +47,9 @@ class RedisClient:
         try:
             self.redis.delete(param)
         except RedisError as e:
+            logging.error(
+                'Error while delete on redis'
+            )
             logging.error(
                 str(e)
             )

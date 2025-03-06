@@ -29,22 +29,26 @@ class PermissionHolder:
 
 
 class PermissionsGenerator:
+    TEMPORARY_SUPERUSER_NAME = 'temp_for_generation'
+
+    @classmethod
+    def get_superuser(cls):
+        if (user := User.objects.filter(is_superuser=True).first()) is not None:
+            return user
+
+        return User.objects.create_superuser(
+            username=cls.TEMPORARY_SUPERUSER_NAME,
+            password=cls.TEMPORARY_SUPERUSER_NAME,
+        )
+
     @classmethod
     def get_all_permissions(cls):
-        try:
-            superuser = User.objects.filter(
-                is_superuser=True
-            ).first()
-        except User.DoesNotExist:
-            superuser = User.objects.create_superuser(
-                username='temp_for_generation',
-                password='temp_for_generation',
-            )
+        superuser = cls.get_superuser()
 
         for permission in sorted(superuser.get_all_permissions()):
             yield PermissionHolder(permission)
 
-        if superuser.username == 'temp_for_generation':
+        if superuser.username == cls.TEMPORARY_SUPERUSER_NAME:
             superuser.delete()
 
     @classmethod

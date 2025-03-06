@@ -2,7 +2,6 @@ from typing import Optional
 
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import Profile
 
@@ -38,7 +37,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
         # IssueWatcherViewPayloadSerializer
         model = Profile
         fields = '__all__'
-        read_only_fields = ('user',)
+        read_only_fields = ['user',]
+
+
+class UserMeProfileSerializer(UserProfileSerializer):
+    class Meta:
+        model = UserProfileSerializer.Meta.model
+        fields = UserProfileSerializer.Meta.fields
+        read_only_fields = UserProfileSerializer.Meta.read_only_fields + [
+            'type',
+        ]
 
 
 class UserWithProfileSerializer(UserSerializer):
