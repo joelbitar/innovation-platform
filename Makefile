@@ -70,10 +70,10 @@ logs:
 restart: stop up
 	$(info Done restarting)
 
-test:
+test-without-coverage:
 	docker compose run backend-dev sh -c "python manage.py test"
 
-test-coverage:
+test:
 	docker compose run backend-dev sh -c "coverage run --source='.' --rcfile='/src/.coveragerc' manage.py test && coverage report && coverage json && coverage html && coverage-threshold"
 
 migrate:
