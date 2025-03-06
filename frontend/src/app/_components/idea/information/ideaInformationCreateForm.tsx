@@ -1,13 +1,10 @@
 'use client'
 
-import {useForm, SubmitHandler} from "react-hook-form";
-import {IdeaInformation} from "@/lib/api";
-import {getClientAPIClient} from "@/lib/apiClientClient";
-
+import {useForm} from "react-hook-form";
+import {IdeaInformation} from "../../../../lib/api";
+import {getClientFileApi, getClientIdeaApi, getMultipartHeaders} from "@/lib/apiClientFactory";
 
 export function IdeaInformationCreateForm({ideaId}: { ideaId: string }) {
-    const apiClient = getClientAPIClient()
-
     const {
         register,
         handleSubmit,
@@ -15,20 +12,46 @@ export function IdeaInformationCreateForm({ideaId}: { ideaId: string }) {
         formState: {errors},
     } = useForm<IdeaInformation>()
 
+    const ideaApi = getClientIdeaApi()
+    const ideaFileApi = getClientFileApi()
+
     const onSubmit: (data: IdeaInformation) => void = (data: IdeaInformation) => {
-        apiClient.idea.ideaIdeaInformationCreate(
+        const file = data.file[0]
+
+        delete data.file
+
+        ideaApi.ideaInformationCreate(
             ideaId,
-            data
+            data,
         ).then(
-            (createdIdeaInformation) => {
-                reset()
+            (data) => {
+                console.log('success', data.data.id)
+                const formData = new FormData()
+                formData.append('file', file)
+
+                ideaFileApi.fileCreate(
+                    {
+                        'related_model': 'idea.Information',
+                        'related_pk': data.data.id,
+                        'file': file
+                    },
+                ).then(
+                    (d) => {
+                        console.log('success', d)
+                    },
+                    (e) => {
+                        console.error('error', e)
+                    }
+                )
+
+                //reset()
             },
             (error) => {
-                console.error(error)
+                console.error('error', error)
             }
         )
-    }
 
+    }
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -41,6 +64,7 @@ export function IdeaInformationCreateForm({ideaId}: { ideaId: string }) {
                     <textarea {...register("text")}/>
                 </label>
                 <label>
+                    <input type="file" {...register("file")}/>
                 </label>
                 <button type="submit">Submit</button>
             </form>

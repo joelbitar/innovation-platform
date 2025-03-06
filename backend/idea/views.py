@@ -25,6 +25,8 @@ class VoteViewSet(CreatedByModelViewSet):
     queryset = Vote.objects.all()
     serializer_class = VoteSerializer
 
+    http_method_names = ['delete']
+
 
 class CampaignIdeaViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = IdeaDetailSerializer
@@ -33,9 +35,6 @@ class CampaignIdeaViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         return Idea.objects.filter(
             campaign_id=self.kwargs['campaign_id']
         )
-
-    def fetch_campaign_ideas(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
 
 
 class RoundMyVoteViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):

@@ -5,9 +5,10 @@ import {useForm} from "react-hook-form";
 import {Campaign} from "@/lib/api/models/Campaign";
 import {ApiClient} from "@/lib/api/ApiClient";
 import {getClientAPIClient} from "@/lib/apiClientClient";
+import {getClientCampaignApi} from "@/lib/apiClientFactory";
 
 export function CampaignCreateForm() {
-    const apiClient = getClientAPIClient();
+    const campaignApi = getClientCampaignApi();
 
     const {
         register,
@@ -19,12 +20,12 @@ export function CampaignCreateForm() {
     console.log('create campaign..?')
     const onSubmit: (data: Campaign) => void = (data: Campaign) =>  {
         console.log('posting...')
-        apiClient.campaign.campaignCreate(data).then(
+        campaignApi.campaignCreate(data).then(
             (data) => {
                 window.history.pushState(
                     {},
                     '',
-                    `/campaign/${data.id}`
+                    `/campaign/${data.data.id}`
                 )
                 console.log(data)
             },

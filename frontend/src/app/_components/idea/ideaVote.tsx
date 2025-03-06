@@ -1,7 +1,7 @@
 'use client'
 
 import {useEffect, useState} from "react";
-import {ApiClient} from "@/lib/api";
+import {getClientIdeaApi} from "@/lib/apiClientFactory";
 
 type IdeaVoteProps = {
     ideaId: string,
@@ -11,9 +11,9 @@ type IdeaVoteProps = {
 
 export default function IdeaVote({ideaId, roundId, postSubmit}: IdeaVoteProps) {
     const [vote, setVote] = useState(undefined);
-    const apiClient = new ApiClient()
+    const ideaApi = getClientIdeaApi()
     const handleVote = () => {
-        apiClient.idea.ideaRoundIdeaVoteMeCreate(ideaId, roundId, {}).then(
+        ideaApi.ideaRoundIdeaVoteMeCreate(ideaId, roundId, {}).then(
             response => {
                 console.log('Voted for idea', ideaId, response)
                 fetchVoteStatus()
@@ -26,7 +26,7 @@ export default function IdeaVote({ideaId, roundId, postSubmit}: IdeaVoteProps) {
 
     const removeVote = () => {
         console.log('remove vote...', vote)
-        apiClient.idea.ideaVoteDestroy(vote.id).then(
+        ideaApi.ideaVoteDestroy(vote.id).then(
             () =>{
                 fetchVoteStatus()
                 if(postSubmit) {
@@ -37,9 +37,9 @@ export default function IdeaVote({ideaId, roundId, postSubmit}: IdeaVoteProps) {
     }
 
     const fetchVoteStatus = () => {
-        apiClient.idea.ideaRoundIdeaVoteMeList(ideaId, roundId).then(
+        ideaApi.ideaRoundIdeaVoteMeList(ideaId, roundId).then(
             response => {
-                if(response.length === undefined) {
+                if(response.data.length === undefined) {
                     setVote(false)
                     return
                 }

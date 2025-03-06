@@ -23,3 +23,5 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
+
+MEDIA_ROOT = '/tmp/'

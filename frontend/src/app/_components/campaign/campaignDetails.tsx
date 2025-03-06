@@ -1,13 +1,13 @@
-import {getServerAPIClient} from "@/lib/apiClientServer";
 import CampaignRoundList from "@/app/_components/campaign_round/campaignRoundList";
+import {getServerCampaignApi} from "@/lib/apiClientFactory";
 
 type Props = {
     id: number
 }
 
 export default async function CampaignDetails({id}: Props) {
-    const apiClient = await getServerAPIClient()
-    const campaign = await apiClient.campaign.campaignRetrieve(id)
+    const campaignApi = await getServerCampaignApi()
+    const campaign = await campaignApi.campaignRetrieve(id)
 
     return (
         <>

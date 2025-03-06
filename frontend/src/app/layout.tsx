@@ -3,6 +3,8 @@ import { SITE_NAME, HOME_OG_IMAGE_URL } from "@/lib/constants";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import cn from "classnames";
+import {CookiesProvider} from 'next-client-cookies/server';
+
 //import { ThemeSwitcher } from "./_components/theme-switcher";
 
 import "./globals.css";
@@ -58,11 +60,15 @@ export default function RootLayout({
         <meta name="theme-color" content="#000" />
       </head>
       <body
-        className={cn(inter.className, "dark:bg-slate-900 dark:text-slate-400")}
+          className={cn(inter.className, "dark:bg-slate-900 dark:text-slate-400")}
       >
-         <div className="min-h-screen flex">{children}</div>
-         <Footer />
-      </body>
-    </html>
+      <div className="min-h-screen flex">
+        <CookiesProvider>
+           {children}
+        </CookiesProvider>
+      </div>
+      <Footer/>
+    </body>
+</html>
   );
 }

@@ -1,12 +1,11 @@
 'use client'
 
-import {useForm, SubmitHandler} from "react-hook-form";
-import {Campaign, Idea, IdeaService} from "@/lib/apiClientServer";
-
+import {useForm} from "react-hook-form";
+import {Campaign, Idea} from "@/lib/api";
+import {getClientIdeaApi} from "@/lib/apiClientFactory";
 
 
 export function IdeaCreateForm({campaignId}: {campaignId: string}) {
-
     const {
         register,
         handleSubmit,
@@ -14,10 +13,12 @@ export function IdeaCreateForm({campaignId}: {campaignId: string}) {
         formState: {errors},
     } = useForm<Campaign>()
 
+    const ideaApi = getClientIdeaApi()
+
     const onSubmit: (data: Idea) => void = (data: Idea) =>  {
         data.campaign = parseInt(campaignId, 10)
 
-        IdeaService.ideaIdeaCreate(data).then(
+        ideaApi.ideaCreate(data).then(
             (data) => {
                 reset()
             },

@@ -12,6 +12,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "noUncheckedIndexedAccess": true, // Recomended by openapi-ts
     "plugins": [
       {
         "name": "next"

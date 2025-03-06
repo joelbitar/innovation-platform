@@ -6,6 +6,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 
 from campaign.models import Campaign, CampaignRound
+from file.models import RelatedFile
 from idea.models import Idea, Information
 from user.tests.helpers.authenticated_test_case import AuthenticatedClientTestCase
 
@@ -210,8 +211,8 @@ class IdeaInformationFileTests(IdeaInformationTestsBase):
     # Test should be able to upload file
 
     def tearDown(self):
-        for information in Information.objects.all():
-            information.file.delete()
+        for file in RelatedFile.objects.all():
+            file.file.delete()
         super().tearDown()
 
     def test_should_be_able_to_upload_file(self):
@@ -225,16 +226,53 @@ class IdeaInformationFileTests(IdeaInformationTestsBase):
             ),
             {
                 'title': 'Test Information',
-                'file': SimpleUploadedFile('test.txt', b'test content')
             }
+        )
+
+        self.assertEqual(
+            1,
+            Information.objects.all().count(),
         )
 
         with self.subTest('Response should be 201'):
             self.assertEqual(201, response.status_code, response.content)
             self.assertEqual('Test Information', response.data['title'])
-            self.assertIsNotNone(response.data['file'])
 
         information = Information.objects.all().first()
 
-        with self.subTest('Information should have been created with file'):
-            self.assertIsNotNone(information.file)
+        with self.subTest('Information should not have been created with file'):
+            self.assertIsNone(information.file)
+
+        response = self.client.post(
+            reverse(
+                'file-list',
+            ),
+            {
+                'file': SimpleUploadedFile('test.txt', b'test content', content_type='text/plain'),
+                'namespace': 'test_namespace',
+                'related_model': 'idea.Information',
+                'related_pk': information.id
+            },
+            format='multipart'
+        )
+
+        with self.subTest('Should respond with 201'):
+            self.assertEqual(
+                201,
+                response.status_code,
+                response.content
+            )
+
+        with self.subTest('Should still have just one information'):
+            self.assertEqual(
+                1,
+                Information.objects.all().count(),
+            )
+
+        information.refresh_from_db()
+
+        with self.subTest('Should have the file on information'):
+            self.assertIsNotNone(
+                information.file
+            )
+

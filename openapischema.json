@@ -1,0 +1,2986 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "",
+        "version": "0.0.0"
+    },
+    "paths": {
+        "/api/auth/login/": {
+            "post": {
+                "operationId": "auth_login_create",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Login"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/logout/": {
+            "post": {
+                "operationId": "auth_logout_create",
+                "tags": [
+                    "auth"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/business/business_area//": {
+            "get": {
+                "operationId": "business_business_area_list",
+                "tags": [
+                    "business"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/BusinessArea"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "business_business_area_create",
+                "tags": [
+                    "business"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BusinessArea"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BusinessArea"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BusinessArea"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BusinessArea"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/business/business_area//{id}/": {
+            "get": {
+                "operationId": "business_business_area_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this business area.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "business"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BusinessArea"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "business_business_area_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this business area.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "business"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BusinessArea"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BusinessArea"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BusinessArea"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BusinessArea"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "business_business_area_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this business area.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "business"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedBusinessArea"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedBusinessArea"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedBusinessArea"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BusinessArea"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "business_business_area_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this business area.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "business"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/campaign/": {
+            "get": {
+                "operationId": "campaign_list",
+                "tags": [
+                    "campaign"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Campaign"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "campaign_create",
+                "tags": [
+                    "campaign"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Campaign"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Campaign"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Campaign"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Campaign"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/campaign/{campaign_id}/round/": {
+            "get": {
+                "operationId": "campaign_round_list",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "campaign_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "campaign"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/CampaignRound"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "campaign_round_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "campaign_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "campaign"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CampaignRound"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CampaignRound"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CampaignRound"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CampaignRound"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/campaign/{campaign_id}/round/{id}/": {
+            "get": {
+                "operationId": "campaign_round_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "campaign_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "campaign"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CampaignRound"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "campaign_round_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "campaign_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "campaign"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CampaignRound"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CampaignRound"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CampaignRound"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CampaignRound"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "campaign_round_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "campaign_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "campaign"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedCampaignRound"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedCampaignRound"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedCampaignRound"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CampaignRound"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "campaign_round_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "campaign_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "campaign"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/campaign/{id}/": {
+            "get": {
+                "operationId": "campaign_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this campaign.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "campaign"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Campaign"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "campaign_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this campaign.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "campaign"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Campaign"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Campaign"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Campaign"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Campaign"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "campaign_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this campaign.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "campaign"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedCampaign"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedCampaign"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedCampaign"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Campaign"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "campaign_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this campaign.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "campaign"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/file/": {
+            "get": {
+                "operationId": "file_list",
+                "tags": [
+                    "file"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RelatedFile"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "file_create",
+                "tags": [
+                    "file"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RelatedFile"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RelatedFile"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RelatedFile"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RelatedFile"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/file/{id}/": {
+            "get": {
+                "operationId": "file_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this related file.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "file"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RelatedFile"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "file_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this related file.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "file"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedRelatedFile"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedRelatedFile"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedRelatedFile"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RelatedFile"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "file_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this related file.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "file"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/idea/": {
+            "get": {
+                "operationId": "idea_list",
+                "tags": [
+                    "idea"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Idea"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "idea_create",
+                "tags": [
+                    "idea"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Idea"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Idea"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Idea"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Idea"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/idea/{idea_id}/information/": {
+            "get": {
+                "operationId": "idea_information_list",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/IdeaInformation"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "idea_information_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IdeaInformation"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IdeaInformation"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IdeaInformation"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IdeaInformation"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/idea/{idea_id}/information/{id}/": {
+            "get": {
+                "operationId": "idea_information_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this information.",
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IdeaInformation"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "idea_information_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this information.",
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IdeaInformation"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IdeaInformation"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IdeaInformation"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IdeaInformation"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "idea_information_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this information.",
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedIdeaInformation"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedIdeaInformation"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedIdeaInformation"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IdeaInformation"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "idea_information_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this information.",
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/idea/{id}/": {
+            "get": {
+                "operationId": "idea_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this idea.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IdeaDetail"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "idea_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this idea.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Idea"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Idea"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Idea"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Idea"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "idea_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this idea.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedIdea"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedIdea"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedIdea"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Idea"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "idea_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this idea.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/idea/campaign/{campaign_id}/idea/": {
+            "get": {
+                "operationId": "idea_campaign_idea_list",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "campaign_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/IdeaDetail"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/idea/round/{round_id}/idea/{idea_id}/information/": {
+            "get": {
+                "operationId": "idea_round_idea_information_list",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "round_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/IdeaInformation"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "idea_round_idea_information_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "round_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IdeaInformation"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IdeaInformation"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IdeaInformation"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IdeaInformation"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/idea/round/{round_id}/idea/{idea_id}/information/{id}/": {
+            "get": {
+                "operationId": "idea_round_idea_information_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this information.",
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "round_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IdeaInformation"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "idea_round_idea_information_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this information.",
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "round_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IdeaInformation"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IdeaInformation"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IdeaInformation"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IdeaInformation"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "idea_round_idea_information_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this information.",
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "round_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedIdeaInformation"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedIdeaInformation"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedIdeaInformation"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IdeaInformation"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "idea_round_idea_information_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this information.",
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "round_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/idea/round/{round_id}/idea/{idea_id}/vote/me/": {
+            "get": {
+                "operationId": "idea_round_idea_vote_me_list",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "round_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Vote"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "idea_round_idea_vote_me_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "idea_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "round_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Vote"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Vote"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Vote"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Vote"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/idea/round/{round_id}/vote/me/": {
+            "get": {
+                "operationId": "idea_round_vote_me_list",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "round_id",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^\\d+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Vote"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/idea/vote/{id}/": {
+            "delete": {
+                "operationId": "idea_vote_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "A unique integer value identifying this vote.",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "idea"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/user/": {
+            "get": {
+                "operationId": "user_retrieve",
+                "description": "View to return data about a specific user",
+                "tags": [
+                    "user"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserWithPermissions"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/user/me/": {
+            "get": {
+                "operationId": "user_me_retrieve",
+                "description": "View to return data about the currently logged in user",
+                "tags": [
+                    "user"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserWithPermissions"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/user/me/profile/": {
+            "get": {
+                "operationId": "user_me_profile_retrieve",
+                "description": "View to work with profile for the currently logged in user",
+                "tags": [
+                    "user"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserProfile"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AbbreviatedUser": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "label": {
+                        "type": "string",
+                        "nullable": true,
+                        "readOnly": true,
+                        "description": "The full name of the user if it exists, otherwise the username"
+                    }
+                },
+                "required": [
+                    "id",
+                    "label"
+                ]
+            },
+            "BusinessArea": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "slug": {
+                        "type": "string",
+                        "readOnly": true,
+                        "pattern": "^[-a-zA-Z0-9_]+$"
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 64
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "users": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "slug"
+                ]
+            },
+            "Campaign": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "created_by": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AbbreviatedUser"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "business_areas": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "required": [
+                    "created_at",
+                    "created_by",
+                    "description",
+                    "id",
+                    "name",
+                    "updated_at"
+                ]
+            },
+            "CampaignRound": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "created_by": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AbbreviatedUser"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "campaign": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "campaign",
+                    "created_at",
+                    "created_by",
+                    "id",
+                    "name",
+                    "updated_at"
+                ]
+            },
+            "Idea": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "created_by": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AbbreviatedUser"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "title": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "visibility": {
+                        "$ref": "#/components/schemas/VisibilityEnum"
+                    },
+                    "campaign": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "campaign",
+                    "created_at",
+                    "created_by",
+                    "description",
+                    "id",
+                    "title",
+                    "updated_at"
+                ]
+            },
+            "IdeaDetail": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "created_by": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AbbreviatedUser"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "round_votes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RoundVotes"
+                        }
+                    },
+                    "title": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "visibility": {
+                        "$ref": "#/components/schemas/VisibilityEnum"
+                    },
+                    "campaign": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "campaign",
+                    "created_at",
+                    "created_by",
+                    "description",
+                    "id",
+                    "round_votes",
+                    "title",
+                    "updated_at"
+                ]
+            },
+            "IdeaInformation": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "created_by": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AbbreviatedUser"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "restored_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "transaction_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "title": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "text": {
+                        "type": "string"
+                    },
+                    "idea": {
+                        "type": "integer"
+                    },
+                    "folder": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "round": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "file": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "created_at",
+                    "created_by",
+                    "id",
+                    "updated_at"
+                ]
+            },
+            "Login": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "password",
+                    "username"
+                ]
+            },
+            "PatchedBusinessArea": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "slug": {
+                        "type": "string",
+                        "readOnly": true,
+                        "pattern": "^[-a-zA-Z0-9_]+$"
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 64
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "users": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            },
+            "PatchedCampaign": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "created_by": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AbbreviatedUser"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "business_areas": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            },
+            "PatchedCampaignRound": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "created_by": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AbbreviatedUser"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "campaign": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "PatchedIdea": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "created_by": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AbbreviatedUser"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "title": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "visibility": {
+                        "$ref": "#/components/schemas/VisibilityEnum"
+                    },
+                    "campaign": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "PatchedIdeaInformation": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "created_by": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AbbreviatedUser"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "restored_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "transaction_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "title": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "text": {
+                        "type": "string"
+                    },
+                    "idea": {
+                        "type": "integer"
+                    },
+                    "folder": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "round": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "file": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                }
+            },
+            "PatchedRelatedFile": {
+                "type": "object",
+                "properties": {
+                    "related_model": {
+                        "type": "string",
+                        "writeOnly": true
+                    },
+                    "related_pk": {
+                        "type": "integer",
+                        "writeOnly": true
+                    },
+                    "filename": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "file": {
+                        "type": "string",
+                        "format": "uri",
+                        "writeOnly": true
+                    },
+                    "url": {
+                        "type": "string",
+                        "readOnly": true
+                    }
+                }
+            },
+            "RelatedFile": {
+                "type": "object",
+                "properties": {
+                    "related_model": {
+                        "type": "string",
+                        "writeOnly": true
+                    },
+                    "related_pk": {
+                        "type": "integer",
+                        "writeOnly": true
+                    },
+                    "filename": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "file": {
+                        "type": "string",
+                        "format": "uri",
+                        "writeOnly": true
+                    },
+                    "url": {
+                        "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "file",
+                    "filename",
+                    "related_model",
+                    "related_pk",
+                    "url"
+                ]
+            },
+            "RoundVotes": {
+                "type": "object",
+                "properties": {
+                    "round_pk": {
+                        "type": "integer"
+                    },
+                    "count": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "count",
+                    "round_pk"
+                ]
+            },
+            "TypeEnum": {
+                "enum": [
+                    "CONTRIBUTOR",
+                    "MODERATOR",
+                    "ADMIN"
+                ],
+                "type": "string",
+                "description": "* `CONTRIBUTOR` - Contributor\n* `MODERATOR` - Moderator\n* `ADMIN` - Admin"
+            },
+            "UserProfile": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/TypeEnum"
+                    },
+                    "user": {
+                        "type": "integer",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "id",
+                    "user"
+                ]
+            },
+            "UserWithPermissions": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "label": {
+                        "type": "string",
+                        "nullable": true,
+                        "readOnly": true,
+                        "description": "The full name of the user if it exists, otherwise the username"
+                    },
+                    "username": {
+                        "type": "string",
+                        "description": "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+                        "pattern": "^[\\w.@+-]+$",
+                        "maxLength": 150
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email address",
+                        "maxLength": 254
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "maxLength": 150
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "maxLength": 150
+                    },
+                    "profile": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/UserProfile"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "permissions": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "group_permissions": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "is_staff": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "is_superuser": {
+                        "type": "boolean",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "group_permissions",
+                    "id",
+                    "is_staff",
+                    "is_superuser",
+                    "label",
+                    "permissions",
+                    "profile",
+                    "username"
+                ]
+            },
+            "VisibilityEnum": {
+                "enum": [
+                    "PUBLIC",
+                    "BUSINESS_AREA",
+                    "PRIVATE"
+                ],
+                "type": "string",
+                "description": "* `PUBLIC` - Public\n* `BUSINESS_AREA` - Business Area\n* `PRIVATE` - Private"
+            },
+            "Vote": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "created_by": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AbbreviatedUser"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "idea": {
+                        "type": "integer"
+                    },
+                    "round": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "created_at",
+                    "created_by",
+                    "id",
+                    "idea",
+                    "round",
+                    "updated_at"
+                ]
+            }
+        },
+        "securitySchemes": {
+            "cookieAuth": {
+                "type": "apiKey",
+                "in": "cookie",
+                "name": "sessionid"
+            }
+        }
+    }
+}

@@ -70,8 +70,11 @@ logs:
 restart: stop up
 	$(info Done restarting)
 
-test:
+test-without-coverage:
 	docker compose run backend-dev sh -c "python manage.py test"
+
+test:
+	docker compose run backend-dev sh -c "coverage run --source='.' --rcfile='/src/.coveragerc' manage.py test && coverage report && coverage json && coverage html && coverage-threshold"
 
 migrate:
 	docker compose run backend-dev sh -c "python manage.py migrate; chmod -R 664 db.sqlite3 && chown -R $(shell id -u):$(shell id -g) db.sqlite3"
@@ -81,15 +84,21 @@ makemigrations:
 
 generate-openapischema:
 	docker compose run backend-dev sh -c "python manage.py spectacular --file openapischema.yml"
-	docker compose exec backend-dev sh -c "chmod -R 664 openapischema.yml && chown -R $(shell id -u):$(shell id -g) openapischema.yml"
-	mv backend/openapischema.yml openapischema.yml
+	docker compose run backend-dev sh -c "python manage.py spectacular --format openapi-json --file openapischema.json"
+	docker compose exec backend-dev sh -c "chmod -R 664 openapischema.* && chown -R $(shell id -u):$(shell id -g) openapischema.*"
+	mv backend/openapischema.* .
 
 generate-frontend-api-service: generate-openapischema
+	docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate -i /local/openapischema.yml -g typescript-axios -o /local/frontend/src/lib/api
 	cp openapischema.yml frontend/openapischema.yml
 	#docker compose run frontend-dev sh -c "./node_modules/openapi-typescript-codegen/bin/index.js --input openapischema.yml --output src/lib/api --request src/lib/__apiServiceCustomRequest.ts"
 	docker compose run frontend-dev sh -c "./node_modules/openapi-typescript-codegen/bin/index.js --input openapischema.yml --output src/lib/api --name ApiClient"
 	docker compose run frontend-dev sh -c "chmod -R 774 src/lib/api && chown -R $(shell id -u):$(shell id -g) src/lib/api"
 	rm frontend/openapischema.yml
+
+generate-api-client: generate-openapischema
+	#docker compose run frontend-dev sh -c "./node_modules/openapi-typescript/bin/cli.js openapischema.yml -o src/lib/api/schema.d.ts"
+	docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate -i /local/openapischema.yml -g typescript-axios -o /local/frontend/src/lib/api
 
 generate-frontend-permissions:
 	docker compose run backend-dev sh -c "python manage.py generate_permissions_jsx temp_generated_permissions.jsx; chmod -R 664 temp_generated_permissions.jsx && chown -R $(shell id -u):$(shell id -g) temp_generated_permissions.jsx"
@@ -109,3 +118,7 @@ generate_api_key:
 
 init: build migrate createsuperuser generate_api_key
 	$(info Done initializing)
+
+prune:
+	docker system prune --all --force
+	$(info Pruned)
