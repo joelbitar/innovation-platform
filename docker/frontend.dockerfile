@@ -67,9 +67,6 @@ RUN yarn build
 # Production image, copy all the files and run next
 FROM app_frontend_base AS app_frontend_prod
 
-ARG BACKEND_URL
-ENV BACKEND_URL=$BACKEND_URL
-
 WORKDIR /app
 
 # Uncomment the following line in case you want to disable telemetry during runtime.
@@ -78,12 +75,12 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+COPY --from=app_frontend_builder /app/public ./public
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=app_frontend_builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=app_frontend_builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
