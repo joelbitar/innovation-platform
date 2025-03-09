@@ -130,5 +130,5 @@ pip-compile:
 	docker compose run backend-dev sh -c "pip-compile requirements.in --output-file requirements.txt && chmod -R 664 requirements.txt && chown -R $(shell id -u):$(shell id -g) requirements.txt"
 
 pip-upgrade:
-	docker compose run backend-dev sh -c "pip-compile --upgrade-package requirements.in --output-file requirements.txt && chmod -R 664 requirements.txt && chown -R $(shell id -u):$(shell id -g) requirements.txt"
+	docker compose run backend-dev sh -c "pip-compile --upgrade requirements.in --output-file requirements.txt && chmod -R 664 requirements.txt && chown -R $(shell id -u):$(shell id -g) requirements.txt"
 

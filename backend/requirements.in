@@ -7,7 +7,6 @@ django-celery-beat
 django-soft-delete
 django_celery_results
 djangorestframework
-djangorestframework_simplejwt
 djangorestframework-api-key
 drf-spectacular
 sqlparse
