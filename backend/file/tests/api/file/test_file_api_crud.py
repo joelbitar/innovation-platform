@@ -7,6 +7,7 @@ from django.urls import reverse
 from campaign.models import Campaign
 from file.models import RelatedFile
 from idea.models import Information, Idea
+from lib.permissions.created_by_model_permissions import CreatedByModelPermissions
 from lib.permissions.model_permissions import ModelPermissions
 from user.tests.helpers.authenticated_test_case import AuthenticatedClientTestCase
 
@@ -192,7 +193,7 @@ class FileAPICreateTests(AuthenticatedClientTestCase):
         )
         self.assertTrue(
             self.user.has_perm(
-                ModelPermissions.CHANGE_OWN_CREATED_BY_INSTANCES
+                CreatedByModelPermissions.CHANGE_OWN_CREATED_BY_INSTANCES
             )
         )
 
@@ -245,7 +246,7 @@ class FileAPICreateTests(AuthenticatedClientTestCase):
     def test_should_not_be_able_to_upload_file_to_a_model_if_i_do_not_have_the_change_own_created_by_instances_permission(self):
         self.assertFalse(
             self.user.has_perm(
-                ModelPermissions.CHANGE_OWN_CREATED_BY_INSTANCES
+                CreatedByModelPermissions.CHANGE_OWN_CREATED_BY_INSTANCES
             )
         )
 

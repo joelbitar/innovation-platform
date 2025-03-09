@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from idea.models import Idea
 from lib.models.created_by_model_mixin import CreatedByModel
+from lib.permissions.created_by_model_permissions import CreatedByModelPermissions
 from lib.permissions.model_permissions import ModelPermissions
 from user.tests.helpers.user_permissions_mixin import UserPermissionsTestMixin
 
@@ -34,7 +35,7 @@ class PermissionToDeleteOwnItemsTest(TestCase, UserPermissionsTestMixin):
         )
 
     def helper_get_model_permission_instance(self):
-        return ModelPermissions()
+        return CreatedByModelPermissions()
 
     def test_should_not_have_permission_if_we_delete_on_view_that_has_queryset_without_created_by_model(self):
         p = self.helper_get_model_permission_instance()
@@ -119,7 +120,6 @@ class PermissionToDeleteOwnItemsTest(TestCase, UserPermissionsTestMixin):
 
         with self.subTest('Should only be for delete method'):
             for request in (
-                    RequestFactory().get('/'),
                     RequestFactory().post('/'),
                     RequestFactory().put('/'),
                     RequestFactory().patch('/'),
@@ -188,7 +188,7 @@ class PermissionToChangeOwnItemsTest(TestCase, UserPermissionsTestMixin):
         )
 
     def helper_get_model_permission_instance(self):
-        return ModelPermissions()
+        return CreatedByModelPermissions()
 
     def test_should_not_have_permission_if_we_delete_on_view_that_has_queryset_without_created_by_model(self):
         p = self.helper_get_model_permission_instance()
@@ -276,7 +276,6 @@ class PermissionToChangeOwnItemsTest(TestCase, UserPermissionsTestMixin):
 
         with self.subTest('Should only be for change method'):
             for request in (
-                    RequestFactory().get('/'),
                     RequestFactory().post('/'),
                     RequestFactory().put('/'),
                     RequestFactory().delete('/'),

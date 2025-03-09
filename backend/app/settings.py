@@ -138,6 +138,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
         'lib.permissions.model_permissions.ModelPermissions',
+        'lib.permissions.created_by_model_permissions.CreatedByModelPermissions',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
