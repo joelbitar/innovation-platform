@@ -2,6 +2,7 @@ asgiref
 celery
 Django
 django-environ
+django-allauth
 django-celery-beat
 django-soft-delete
 django_celery_results
