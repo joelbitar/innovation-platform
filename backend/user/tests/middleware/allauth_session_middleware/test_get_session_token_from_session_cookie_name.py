@@ -9,7 +9,7 @@ from django.conf import settings
 
 from django.test import RequestFactory
 
-from user.authentication.allauth_session_authentication import AllauthSessionMiddleware
+from user.authentication.allauth_session_authentication import SessionCookieTokenAuthenticatoin
 
 
 class SessionTokenMiddlewareTests(SimpleTestCase):
@@ -27,7 +27,7 @@ class SessionTokenMiddlewareTests(SimpleTestCase):
             (session_token_value := "".join(random.choices(string.ascii_letters, k=32)))
         )
 
-        middleware = AllauthSessionMiddleware()
+        middleware = SessionCookieTokenAuthenticatoin()
 
         self.assertEqual(
             session_token_value,
@@ -40,7 +40,7 @@ class SessionTokenMiddlewareTests(SimpleTestCase):
             None
         )
 
-        middleware = AllauthSessionMiddleware()
+        middleware = SessionCookieTokenAuthenticatoin()
 
         self.assertIsNone(
             middleware.get_session_token(http_request),

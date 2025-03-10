@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 
 class MyAuthenticationScheme(OpenApiAuthenticationExtension):
-    target_class = 'allauth.headless.contrib.rest_framework.authentication.XSessionTokenAuthentication'  # full import path OR class ref
+    target_class = 'user.authentication.allauth_session_authentication.SessionCookieTokenAuthentication'  # full import path OR class ref
     name = 'CookieSessionTokenAuthentication'  # name used in the schema
 
     def get_security_definition(self, auto_schema):

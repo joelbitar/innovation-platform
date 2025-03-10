@@ -9,7 +9,7 @@ from django.http import HttpRequest
 from django.conf import settings
 
 
-class AllauthSessionMiddleware(XSessionTokenAuthentication):
+class SessionCookieTokenAuthentication(XSessionTokenAuthentication):
     def get_session_token(self, request: HttpRequest) -> typing.Optional[str]:
         return request.COOKIES.get(
             settings.SESSION_COOKIE_NAME,

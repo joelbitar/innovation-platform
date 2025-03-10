@@ -145,7 +145,7 @@ REST_FRAMEWORK = {
         'lib.permissions.created_by_model_permissions.CreatedByModelPermissions',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'user.authentication.allauth_session_authentication.AllauthSessionMiddleware'
+        'user.authentication.allauth_session_authentication.SessionCookieTokenAuthentication',
         #'rest_framework.authentication.SessionAuthentication',
     ),
 }
