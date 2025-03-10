@@ -8,3 +8,4 @@ class UserConfig(AppConfig):
     def ready(self):
         import user.signals.user_create_profile_signal
         import user.signals.allauth_user_logged_in
+        import user.schema
