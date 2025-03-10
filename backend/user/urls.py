@@ -19,4 +19,5 @@ user_patterns = [
 urlpatterns = [
     path('auth/', include(session_based_login_patterns)),
     path('user/', include(user_patterns)),
+    path("_allauth/", include("allauth.headless.urls"))
 ]

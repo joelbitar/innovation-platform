@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'rest_framework_api_key',
     'django_celery_beat',
     'django_celery_results',
+    'allauth.account',
+    'allauth.headless',
     'lib',
     'user',
     'business',
@@ -66,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -141,7 +144,8 @@ REST_FRAMEWORK = {
         'lib.permissions.created_by_model_permissions.CreatedByModelPermissions',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
+        'allauth.headless.contrib.rest_framework.authentication.XSessionTokenAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
     ),
 }
 
@@ -175,6 +179,14 @@ CACHES = {
 SESSION_COOKIE_AGE = AUTHENTICATION_LIFETIME
 
 CSRF_TRUSTED_ORIGINS = env('CSRF_TRUSTED_ORIGINS')
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 # Files and media
 MEDIA_ROOT = BASE_DIR / 'media'

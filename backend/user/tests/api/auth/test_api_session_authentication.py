@@ -13,13 +13,14 @@ from rest_framework.test import APIClient
 from user.serializers import UserWithPermissionsSerializer
 
 
-class SessionAuthenticationAPITests(TestCase):
+class SessionAuthenticationUsernameAPITests(TestCase):
     def setUp(self) -> None:
-        self.username = 'testuser'
+        self.username = 'testuser@example.com'
         self.password = 'testpassword'
 
         self.user = User.objects.create_user(
-            username=self.username,
+            username='testuser',
+            email=self.username,
             password=self.password,
         )
         self.user.is_active = True
@@ -29,11 +30,13 @@ class SessionAuthenticationAPITests(TestCase):
 
     def helper_login(self, username, password, client: Optional[APIClient] = None):
         return (client or self.client).post(
-            reverse('auth_login'),
-            {
-                'username': username,
+            reverse('headless:app:account:login'),
+            json.dumps({
+                'email': username,
                 'password': password,
-            }
+            }),
+            # application json
+            content_type='application/json',
         )
 
     # Test should be able to obtain two token pairs
@@ -71,7 +74,8 @@ class SessionAuthenticationAPITests(TestCase):
         )
 
     # Test should be able to login
-    def test_should_be_able_to_login(self):
+    @patch('lib.redis.RedisClient.set', return_value=True)
+    def test_should_be_able_to_login(self, mocked_redis_client_set):
         response = self.helper_login(
             self.username,
             self.password,

@@ -25,3 +25,7 @@ STORAGES = {
 }
 
 MEDIA_ROOT = '/tmp/'
+
+CACHES["default"] = {
+    "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+}
