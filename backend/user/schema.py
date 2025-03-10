@@ -18,7 +18,7 @@ class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
 
-class Fix4(OpenApiViewExtension):
+class AllauthHeadlessLoginView(OpenApiViewExtension):
     target_class = 'allauth.headless.account.views.LoginView'
 
     def view_replacement(self):

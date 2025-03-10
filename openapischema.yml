@@ -3,38 +3,6 @@ info:
   title: ''
   version: 0.0.0
 paths:
-  /api/auth/login/:
-    post:
-      operationId: auth_login_create
-      tags:
-      - auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Login'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Login'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Login'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Login'
-          description: ''
-  /api/auth/logout/:
-    post:
-      operationId: auth_logout_create
-      tags:
-      - auth
-      responses:
-        '200':
-          description: No response body
   /api/business/business_area//:
     get:
       operationId: business_business_area_list
@@ -1570,16 +1538,6 @@ components:
       - created_by
       - id
       - updated_at
-    Login:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-      required:
-      - password
-      - username
     PatchedBusinessArea:
       type: object
       properties:
