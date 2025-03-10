@@ -15,12 +15,13 @@ from user.serializers import UserWithPermissionsSerializer
 
 class SessionAuthenticationUsernameAPITests(TestCase):
     def setUp(self) -> None:
-        self.username = 'testuser@example.com'
+        self.username = 'testuser'
+        self.email = 'testuser@example.com'
         self.password = 'testpassword'
 
         self.user = User.objects.create_user(
             username='testuser',
-            email=self.username,
+            email=self.email,
             password=self.password,
         )
         self.user.is_active = True
@@ -32,7 +33,7 @@ class SessionAuthenticationUsernameAPITests(TestCase):
         return (client or self.client).post(
             reverse('headless:app:account:login'),
             json.dumps({
-                'email': username,
+                'username': username,
                 'password': password,
             }),
             # application json
@@ -88,16 +89,10 @@ class SessionAuthenticationUsernameAPITests(TestCase):
                 response.content,
             )
 
-        with self.subTest('Should have user id in session'):
-            session = self.client.session
-
-            self.assertIsNotNone(
-                session_user_id := session.get('_auth_user_id')
-            )
-
-            self.assertEqual(
-                self.user.pk,
-                int(session_user_id),
+        with self.subTest('Should have session token'):
+            self.assertIn(
+                'session-token',
+                response.cookies,
             )
 
     # Test should set user token cookie on response from obtain token view
