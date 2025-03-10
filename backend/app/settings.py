@@ -144,7 +144,7 @@ REST_FRAMEWORK = {
         'lib.permissions.created_by_model_permissions.CreatedByModelPermissions',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'allauth.headless.contrib.rest_framework.authentication.XSessionTokenAuthentication',
+        'user.authentication.allauth_session_authentication.AllauthSessionMiddleware'
         #'rest_framework.authentication.SessionAuthentication',
     ),
 }

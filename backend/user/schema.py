@@ -9,7 +9,8 @@ class MyAuthenticationScheme(OpenApiAuthenticationExtension):
 
     def get_security_definition(self, auto_schema):
         return {
-            'type': 'Session Token',
+            'type': 'http',
+            'scheme': 'cookie',
             'in': 'Cookies',
             'name': 'session-token',
         }

@@ -1,4 +1,4 @@
-import {AuthApi, CampaignApi, Configuration, FileApi, IdeaApi} from "@/lib/api";
+import {CampaignApi, Configuration, FileApi, IdeaApi} from "@/lib/api";
 
 async function getServerConfiguration() {
     // Import cookies from next/headers
@@ -80,9 +80,6 @@ export function getClientFileApi(): FileApi {
     return clientAPIFactory(FileApi, getMultipartHeaders())
 }
 
-export function getClientAuthApi(): AuthApi {
-    return clientAPIFactory(AuthApi)
-}
 
 export function getClientCampaignApi(): CampaignApi {
     return clientAPIFactory(CampaignApi)

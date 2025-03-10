@@ -1884,6 +1884,7 @@ components:
       - updated_at
   securitySchemes:
     CookieSessionTokenAuthentication:
-      type: Session Token
+      type: http
+      scheme: cookie
       in: Cookies
       name: session-token

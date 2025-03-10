@@ -385,25 +385,6 @@ export interface IdeaInformation {
 /**
  * 
  * @export
- * @interface Login
- */
-export interface Login {
-    /**
-     * 
-     * @type {string}
-     * @memberof Login
-     */
-    'username': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Login
-     */
-    'password': string;
-}
-/**
- * 
- * @export
  * @interface PatchedBusinessArea
  */
 export interface PatchedBusinessArea {
@@ -1000,170 +981,6 @@ export interface Vote {
 }
 
 /**
- * AuthApi - axios parameter creator
- * @export
- */
-export const AuthApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {Login} login 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authLoginCreate: async (login: Login, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'login' is not null or undefined
-            assertParamExists('authLoginCreate', 'login', login)
-            const localVarPath = `/api/auth/login/`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(login, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authLogoutCreate: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/auth/logout/`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * AuthApi - functional programming interface
- * @export
- */
-export const AuthApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = AuthApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {Login} login 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async authLoginCreate(login: Login, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Login>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authLoginCreate(login, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthApi.authLoginCreate']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async authLogoutCreate(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authLogoutCreate(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthApi.authLogoutCreate']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * AuthApi - factory interface
- * @export
- */
-export const AuthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = AuthApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {Login} login 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authLoginCreate(login: Login, options?: RawAxiosRequestConfig): AxiosPromise<Login> {
-            return localVarFp.authLoginCreate(login, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authLogoutCreate(options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.authLogoutCreate(options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * AuthApi - object-oriented interface
- * @export
- * @class AuthApi
- * @extends {BaseAPI}
- */
-export class AuthApi extends BaseAPI {
-    /**
-     * 
-     * @param {Login} login 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AuthApi
-     */
-    public authLoginCreate(login: Login, options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authLoginCreate(login, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AuthApi
-     */
-    public authLogoutCreate(options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authLogoutCreate(options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
  * BusinessApi - axios parameter creator
  * @export
  */
@@ -1189,6 +1006,8 @@ export const BusinessApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -1226,6 +1045,8 @@ export const BusinessApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1254,6 +1075,8 @@ export const BusinessApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -1288,6 +1111,8 @@ export const BusinessApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -1325,6 +1150,8 @@ export const BusinessApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1360,6 +1187,8 @@ export const BusinessApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -1630,6 +1459,8 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -1666,6 +1497,8 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1694,6 +1527,8 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -1728,6 +1563,8 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -1765,6 +1602,8 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1800,6 +1639,8 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -1841,6 +1682,8 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1873,6 +1716,8 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -1911,6 +1756,8 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -1952,6 +1799,8 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1992,6 +1841,8 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -2030,6 +1881,8 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -2513,6 +2366,8 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -2549,6 +2404,8 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2577,6 +2434,8 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -2611,6 +2470,8 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -2647,6 +2508,8 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -2880,6 +2743,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2911,6 +2776,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -2948,6 +2815,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2981,6 +2850,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -3022,6 +2893,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -3054,6 +2927,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -3092,6 +2967,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -3133,6 +3010,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -3171,6 +3050,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3202,6 +3083,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -3236,6 +3119,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -3272,6 +3157,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -3310,6 +3197,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -3355,6 +3244,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -3391,6 +3282,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -3433,6 +3326,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -3478,6 +3373,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -3519,6 +3416,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -3563,6 +3462,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3603,6 +3504,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -3635,6 +3538,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -3672,6 +3577,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3707,6 +3614,8 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -4585,6 +4494,8 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -4617,6 +4528,8 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication CookieSessionTokenAuthentication required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -4645,6 +4558,8 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     
@@ -4678,6 +4593,8 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication CookieSessionTokenAuthentication required
 
 
     

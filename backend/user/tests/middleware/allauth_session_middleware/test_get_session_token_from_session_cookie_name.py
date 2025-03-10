@@ -9,7 +9,7 @@ from django.conf import settings
 
 from django.test import RequestFactory
 
-from user.middleware.allauth_session_middleware import AllauthSessionMiddleware
+from user.authentication.allauth_session_authentication import AllauthSessionMiddleware
 
 
 class SessionTokenMiddlewareTests(SimpleTestCase):

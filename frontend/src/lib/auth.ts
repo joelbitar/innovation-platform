@@ -1,8 +1,9 @@
 'use client';
 
 
-import {getClientAuthApi} from "@/lib/apiClientFactory";
 import {UserWithPermissions} from "api";
+// import axios
+import axios from 'axios'
 
 
 export function setLocalStorageUserData(data: any) {
@@ -18,9 +19,30 @@ export function getLocalStorageUserData() {
     }
 }
 
+const AuthApi = function (){
+    return {
+        authLoginCreate: (
+            {username, password}: {username: string, password: string}
+        ) => {
+            return axios(
+                '/api/_allauth/browser/v1/auth/login',
+                {
+                    method: 'POST',
+                    data: {
+                        username,
+                        password
+                    }
+                }
+            )
+        },
+        authLogoutCreate: () => {},
+    }
+}
+
+
 
 export function login(username: string, password: string): Promise<UserWithPermissions> {
-    const authApiClient = getClientAuthApi()
+    const authApiClient = new AuthApi()
 
     return new Promise((resolve, reject) => {
         authApiClient.authLoginCreate({
