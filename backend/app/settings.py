@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'campaign',
     'idea',
     'file',
+    'status',
 ]
 
 MIDDLEWARE = [
