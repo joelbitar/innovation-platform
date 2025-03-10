@@ -180,7 +180,7 @@ SESSION_COOKIE_AGE = AUTHENTICATION_LIFETIME
 
 CSRF_TRUSTED_ORIGINS = env('CSRF_TRUSTED_ORIGINS')
 
-# Allauth settings
+# Authentication settings
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
@@ -192,6 +192,8 @@ AUTHENTICATION_BACKENDS = [
 # Enable both username and email login
 ACCOUNT_LOGIN_METHOD = {'username', 'email'}
 ACCOUNT_EMAIL_REQUIRED = True
+
+SESSION_COOKIE_NAME = 'session-token'
 
 # Files and media
 MEDIA_ROOT = BASE_DIR / 'media'

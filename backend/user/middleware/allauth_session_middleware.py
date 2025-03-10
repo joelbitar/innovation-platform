@@ -1,18 +1,16 @@
 """
 Intercepts login requests and sets a session token cookie on the response.
 """
+import typing
+
+from allauth.headless.contrib.rest_framework.authentication import XSessionTokenAuthentication
+from django.http import HttpRequest
+
+from django.conf import settings
 
 
-class AllauthSessionMiddleware(MiddlewareMixin):
-    def process_response(self, request, response):
-        session_lifetime = settings.SESSION_COOKIE_AGE
-        if response.status_code == 200:
-            if request.user.is_authenticated:
-                response.set_cookie(
-                    key='session-token',
-                    value=request.user.get_session_token(),
-                    httponly=True,
-                    secure=settings.SESSION_COOKIE_SECURE,
-                    samesite='Strict',
-                )
-        return response
+class AllauthSessionMiddleware(XSessionTokenAuthentication):
+    def get_session_token(self, request: HttpRequest) -> typing.Optional[str]:
+        return request.COOKIES.get(
+            settings.SESSION_COOKIE_NAME,
+        )

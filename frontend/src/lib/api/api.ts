@@ -718,6 +718,33 @@ export interface PatchedRelatedFile {
 /**
  * 
  * @export
+ * @interface PatchedUserMeProfile
+ */
+export interface PatchedUserMeProfile {
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedUserMeProfile
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {TypeEnum}
+     * @memberof PatchedUserMeProfile
+     */
+    'type'?: TypeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedUserMeProfile
+     */
+    'user'?: number;
+}
+
+
+/**
+ * 
+ * @export
  * @interface RelatedFile
  */
 export interface RelatedFile {
@@ -784,6 +811,33 @@ export const TypeEnum = {
 } as const;
 
 export type TypeEnum = typeof TypeEnum[keyof typeof TypeEnum];
+
+
+/**
+ * 
+ * @export
+ * @interface UserMeProfile
+ */
+export interface UserMeProfile {
+    /**
+     * 
+     * @type {number}
+     * @memberof UserMeProfile
+     */
+    'id': number;
+    /**
+     * 
+     * @type {TypeEnum}
+     * @memberof UserMeProfile
+     */
+    'type': TypeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserMeProfile
+     */
+    'user': number;
+}
 
 
 /**
@@ -1136,8 +1190,6 @@ export const BusinessApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -1174,8 +1226,6 @@ export const BusinessApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1204,8 +1254,6 @@ export const BusinessApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -1240,8 +1288,6 @@ export const BusinessApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -1279,8 +1325,6 @@ export const BusinessApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1316,8 +1360,6 @@ export const BusinessApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -1588,8 +1630,6 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -1626,8 +1666,6 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1656,8 +1694,6 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -1692,8 +1728,6 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -1731,8 +1765,6 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1768,8 +1800,6 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -1811,8 +1841,6 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1845,8 +1873,6 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -1885,8 +1911,6 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -1928,8 +1952,6 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1970,8 +1992,6 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -2010,8 +2030,6 @@ export const CampaignApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -2495,8 +2513,6 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -2533,8 +2549,6 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2563,8 +2577,6 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -2599,8 +2611,6 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -2637,8 +2647,6 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -2872,8 +2880,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2905,8 +2911,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -2944,8 +2948,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2979,8 +2981,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -3022,8 +3022,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -3056,8 +3054,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -3096,8 +3092,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -3139,8 +3133,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -3179,8 +3171,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3212,8 +3202,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -3248,8 +3236,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -3286,8 +3272,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -3326,8 +3310,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -3373,8 +3355,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -3411,8 +3391,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -3455,8 +3433,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -3502,8 +3478,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -3545,8 +3519,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -3591,8 +3563,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3633,8 +3603,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -3667,8 +3635,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -3706,8 +3672,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3743,8 +3707,6 @@ export const IdeaApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -4606,6 +4568,39 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * View to work with profile for the currently logged in user
+         * @param {PatchedUserMeProfile} [patchedUserMeProfile] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userMeProfilePartialUpdate: async (patchedUserMeProfile?: PatchedUserMeProfile, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/user/me/profile/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patchedUserMeProfile, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * View to work with profile for the currently logged in user
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -4621,8 +4616,6 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -4653,8 +4646,6 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication cookieAuth required
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -4668,11 +4659,15 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * View to return data about a specific user
+         * @param {string} userId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userRetrieve: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/user/`;
+        userRetrieve: async (userId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('userRetrieve', 'userId', userId)
+            const localVarPath = `/api/user/{user_id}/`
+                .replace(`{${"user_id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4683,8 +4678,6 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication cookieAuth required
 
 
     
@@ -4709,10 +4702,22 @@ export const UserApiFp = function(configuration?: Configuration) {
     return {
         /**
          * View to work with profile for the currently logged in user
+         * @param {PatchedUserMeProfile} [patchedUserMeProfile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userMeProfileRetrieve(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserProfile>> {
+        async userMeProfilePartialUpdate(patchedUserMeProfile?: PatchedUserMeProfile, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserMeProfile>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userMeProfilePartialUpdate(patchedUserMeProfile, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.userMeProfilePartialUpdate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * View to work with profile for the currently logged in user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userMeProfileRetrieve(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserMeProfile>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userMeProfileRetrieve(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UserApi.userMeProfileRetrieve']?.[localVarOperationServerIndex]?.url;
@@ -4731,11 +4736,12 @@ export const UserApiFp = function(configuration?: Configuration) {
         },
         /**
          * View to return data about a specific user
+         * @param {string} userId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userRetrieve(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserWithPermissions>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.userRetrieve(options);
+        async userRetrieve(userId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserWithPermissions>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userRetrieve(userId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UserApi.userRetrieve']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -4752,10 +4758,19 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * View to work with profile for the currently logged in user
+         * @param {PatchedUserMeProfile} [patchedUserMeProfile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userMeProfileRetrieve(options?: RawAxiosRequestConfig): AxiosPromise<UserProfile> {
+        userMeProfilePartialUpdate(patchedUserMeProfile?: PatchedUserMeProfile, options?: RawAxiosRequestConfig): AxiosPromise<UserMeProfile> {
+            return localVarFp.userMeProfilePartialUpdate(patchedUserMeProfile, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * View to work with profile for the currently logged in user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userMeProfileRetrieve(options?: RawAxiosRequestConfig): AxiosPromise<UserMeProfile> {
             return localVarFp.userMeProfileRetrieve(options).then((request) => request(axios, basePath));
         },
         /**
@@ -4768,11 +4783,12 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * View to return data about a specific user
+         * @param {string} userId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userRetrieve(options?: RawAxiosRequestConfig): AxiosPromise<UserWithPermissions> {
-            return localVarFp.userRetrieve(options).then((request) => request(axios, basePath));
+        userRetrieve(userId: string, options?: RawAxiosRequestConfig): AxiosPromise<UserWithPermissions> {
+            return localVarFp.userRetrieve(userId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4784,6 +4800,17 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
  * @extends {BaseAPI}
  */
 export class UserApi extends BaseAPI {
+    /**
+     * View to work with profile for the currently logged in user
+     * @param {PatchedUserMeProfile} [patchedUserMeProfile] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userMeProfilePartialUpdate(patchedUserMeProfile?: PatchedUserMeProfile, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).userMeProfilePartialUpdate(patchedUserMeProfile, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * View to work with profile for the currently logged in user
      * @param {*} [options] Override http request option.
@@ -4806,12 +4833,13 @@ export class UserApi extends BaseAPI {
 
     /**
      * View to return data about a specific user
+     * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public userRetrieve(options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).userRetrieve(options).then((request) => request(this.axios, this.basePath));
+    public userRetrieve(userId: string, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).userRetrieve(userId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

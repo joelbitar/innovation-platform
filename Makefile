@@ -85,7 +85,7 @@ makemigrations:
 generate-openapischema:
 	docker compose run backend-dev sh -c "python manage.py spectacular --file openapischema.yml"
 	docker compose run backend-dev sh -c "python manage.py spectacular --format openapi-json --file openapischema.json"
-	docker compose exec backend-dev sh -c "chmod -R 664 openapischema.* && chown -R $(shell id -u):$(shell id -g) openapischema.*"
+	docker compose run backend-dev sh -c "chmod -R 664 openapischema.* && chown -R $(shell id -u):$(shell id -g) openapischema.*"
 	mv backend/openapischema.* .
 
 generate-frontend-api-service: generate-openapischema

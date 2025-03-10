@@ -12,6 +12,8 @@ from rest_framework.test import APIClient
 
 from user.serializers import UserWithPermissionsSerializer
 
+from django.conf import settings
+
 
 class SessionAuthenticationUsernameAPITests(TestCase):
     def setUp(self) -> None:
@@ -91,20 +93,7 @@ class SessionAuthenticationUsernameAPITests(TestCase):
 
         with self.subTest('Should have session token'):
             self.assertIn(
-                'session-token',
-                response.cookies,
-            )
-
-    # Test should set user token cookie on response from obtain token view
-    def test_should_set_sessionid_cookie_on_response_from_obtain_token_view(self):
-        response = self.helper_login(
-            self.username,
-            self.password,
-        )
-
-        with self.subTest('Should have token cookie'):
-            self.assertIn(
-                'sessionid',
+                settings.SESSION_COOKIE_NAME,
                 response.cookies,
             )
 
