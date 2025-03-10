@@ -66,7 +66,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -112,7 +112,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -148,7 +148,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -202,7 +202,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -255,7 +255,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -289,7 +289,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -307,7 +307,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -353,7 +353,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -389,7 +389,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -446,7 +446,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -490,7 +490,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -552,7 +552,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -613,7 +613,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -655,7 +655,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -684,7 +684,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -738,7 +738,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -791,7 +791,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -825,7 +825,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -843,7 +843,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -889,7 +889,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -925,7 +925,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -978,7 +978,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1012,7 +1012,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1030,7 +1030,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1076,7 +1076,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1112,7 +1112,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1168,7 +1168,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1213,7 +1213,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1275,7 +1275,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1337,7 +1337,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1380,7 +1380,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1409,7 +1409,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1463,7 +1463,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1516,7 +1516,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1550,7 +1550,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1579,7 +1579,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1627,7 +1627,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1692,7 +1692,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1746,7 +1746,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1817,7 +1817,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1888,7 +1888,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1940,7 +1940,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -1978,7 +1978,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -2044,7 +2044,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -2080,7 +2080,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -2119,7 +2119,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -2149,7 +2149,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -2175,7 +2175,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -2201,7 +2201,7 @@
                 ],
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -2244,7 +2244,7 @@
                 },
                 "security": [
                     {
-                        "MyAuthentication": []
+                        "CookieSessionTokenAuthentication": []
                     }
                 ],
                 "responses": {
@@ -3077,10 +3077,10 @@
             }
         },
         "securitySchemes": {
-            "MyAuthentication": {
-                "type": "apiKey",
-                "in": "header",
-                "name": "api_key"
+            "CookieSessionTokenAuthentication": {
+                "type": "Session Token",
+                "in": "Cookies",
+                "name": "session-token"
             }
         }
     }

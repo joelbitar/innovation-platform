@@ -41,7 +41,7 @@ paths:
       tags:
       - business
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -68,7 +68,7 @@ paths:
               $ref: '#/components/schemas/BusinessArea'
         required: true
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '201':
           content:
@@ -89,7 +89,7 @@ paths:
       tags:
       - business
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -121,7 +121,7 @@ paths:
               $ref: '#/components/schemas/BusinessArea'
         required: true
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -152,7 +152,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedBusinessArea'
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -172,7 +172,7 @@ paths:
       tags:
       - business
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '204':
           description: No response body
@@ -182,7 +182,7 @@ paths:
       tags:
       - campaign
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -209,7 +209,7 @@ paths:
               $ref: '#/components/schemas/Campaign'
         required: true
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '201':
           content:
@@ -230,7 +230,7 @@ paths:
       tags:
       - campaign
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -264,7 +264,7 @@ paths:
               $ref: '#/components/schemas/CampaignRound'
         required: true
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '201':
           content:
@@ -290,7 +290,7 @@ paths:
       tags:
       - campaign
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -327,7 +327,7 @@ paths:
               $ref: '#/components/schemas/CampaignRound'
         required: true
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -363,7 +363,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedCampaignRound'
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -388,7 +388,7 @@ paths:
       tags:
       - campaign
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '204':
           description: No response body
@@ -405,7 +405,7 @@ paths:
       tags:
       - campaign
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -437,7 +437,7 @@ paths:
               $ref: '#/components/schemas/Campaign'
         required: true
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -468,7 +468,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedCampaign'
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -488,7 +488,7 @@ paths:
       tags:
       - campaign
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '204':
           description: No response body
@@ -498,7 +498,7 @@ paths:
       tags:
       - file
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -525,7 +525,7 @@ paths:
               $ref: '#/components/schemas/RelatedFile'
         required: true
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '201':
           content:
@@ -546,7 +546,7 @@ paths:
       tags:
       - file
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -577,7 +577,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedRelatedFile'
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -597,7 +597,7 @@ paths:
       tags:
       - file
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '204':
           description: No response body
@@ -607,7 +607,7 @@ paths:
       tags:
       - idea
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -634,7 +634,7 @@ paths:
               $ref: '#/components/schemas/Idea'
         required: true
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '201':
           content:
@@ -655,7 +655,7 @@ paths:
       tags:
       - idea
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -688,7 +688,7 @@ paths:
             schema:
               $ref: '#/components/schemas/IdeaInformation'
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '201':
           content:
@@ -715,7 +715,7 @@ paths:
       tags:
       - idea
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -752,7 +752,7 @@ paths:
             schema:
               $ref: '#/components/schemas/IdeaInformation'
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -789,7 +789,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedIdeaInformation'
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -815,7 +815,7 @@ paths:
       tags:
       - idea
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '204':
           description: No response body
@@ -832,7 +832,7 @@ paths:
       tags:
       - idea
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -864,7 +864,7 @@ paths:
               $ref: '#/components/schemas/Idea'
         required: true
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -895,7 +895,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedIdea'
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -915,7 +915,7 @@ paths:
       tags:
       - idea
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '204':
           description: No response body
@@ -932,7 +932,7 @@ paths:
       tags:
       - idea
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -961,7 +961,7 @@ paths:
       tags:
       - idea
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -1000,7 +1000,7 @@ paths:
             schema:
               $ref: '#/components/schemas/IdeaInformation'
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '201':
           content:
@@ -1033,7 +1033,7 @@ paths:
       tags:
       - idea
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -1076,7 +1076,7 @@ paths:
             schema:
               $ref: '#/components/schemas/IdeaInformation'
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -1119,7 +1119,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedIdeaInformation'
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -1151,7 +1151,7 @@ paths:
       tags:
       - idea
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '204':
           description: No response body
@@ -1174,7 +1174,7 @@ paths:
       tags:
       - idea
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -1214,7 +1214,7 @@ paths:
               $ref: '#/components/schemas/Vote'
         required: true
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '201':
           content:
@@ -1235,7 +1235,7 @@ paths:
       tags:
       - idea
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -1258,7 +1258,7 @@ paths:
       tags:
       - idea
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '204':
           description: No response body
@@ -1276,7 +1276,7 @@ paths:
       tags:
       - user
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -1291,7 +1291,7 @@ paths:
       tags:
       - user
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -1306,7 +1306,7 @@ paths:
       tags:
       - user
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -1331,7 +1331,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedUserMeProfile'
       security:
-      - MyAuthentication: []
+      - CookieSessionTokenAuthentication: []
       responses:
         '200':
           content:
@@ -1925,7 +1925,7 @@ components:
       - round
       - updated_at
   securitySchemes:
-    MyAuthentication:
-      type: apiKey
-      in: header
-      name: api_key
+    CookieSessionTokenAuthentication:
+      type: Session Token
+      in: Cookies
+      name: session-token
