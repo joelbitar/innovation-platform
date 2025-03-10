@@ -5,6 +5,7 @@ Intercepts login requests and sets a session token cookie on the response.
 
 class AllauthSessionMiddleware(MiddlewareMixin):
     def process_response(self, request, response):
+        session_lifetime = settings.SESSION_COOKIE_AGE
         if response.status_code == 200:
             if request.user.is_authenticated:
                 response.set_cookie(
